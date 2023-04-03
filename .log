@@ -1,0 +1,10 @@
+Script started on Wed 29 Mar 2023 09:53:24 AM CEST
+[1;35m[WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'[0m
+[1;35m[WARNING]: While constructing a mapping from /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/defaults/main.yml, line 6, column 1, found a duplicate dict key (enable_firewall). Using last defined value only.[0m
+[1;35m[WARNING]: While constructing a mapping from /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/defaults/main.yml, line 6, column 1, found a duplicate dict key (ssh_max_sessions). Using last defined value only.[0m
+
+PLAY [all] **********************************************************************************************************************************************************************************************************************************
+[0;36mskipping: no hosts matched[0m
+
+PLAY RECAP **********************************************************************************************************************************************************************************************************************************
+

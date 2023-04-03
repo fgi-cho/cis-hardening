@@ -1,0 +1,3135 @@
+---
+# Check default passwords have changed
+# - block:
+#     - name: "Exit: If check bootloader_credentials.password has not been changed"
+#       fail:
+#         msg: "Exiting: Change bootloader_credentials.password from b00tl04derPwd in defaults/main.yml"
+#   when: set_bootloader_credentials and bootloader_credentials.password is match ("b00tl04derPwd")
+
+# - block:
+#     - name: "Exit: If check root_password has not been changed"
+#       fail:
+#         msg: "Exiting: Change root_password from r00tP4ssw0rd in defaults/main.yml"
+#   when: set_root_password and root_password is match ("r00tP4ssw0rd")
+
+#- name: 1.0 Pre-emptively run an 'apt update', so that future 'apt' invocations don't need to do it anymore
+#  apt:
+#    force_apt_get: yes
+#    update_cache: yes
+#  tags:
+#    - section1
+#    - level_1_server
+#    - level_1_workstation
+#    - "1.0"
+
+# 1.1.1 Disable unused filesystems
+# 1.1.1.1 Ensure mounting of cramfs filesystems is disabled
+# Removing support for unneeded filesystem types reduces the local attack surface of the
+# server. If this filesystem type is not needed, disable it.
+- name: 1.1.1.1 Ensure mounting of cramfs filesystems is disabled
+  block:
+    - name: 1.1.1.1 Ensure mounting of cramfs filesystems is disabled
+      lineinfile:
+        dest: /etc/modprobe.d/CIS.conf
+        regexp: "^(#)?install cramfs(\\s|$)"
+        line: "install cramfs /bin/true"
+        state: present
+        owner: root
+        group: root
+        mode: 0644
+        create: true
+    - name: 1.1.1.1 Ensure mounting of cramfs filesystems is disabled | modprobe
+      modprobe:
+        name: cramfs
+        state: absent
+  when: disable_cramfs
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.1.1.1
+    - filesystems
+    - cramfs
+    - modprobe
+# 1.1.1.2 Ensure mounting of freevxfs filesystems is disabled
+# The freevxfs filesystem type is a free version of the Veritas type filesystem. This is the
+# primary filesystem type for HP-UX operating systems.
+- name: 1.1.1.2 Ensure mounting of freevxfs filesystems is disabled
+  block:
+    - name: 1.1.1.2 Ensure mounting of freevxfs filesystems is disabled
+      lineinfile:
+        dest: /etc/modprobe.d/CIS.conf
+        regexp: "^(#)?install freevxfs"
+        line: "install freevxfs /bin/true"
+        state: present
+        create: true
+    - name: 1.1.1.2 Ensure mounting of freevxfs filesystems is disabled | modprobe
+      modprobe:
+        name: freevxfs
+        state: absent
+  when: disable_freevxfs
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - "1.1.1.2"
+    - filesystems
+    - freevxfs
+    - modprobe
+# 1.1.1.3 Ensure mounting of jffs2 filesystems is disabled
+# The jffs2 (journaling flash filesystem 2) filesystem type is a log-structured filesystem used
+# in flash memory devices.
+- name: 1.1.1.3 Ensure mounting of jffs2 filesystems is disabled
+  block:
+    - name: 1.1.1.3 Ensure mounting of jffs2 filesystems is disabled
+      lineinfile:
+        dest: /etc/modprobe.d/CIS.conf
+        regexp: "^(#)?install jffs2(\\s|$)"
+        line: "install jffs2 /bin/true"
+        state: present
+        create: true
+    - name: 1.1.1.3 Ensure mounting of jffs2 filesystems is disabled
+      modprobe:
+        name: jffs2
+        state: absent
+  when: disable_jffs2
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.1.1.3
+    - filesystems
+    - jffs2
+    - modprobe
+# 1.1.1.4 Ensure mounting of hfs filesystems is disabled
+# The hfs filesystem type is a hierarchical filesystem that allows you to mount Mac OS
+# filesystems.
+- name: 1.1.1.4 Ensure mounting of hfs filesystems is disabled
+  block:
+    - name: 1.1.1.4 Ensure mounting of hfs filesystems is disabled
+      lineinfile:
+        dest: /etc/modprobe.d/CIS.conf
+        regexp: "^(#)?install hfs(\\s|$)"
+        line: "install hfs /bin/true"
+        state: present
+        create: true
+    - name: 1.1.1.4 Ensure mounting of hfs filesystems is disabled | modprobe
+      modprobe:
+        name: hfs
+        state: absent
+  when: disable_hfs
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.1.1.4
+    - filesystems
+    - modprobe
+    - hfs
+# 1.1.1.5 Ensure mounting of hfsplus filesystems is disabled
+# The hfsplus filesystem type is a hierarchical filesystem designed to replace hfs that allows
+# you to mount Mac OS filesystems.
+- name: 1.1.1.5 Ensure mounting of hfsplus filesystems is disabled
+  block:
+    - name: 1.1.1.5 Ensure mounting of hfsplus filesystems is disabled
+      lineinfile:
+        dest: /etc/modprobe.d/CIS.conf
+        regexp: "^(#)?install hfsplus(\\s|$)"
+        line: "install hfsplus /bin/true"
+        state: present
+        create: true
+    - name: 1.1.1.5 Ensure mounting of hfsplus filesystems is disabled | modprobe
+      modprobe:
+        name: hfsplus
+        state: absent
+  when: disable_hfsplus
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.1.1.5
+    - filesystems
+    - hfsplus
+    - modprobe
+
+# 1.1.1.7 Ensure mounting of udf filesystems is disabled
+# The udf filesystem type is the universal disk format used to implement ISO/IEC 13346 and
+# ECMA-167 specifications. This is an open vendor filesystem type for data storage on a
+# broad range of media. This filesystem type is necessary to support writing DVDs and newer
+# optical disc formats.
+- name: 1.1.1.7 Ensure mounting of udf filesystems is disabled
+  block:
+    - name: 1.1.1.7 Ensure mounting of udf filesystems is disabled
+      lineinfile:
+        dest: /etc/modprobe.d/CIS.conf
+        regexp: "^(#)?install udf(\\s|$)"
+        line: "install udf /bin/true"
+        state: present
+        create: true
+    - name: 1.1.1.7 Ensure mounting of udf filesystems is disabled | modprobe
+      modprobe:
+        name: udf
+        state: absent
+  when: disable_udf
+  tags:
+    - section1
+    - level_1_server    
+    - level_1_workstation
+    - 1.1.1.7
+    - filesystems
+    - udf
+    - modprobe
+# 1.1.1.7 Ensure mounting of FAT filesystems is limited
+# The FAT filesystem format is primarily used on older windows systems and portable USB
+# drives or flash modules. It comes in three types FAT12 , FAT16 , and FAT32 all of which are
+# supported by the vfat kernel module.
+#Note:
+# The FAT filesystem format is used by UEFI systems for the EFI boot partition. Disabling the
+# vfat module can prevent boot on UEFI systems.
+- name: 1.1.1.7 Ensure mounting of FAT filesystems is limited
+  block:
+    - name: 1.1.1.7 Ensure mounting of FAT filesystems is limited
+      lineinfile:
+        dest: /etc/modprobe.d/CIS.conf
+        regexp: "^(#)?install vfat(\\s|$)"
+        line: "install vfat /bin/true"
+        state: present
+        create: true
+    - name: 1.1.1.7 Ensure mounting of FAT filesystems is limited | modprobe
+      modprobe:
+        name: vfat
+        state: absent
+  ignore_errors: yes
+  when: disable_fat
+  tags:
+    - section1
+    - level_2_server
+    - level_2_workstation
+    - 1.1.1.7
+    - filesystems
+    - fat
+    - modprobe
+#
+# 1.1.2 Ensure /tmp is configured
+# The /tmp directory is a world-writable directory used for temporary storage by all users
+# and some applications.
+# Notes:
+# If an entry for /tmp exists in /etc/fstab it will take precedence over entries in the
+# tmp.mount file.
+# tmpfs can be resized using the size={size} parameter in /etc/fstab or on the Options
+# line in the tmp.mount file. If we don't specify the size, it will be half the RAM.
+- name: "1.1.2 Ensure /tmp is configured\n
+         1.1.3 Ensure nodev option set on /tmp partition\n
+         1.1.4 Ensure nosuid option set on /tmp partition\n
+         1.1.5 Ensure noexec option set on /tmp partition"
+  block:
+    - name: 1.1.2 Ensure /tmp is configured
+      copy:
+        src: /usr/share/systemd/tmp.mount
+        dest: /etc/systemd/system/tmp.mount
+        owner: root
+        group: root
+        mode: 0644
+        force: true
+        remote_src: true
+    - name: 1.1.2 Ensure /tmp is configured | edit file
+      lineinfile:
+        dest: /etc/systemd/system/tmp.mount
+        regexp: "^Options=mode="
+        line: "Options=mode=1777,strictatime,nosuid,nodev,noexec"
+    - name: 1.1.2 Ensure /tmp is configured | reload demon
+      systemd:
+        daemon_reload: yes
+    - name: 1.1.2 Ensure /tmp is configured | enable and start tmp.mount
+      systemd:
+        name: tmp.mount
+        enabled: yes
+        masked: no
+        state: started
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.1.2
+    - 1.1.3
+    - 1.1.4
+    - 1.1.5
+    - tmp
+    - mount
+# 1.1.6 Ensure /dev/shm is configured
+# 1.1.7 Ensure nodev option set on /dev/shm partition
+# 1.1.8 Ensure nosuid option set on /dev/shm partition
+# 1.1.9 Ensure noexec option set on /dev/shm partition
+# /dev/shm is a traditional shared memory concept. One program will create a memory
+# portion, which other processes (if permitted) can access. Mounting tmpfs at /dev/shm is
+# handled automatically by systemd.
+- name: "1.1.6 Ensure /dev/shm is configured\n
+         1.1.7 Ensure nodev option set on /dev/shm partition\n
+         1.1.8 Ensure nosuid option set on /dev/shm partition\n
+         1.1.9 Ensure noexec option set on /dev/shm partition"
+  mount:
+    name: /dev/shm
+    src: tmpfs
+    state: mounted
+    fstype: tmpfs
+    opts: "defaults,nodev,nosuid,noexec"
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.1.6
+    - 1.1.7
+    - 1.1.8
+    - 1.1.9
+    - mount
+    - shm
+
+# 1.1.11 Ensure separate partition exists for /var/tmp
+# 1.1.12 Ensure /var/tmp partition includes the nodev option
+# 1.1.13 Ensure /var/tmp partition includes the nosuid option
+# 1.1.14 Ensure /var/tmp partition includes the noexec option
+# The /var/tmp directory is a world-writable directory used for temporary storage by all
+# users and some applications.
+- name: "1.1.12 Ensure nodev option set on /var/tmp partition\n
+         1.1.13 Ensure nosuid option set on /var/tmp partition\n
+         1.1.14 Ensure noexec option set on /var/tmp partition"
+  block:
+    - name: 1.1.12 Ensure nodev option set on /var/tmp partitions
+      shell: |
+        mount | grep "on /var/tmp" && true || true
+      register: vartemp
+    - name: /var/tmp partitions
+      debug:
+        msg: "{{ vartemp.stdout_lines }}"
+  tags:
+    - section1
+    - level_2_server
+    - level_2_workstation
+    - 1.1.11
+    - 1.1.12
+    - 1.1.13
+    - 1.1.14
+    - mount
+    - tmp
+    - manual
+
+#1.1.18 Ensure /home partition includes the nodev option
+- name: 1.1.18 Ensure nodev option set on /home partition
+  debug:
+    msg: For new installations, during installation create a custom partition setup and specify a separate partition
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.1.18
+    - manual
+
+# 1.1.22 Ensure sticky bit is set on all world-writable directories
+- name: 1.1.22 Ensure sticky bit is set on all world-writable directories
+  block:
+    - name: 1.1.22 Ensure sticky bit is set on all world-writable directories | get info
+      shell: |
+        df --local -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev -type d \( -perm -0002 -a ! -perm -1000 \) 2>/dev/null
+      register: worldWriteableList
+      ignore_errors: yes
+    - name: 1.1.22 Ensure sticky bit is set on all world-writable directories | fix
+      script: 1_1_22.sh
+      when: worldWriteableList.stdout_lines |length > 0
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.1.22
+# 1.1.23 Disable Automounting
+# autofs allows automatic mounting of devices, typically including CD/DVDs and USB drives.
+# Note: This control should align with the tolerance of the use of portable drives and optical
+# media in the organization. On a server requiring an admin to manually mount media can be
+# part of defense-in-depth to reduce the risk of unapproved software or information being
+# introduced or proprietary software or information being exfiltrated. If admins commonly use
+# flash drives and Server access has sufficient physical controls, requiring manual mounting
+# may not increase security.
+- name: 1.1.23 Disable Automounting
+  block:
+    - name: 1.1.23 Disable Automounting | service disable
+      shell: if systemctl is-enabled --quiet autofs; then systemctl disable autofs && echo disable_ok ; fi
+    - name: 1.1.23 Disable Automounting | package remove
+      apt:
+        name: autofs
+        state: absent
+        purge: yes
+  when: disable_autofs
+  tags:
+    - section1
+    - level_1_server
+    - level_2_workstation
+    - 1.1.23
+# 1.1.24 Disable USB Storage
+# USB storage provides a means to transfer and store files insuring persistence and
+# availability of the files independent of network connection status. Its popularity and utility
+# has led to USB-based malware being a simple and common means for network infiltration
+# and a first step to establishing a persistent threat within a networked environment.
+# Note: An alternative solution to disabling the usb-storage module may be found in USBGuard.
+# Use of USBGuard and construction of USB device policies should be done in alignment with
+# site policy.
+- name: 1.1.24 Disable USB Storage
+  block:
+    - name: 1.1.24 Disable USB Storage | modprobe
+      lineinfile:
+        dest: /etc/modprobe.d/CIS.conf
+        regexp: "^(#)?install usb-storage(\\s|$)"
+        line: "install usb-storage /bin/true"
+        state: present
+        create: true
+    - name: 1.1.24 Disable USB Storage
+      modprobe:
+        name: usb-storage
+        state: absent
+  when: disable_usb
+  tags:
+    - section1
+    - level_1_server
+    - level_2_workstation
+    - 1.1.24
+
+
+# 1.3 Filesystem Integrity Checking
+# AIDE is a file integrity checking tool, similar in nature to Tripwire. While it cannot prevent
+# intrusions, it can detect unauthorized changes to configuration files by alerting when the
+# files are changed. When setting up AIDE, decide internally what the site policy will be
+# concerning integrity checking. Review the AIDE quick start guide and AIDE documentation
+# before proceeding.
+# 1.3.1 Ensure AIDE is installed
+# AIDE takes a snapshot of filesystem state including modification times, permissions, and
+# file hashes which can then be used to compare against the current state of the filesystem to
+# detect modifications to the system.
+# Note: The prelinking feature can interfere with AIDE because it alters binaries to speed up
+# their start up times. Run prelink -ua to restore the binaries to their prelinked state, thus
+# avoiding false positives from AIDE.
+- name: 1.3.1 Ensure AIDE is installed
+  block:
+    - name: 1.3.1 Ensure AIDE is installed
+      apt:
+        name: [ "aide-common", "aide"]
+        state: present
+#        install_recommends: false
+#    - name: Configure default AIDE excludes file
+#      copy:
+#        src: "files/1_4_1.txt"
+#        dest: "/etc/aide/aide.conf.d/00_local_excludes"
+#    - name: Simplify AIDE checksums
+#      lineinfile:
+#        regexp: '^Checksums.*='
+#        line: "Checksums = {{ aide_checksums }}"
+#        path: "/etc/aide/aide.conf"
+#        state: present
+#      when: (aide_checksums is defined) and (aide_checksums| length > 0)
+#    - name: Add extra AIDE exclude paths
+##      lineinfile:
+#        line: "{{ item }}"
+#        path: "/etc/aide/aide.conf.d/00_local_excludes"
+#        state: present
+#      loop: "{{ aide_exclude_paths }}"
+ #     when: (aide_exclude_paths is defined) and (aide_exclude_paths| length > 0)
+#    - name: Configure AIDE as appropriate for your environment | aideinit
+#      command: aideinit -y --force -b
+#      ignore_errors: true    
+#    - name: Configure AIDE as appropriate for your environment | aideinit db
+#      shell: mv /var/lib/aide/aide.db.new /var/lib/aide/aide.db
+      ignore_errors: true
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.3.1
+# 1.3.2 Ensure filesystem integrity is regularly checked
+# Periodic checking of the filesystem integrity is needed to detect changes to the filesystem.
+# Notes:
+# The checking in this recommendation occurs every day at 5am. Alter the frequency and
+# time of the checks in compliance with site policy
+# systemd timers, timer file aidecheck.timer and service file aidecheck.service , have
+# been included as an optional alternative to using cron
+# Ubuntu advises using /usr/bin/aide.wrapper rather than calling /usr/bin/aide
+# directly in order to protect the database and prevent conflicts
+- name: 1.3.2 Ensure filesystem integrity is regularly checked | Cron
+  cron:
+    name: Run AIDE integrity check weekly
+    user: root
+    minute: "0"
+    hour: "5"
+    day: "*"
+    month: "*"
+    weekday: "*"
+    job: "/usr/bin/aide.wrapper --config /etc/aide/aide.conf --check"
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.3.2
+
+
+# 1.4 Secure Boot Settings
+# The recommendations in this section focus on securing the bootloader and settings
+# involved in the boot process directly.
+
+# 1.4.1 Ensure permissions on bootloader config are not overridden
+- name: 1.4.1 Ensure permissions on bootloader config are not overridden 
+  block:
+    - name: 1.4.1 Ensure permissions on bootloader config are not overridden - step 1 - update chmod 444 to chmod 400 in /usr/sbin/grubmkconfig
+      shell: sed -ri 's/chmod\s+[0-7][0-7][0-7]\s+\$\{grub_cfg\}\.new/chmod 400 ${grub_cfg}.new/' /usr/sbin/grub-mkconfig
+    - name: 1.4.1 Ensure permissions on bootloader config are not overridden - step 2 -  check on password not being set before running chmod command
+      shell:  sed -ri 's/ && ! grep "\^password" \$\{grub_cfg\}.new >\/dev\/null//' /usr/sbin/grub-mkconfig
+  when: protect_bootloader_permissions
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.4.1
+
+# 1.4.3 Ensure permissions on bootloader config are configured
+# The grub configuration file contains information on boot settings and passwords for
+# unlocking boot options. The grub configuration is usually grub.cfg stored in /boot/grub/ .
+# Note: This recommendation is designed around the grub bootloader, if LILO or another
+# bootloader is in use in your environment enact equivalent settings. Replace
+# /boot/grub/grub.cfg with the appropriate grub configuration file for your environment
+- name: 1.4.3 Ensure permissions on bootloader config are configured
+  file:
+    path: "/boot/grub/grub.cfg"
+    owner: root
+    group: root
+    mode: "og-rwx"
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.4.3
+
+# 1.5 Additional Process Hardening
+# 1.5.2 Ensure address space layout randomization (ASLR) is enabled
+# Address space layout randomization (ASLR) is an exploit mitigation technique which
+# randomly arranges the address space of key data areas of a process.
+- name: 1.5.2 Ensure address space layout randomization (ASLR) is enabled
+  sysctl:
+    name: kernel.randomize_va_space
+    value: "2"
+    state: present
+    reload: true
+    sysctl_set: true
+    ignoreerrors: true
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.5.2
+# 1.5.3 Ensure prelink is not installed
+- name: 1.5.3 Ensure prelink is not installed
+  block:
+    - name: 1.5.3 Ensure prelink is not installed
+      command: prelink -ua
+      ignore_errors: yes
+    - name: 1.5.3 Ensure prelink is not installed
+      apt:
+        name: prelink
+        state: absent
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.5.3
+# 1.5.4 Ensure core dumps are restricted
+# A core dump is the memory of an executable program. It is generally used to determine
+# why a program aborted. It can also be used to glean confidential information from a core
+# file. The system provides the ability to set a soft limit for core dumps, but this can be
+# overridden by the user.
+- name: 1.5.4 Ensure core dumps are restricted
+  block:
+    - name: 1.5.4 Ensure core dumps are restricted | sysctl
+      sysctl:
+        name: fs.suid_dumpable
+        value: "0"
+        state: present
+        reload: true
+        sysctl_set: true
+        ignoreerrors: true
+    - name: 1.5.4 Ensure core dumps are restricted | limits.conf
+      lineinfile:
+        dest: /etc/security/limits.conf
+        line: "*                hard    core            0"
+        regexp: '(^#)?\*\s+hard\s+core\s+[0-9]+'
+        state: present
+        create: true
+        insertbefore: "# End of file"
+    - name: 1.5.4 Ensure core dumps are restricted | apt
+      apt:
+        name: systemd-coredump
+        state: present
+    - name: 1.5.4 Ensure core dumps are restricted | coredump.conf
+      lineinfile:
+        dest: /etc/systemd/coredump.conf
+        line: "Storage=none"
+        regexp: '(^#)?\s*Storage\s*='
+        state: present
+        create: true
+        insertbefore: "# End of file"
+    - name: 1.5.4 Ensure core dumps are restricted | coredump.conf
+      lineinfile:
+        dest: /etc/systemd/coredump.conf
+        line: "ProcessSizeMax=0"
+        regexp: '(^#)?\s*ProcessSizeMax\s*='
+        state: present
+        create: true
+        insertbefore: "# End of file"
+    - name: 1.5.4 Ensure core dumps are restricted | reload
+      shell: systemctl daemon-reload
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.5.4
+# 1.6 Mandatory Access Control
+# Mandatory Access Control (MAC) provides an additional layer of access restrictions to
+# processes on top of the base Discretionary Access Controls. By restricting how processes
+# can access files and resources on a system the potential impact from vulnerabilities in the
+# processes can be reduced.
+# Impact: Mandatory Access Control limits the capabilities of applications and daemons on a
+# system, while this can prevent unauthorized access the configuration of MAC can be complex
+# and difficult to implement correctly preventing legitimate access from occurring.
+# 1.6.1 Configure AppArmor
+# 1.6.1.1 Ensure AppArmor is installed
+# AppArmor provides Mandatory Access Controls.
+- name: 1.6.1.1 Ensure AppArmor is installed
+  apt:
+    name: ["apparmor"]
+    state: present
+  when: install_apparmor
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.6.1.1
+
+# 1.6.1.3 Ensure all AppArmor Profiles are in enforce or complain mode
+# AppArmor profiles define what resources applications are able to access.
+- name: "1.6.1.3 Ensure all AppArmor Profiles are in enforce or complain mode\n
+         1.6.1.4 Ensure all AppArmor Profiles are enforcing"
+  shell: |
+    find /etc/apparmor.d -maxdepth 1 -type f | while read file
+    do
+      if grep --quiet "flags\s*=.*complain" "$file"; then
+        aa-enforce "$file"
+      fi
+    done
+  tags:
+    - section1
+    - level_2_server
+    - level_2_workstation
+    - 1.6.1.3
+    - 1.6.1.4
+
+# 1.7 Warning Banners
+# Presenting a warning message prior to the normal user login may assist in the prosecution
+# of trespassers on the computer system. Changing some of these login banners also has the
+# side effect of hiding OS version information and other detailed system information from
+# attackers attempting to target specific exploits at a system.
+
+# 1.7.1 Command Line Warning Banners
+# The /etc/motd , /etc/issue , and /etc/issue.net files govern warning banners for
+# standard command line logins for both local and remote users.
+
+# 1.7.1 Ensure message of the day is configured properly
+# The contents of the /etc/motd file are displayed to users after login and function as a
+# message of the day for authenticated users.
+# Unix-based systems have typically displayed information about the OS release and patch
+# level upon logging in to the system. This information can be useful to developers who are
+# developing software for a particular OS platform. If mingetty(8) supports the following
+# options, they display operating system information: \m - machine architecture \r -
+# operating system release \s - operating system name \v - operating system version
+
+# We allow overwriting the default motd message (contained in files/templates/motd.j2) by a custom template, whose path
+# has to be defined in the variable "custom_motd_file_path".
+# 1.7.4 Ensure permissions on /etc/motd are configured
+- block:
+  - name: "1.7.1 Ensure message of the day is configured properly\n
+          1.7.4 Ensure permissions on /etc/motd are configured"
+    template:
+      src: "{{ lookup('first_found', motd, errors='ignore') }}"
+      dest: /etc/motd
+      owner: root
+      group: root
+      mode: "u-x,go-wx"
+  - name: "1.7.1 Ensure message of the day is configured properly\n
+           1.7.4 Ensure permissions on /etc/motd are configured  | Show templates used"
+    debug:
+      msg: "{{'custom file not found, using default' if 'files/templates/motd.j2' in lookup('first_found', motd, errors='warn') else 'Custom file found, using ' ~ custom_motd_file_path }}"
+    run_once: true
+  vars:
+    - motd:
+      - "{{ custom_motd_file_path }}"
+      - "files/templates/motd.j2"
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.7.1
+    - 1.7.4
+
+# 1.7.2 Ensure local login warning banner is configured properly
+# We allow overwriting the default local login message (contained in files/templates/issue.j2) by a custom template, whose path
+# has to be defined in the variable "custom_issue_file_path".
+# 1.7.5 Ensure permissions on /etc/issue are configured
+- block:
+  - name: "1.7.2 Ensure local login warning banner is configured properly\n
+           1.7.5 Ensure permissions on /etc/issue are configured"
+    template:
+      src: "{{ lookup('first_found', issue, errors='ignore') }}"
+      dest: /etc/issue
+      owner: root
+      group: root
+      mode: "u-x,go-wx"
+  - name: "1.7.2 Ensure local login warning banner is configured properly\n
+           1.7.5 Ensure permissions on /etc/issue are configured  | Show templates used"
+    debug:
+      msg: "{{'custom file not found, using default' if 'files/templates/issue.j2' in lookup('first_found', issue, errors='warn') else 'Custom file found, using ' ~ custom_issue_file_path }}"
+    run_once: true
+  vars:
+    - issue:
+      - "{{ custom_issue_file_path }}"
+      - "files/templates/issue.j2"
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.7.2
+    - 1.7.5
+
+# 1.7.3 Ensure remote login warning banner is configured properly
+# We allow overwriting the default remote login message (contained in files/templates/issue.net.j2) by a custom template, whose path
+# has to be defined in the variable "custom_issue_net_file_path".
+# 1.7.6 Ensure permissions on /etc/issue.net are configured
+- block:
+  - name: "1.7.3 Ensure local remote warning banner is configured properly\n
+           1.7.6 Ensure permissions on /etc/issue.net are configured"
+    template:
+      src: "{{ lookup('first_found', issue_net, errors='ignore') }}"
+      dest: /etc/issue.net
+      owner: root
+      group: root
+      mode: "u-x,go-wx"
+  - name: "1.7.3 Ensure remote login warning banner is configured properly\n
+           1.7.6 Ensure permissions on /etc/issue.net are configured  | Show templates used"
+    debug:
+      msg: "{{'custom file not found, using default' if 'files/templates/issue.net.j2' in lookup('first_found', issue_net, errors='warn') else 'Custom file found, using ' ~ custom_issue_net_file_path }}"
+    run_once: true
+  vars:
+    - issue_net:
+      - "{{ custom_issue_net_file_path }}"
+      - "files/templates/issue.net.j2"
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.7.3
+    - 1.7.6
+
+# 1.8 GNOME Display Manager
+# Note: If GDM is not installed on the system, this section can be skipped
+# 1.8.1 Ensure GNOME Display Manager is removed
+# apt purge gdm3
+# 1.8.2 Ensure GDM login banner is configured
+# Edit or create the file /etc/gdm3/greeter.dconf-defaults and add the following:
+# [org/gnome/login-screen] 
+# banner-message-enable=true 
+# banner-message-text='<banner message>' 
+# disable-user-list=true
+# Then dpkg-reconfigure gdm3
+# 1.8.3 Ensure disable-user-list is enabled
+# Edit or create the file /etc/gdm3/greeter.dconf-defaults and edit or add the following:
+# [org/gnome/login-screen] 
+# banner-message-enable=true 
+# banner-message-text='<banner message>' 
+# disable-user-list=true
+# Then dpkg-reconfigure gdm3
+# 1.8.4 Ensure XDCMP is not enabled
+# Edit the file /etc/gdm3/custom.conf and remove the line: 
+# Enable=true
+
+# 2.1 Special Purpose Services
+# 2.1.1 Time Synchronization
+# If access to a physical host's clock is available and configured according to site policy,
+# this section can be skipped
+# Only one time synchronization method should be in use on the system
+# Only the section related to the time synchronization method in use on the system
+# should be followed, all other time synchronization recommendations should be skipped
+# If access to a physical host's clock is available and configured according to site policy,
+# systemd-timesyncd should be stopped and masked
+# 2.1.1.1 Ensure time synchronization is in use
+# System time should be synchronized between all systems in an environment. This is
+# typically done by establishing an authoritative time server or set of servers and having all
+# systems synchronize their clocks to them.
+# If access to a physical host's clock is available and configured according to site policy,
+# this section can be skipped
+# Only one time synchronization method should be in use on the system
+# If access to a physical host's clock is available and configured according to site policy,
+# systemd-timesyncd should be stopped and masked
+- name: 2.1.1.1 Ensure time synchronization is in use
+  block:
+    - name: 2.1.1.1 Ensure time synchronization is in use - service install
+      apt:
+        name: ["chrony"]
+        state: present
+        install_recommends: false
+    - name: 2.1.1.1 Ensure time synchronization is in use - service start
+      service:
+        name: "chrony"
+        state: started
+        enabled: true
+  ignore_errors: true
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.1.1
+# 2.1.1.2 Ensure systemd-timesyncd is configured
+# The systemd-timesyncd service specifically implements only SNTP. This minimalistic
+# service will set the system clock for large offsets or slowly adjust it for smaller deltas.
+# More complex use cases are not covered by systemd-timesyncd
+# If chrony or ntp are used, systemd-timesyncd should be stopped and masked, and this
+# section skipped
+# This recommendation only applies if timesyncd is in use on the system
+# Only one time synchronization method should be in use on the system
+- name: 2.1.1.2 Ensure systemd-timesyncd is configured
+  block:
+    - name: 2.1.1.2 Remove NTP
+      apt:
+        name: "ntp"
+        state: absent
+    - name: 2.1.1.2 Ensure systemd-timesyncd is configured | install systemd-timesyncd
+      apt:
+         name: systemd-timesyncd
+         state: present
+    - name: 2.1.1.2 Ensure systemd-timesyncd is configured | set timezone
+      timezone:
+        name: "{{ timesync_timezone }}"
+    - name: 2.1.1.2 Ensure systemd-timesyncd is configured | Configure systemd-timesyncd
+      template:
+        src:  files/templates/timesyncd.conf.j2
+        dest: /etc/systemd/timesyncd.conf
+        mode: 0644
+        owner: root
+        group: root
+      notify: reloadTimesyncd
+    - name: 2.1.1.2 Ensure systemd-timesyncd is configured | Start and enable systemd-timesyncd
+      service:
+        name: systemd-timesyncd.service
+        enabled: yes
+        state: started
+  when: enable_systemdtimesyncd
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.1.2
+# 2.1.1.3 Ensure chrony is configured
+- name: 2.1.1.3 Ensure chrony is configured
+  block:
+    - name: 2.1.1.3 Remove NTP
+      apt:
+        name: "ntp"
+        state: absent
+    - name: 2.1.1.3 Ensure chrony is configured | Install Chrony
+      apt:
+        name: "chrony"
+        state: present
+    - name: 2.1.1.3 Ensure chrony is configured | Start Chrony service
+      service:
+        name: "chrony"
+        state: started
+        enabled: yes
+    - name: 2.1.1.3 Ensure chrony is configured | Generate configuration
+      template:
+        src: files/templates/chrony.conf.j2
+        dest: "/etc/chrony/chrony.conf"
+        owner: root
+        group: root
+        mode: 0644
+      register: chrony_conf
+    - name: 2.1.1.3 Ensure chrony is configured | Restart Chrony service
+      service:
+        name: "chrony"
+        state: restarted
+        enabled: yes
+      when: chrony_conf.changed
+  when: chronyEnable
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.1.3
+# 2.1.1.4 Ensure ntp is configured
+# ntp is a daemon which implements the Network Time Protocol (NTP). It is designed to
+# synchronize system clocks across a variety of systems and use a source that is highly
+# accurate. More information on NTP can be found at http://www.ntp.org. ntp can be
+# configured to be a client and/or a server.
+#- name: 2.1.1.4 Ensure ntp is configured
+#  block:
+#    - name: Check if NTP is installed
+#      package_facts:
+#        manager: "auto"
+#    - name: 2.1.1.4 Ensure ntp is configured | modify /etc/ntp.conf
+#      template:
+#        src: files/templates/ntp.conf.j2
+#        dest: /etc/ntp.conf
+#        owner: root
+#        group: root
+#        mode: 0644
+#      when: "'ntp' in ansible_facts.packages"
+#    - name: 2.1.1.4 Ensure ntp is configured | modify /etc/init.d/ntp
+#      lineinfile:
+#       dest: /etc/init.d/ntp
+#        regexp: "^RUNASUSER"
+#        line: "RUNASUSER=ntp"
+#      when: "'ntp' in ansible_facts.packages"
+#  tags:
+#    - section2
+#    - level_1_server
+#    - level_1_workstation
+#    - 2.1.1.4
+# 2.1.2 Ensure X Window System is not installed
+# Many Linux systems run applications which require a Java runtime. Some Linux Java
+# packages have a dependency on specific X Windows xorg-x11-fonts. One workaround to
+# avoid this dependency is to use the "headless" Java packages for your specific Java runtime,
+# if provided by your distribution.
+- name: 2.1.2 Ensure X Window System is not installed
+  apt:
+    name: ["xserver-xorg*"]
+    state: absent
+    purge: yes
+  when: remove_XWindowSystem
+  tags:
+    - section2
+    - level_1_server
+    - 2.1.2
+# 2.1.3 Ensure Avahi Server is not installed
+# Avahi is a free zeroconf implementation, including a system for multicast DNS/DNS-SD
+# service discovery. Avahi allows programs to publish and discover services and hosts
+# running on a local network with no specific configuration. For example, a user can plug a
+# computer into a network and Avahi automatically finds printers to print to, files to look at
+# and people to talk to, as well as network services running on the machine.
+- name: 2.1.3 Ensure Avahi Server is not installed
+  apt:
+    name: avahi-daemon
+    state: absent
+    purge: yes
+  when: remove_AvahiServer
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.3
+# 2.1.4 Ensure CUPS is not installed
+# The Common UNIX Print System (CUPS) provides the ability to print to both local and
+# network printers. A system running CUPS can also accept print jobs from remote systems
+# and print them to local printers. It also provides a web based remote administration
+# capability.
+# Removing CUPS will prevent printing from the system, a common task for workstation systems.
+- name: 2.1.4 Ensure CUPS is not installed
+  apt:
+    name: cups
+    state: absent
+    purge: yes
+  when: remove_CUPS
+  tags:
+    - section2
+    - level_1_server
+    - level_2_workstation
+    - 2.1.4
+# 2.1.5 Ensure DHCP Server is not installed
+# The Dynamic Host Configuration Protocol (DHCP) is a service that allows machines to be
+# dynamically assigned IP addresses.
+- name: 2.1.5 Ensure DHCP Server is not installed
+  apt:
+    name: isc-dhcp-server
+    state: absent
+    purge: yes
+  when: remove_DHCPServer
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.5
+# 2.1.6 Ensure LDAP server is not installed
+# The Lightweight Directory Access Protocol (LDAP) was introduced as a replacement for
+# NIS/YP. It is a service that provides a method for looking up information from a central
+# database.
+- name: 2.1.6 Ensure LDAP server is not installed
+  apt:
+    name: slapd
+    state: absent
+    purge: yes
+  when: remove_LDAPserver
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.6
+# 2.1.7 Ensure NFS is not installed
+# The Network File System (NFS) is one of the first and most widely distributed file systems
+# in the UNIX environment. It provides the ability for systems to mount file systems of other
+# servers through the network.
+- name: 2.1.7 Ensure NFS is not installed
+  apt:
+    name: rpcbind
+    state: absent
+    purge: yes
+  when: remove_NFS
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.7
+# 2.1.8 Ensure DNS Server is not installed
+# The Domain Name System (DNS) is a hierarchical naming system that maps names to IP
+# addresses for computers, services and other resources connected to a network.
+- name: 2.1.8 Ensure DNS Server is not installed
+  apt:
+    name: bind9
+    state: absent
+    purge: yes
+  when: remove_DNSServer
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.8
+# 2.1.9 Ensure FTP Server is not installed
+# The File Transfer Protocol (FTP) provides networked computers with the ability to transfer
+# files.
+# Note: Additional FTP servers also exist and should be audited.
+- name: 2.1.9 Ensure FTP Server is not installed
+  apt:
+    name: vsftpd
+    state: absent
+    purge: yes
+  when: remove_FTPServer
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.9
+# 2.1.10 Ensure HTTP server is not installed
+# HTTP or web servers provide the ability to host web site content.
+# Note: Several httpd servers exist and can use other service names. apache2 and nginx are
+# example services that provide an HTTP server. These and other services should also be audited
+- name: 2.1.10 Ensure HTTP server is not installed
+  apt:
+    name: ["{{ web_server_name }}"]
+    state: absent
+    purge: yes
+  when: remove_HTTPserver
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.10
+# 2.1.11 Ensure IMAP and POP3 server are not installed
+# dovecot-imapd and dovecot-pop3d are an open source IMAP and POP3 server for Linux
+# based systems.
+# Note: Several IMAP/POP3 servers exist and can use other service names. courier-imap and
+# cyrus-imap are example services that provide a mail server. These and other services should
+# also be audited.
+- name: 2.1.11 Ensure IMAP and POP3 server are not installed
+  apt:
+    name: ["dovecot-imapd", "dovecot-pop3d"]
+    state: absent
+    purge: yes
+  when: remove_IMAPandPOP3server
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.11
+# 2.1.12 Ensure Samba is not installed
+# The Samba daemon allows system administrators to configure their Linux systems to share
+# file systems and directories with Windows desktops. Samba will advertise the file systems
+# and directories via the Server Message Block (SMB) protocol. Windows desktop users will
+# be able to mount these directories and file systems as letter drives on their systems.
+- name: 2.1.12 Ensure Samba is not installed
+  become: yes
+  apt:
+    name: samba*
+    state: absent
+    force: yes
+    purge: yes
+  when: remove_Samba 
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.12
+# 2.1.13 Ensure HTTP Proxy Server is not installed
+# Squid is a standard proxy server used in many distributions and environments.
+# Note: Several HTTP proxy servers exist. These and other services should be checked
+- name: 2.1.13 Ensure HTTP Proxy Server is not installed
+  apt:
+    name: "{{HTTPProxyServer}}"
+    state: absent
+    purge: yes
+  when: remove_HTTPProxyServer
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.13
+# 2.1.14 Ensure SNMP Server is not installed
+# Simple Network Management Protocol (SNMP) is a widely used protocol for monitoring the
+# health and welfare of network equipment, computer equipment and devices like UPSs.
+# Net-SNMP is a suite of applications used to implement SNMPv1 (RFC 1157), SNMPv2 (RFCs
+# 1901-1908), and SNMPv3 (RFCs 3411-3418) using both IPv4 and IPv6.
+# Support for SNMPv2 classic (a.k.a. "SNMPv2 historic" - RFCs 1441-1452) was dropped with
+# the 4.0 release of the UCD-snmp package.
+# The Simple Network Management Protocol (SNMP) server is used to listen for SNMP
+# commands from an SNMP management system, execute the commands or collect the
+# information and then send results back to the requesting system.
+- name: 2.1.14 Ensure SNMP Server is not installed
+  apt:
+    name: snmpd
+    state: absent
+    purge: yes
+  when: remove_SNMPServer
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.14
+# 2.1.15 Ensure mail transfer agent is configured for local-only mode
+# Mail Transfer Agents (MTA), such as sendmail and Postfix, are used to listen for incoming
+# mail and transfer the messages to the appropriate user or mail server. If the system is not
+# intended to be a mail server, it is recommended that the MTA be configured to only process
+# local mail.
+- name: 2.1.15 Ensure mail transfer agent is configured for local-only mode
+  block:
+    - name: 2.1.15 Ensure mail transfer agent is configured for local-only mode
+      stat:
+        path: /etc/postfix/main.cf
+      register: postfix
+    - name: 2.1.15 Ensure mail transfer agent is configured for local-only mode
+      lineinfile:
+        dest: /etc/postfix/main.cf
+        regexp: "^(#)?inet_interfaces"
+        line: "inet_interfaces = 127.0.0.1"
+      register: postfix_conf_change
+      when: postfix.stat.exists
+    - name: 2.1.15 Restart Mail transfer agent
+      service:
+        name: postfix
+        state: restarted
+      when: postfix_conf_change.changed
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.15
+# 2.1.16 Ensure rsync service is not installed
+# The rsync service can be used to synchronize files between systems over network links.
+- name: 2.1.16 Ensure rsync service is not installed
+  apt:
+    name: rsync
+    state: absent
+    purge: yes
+  ignore_errors: yes
+  when: remove_rsyncservice
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.16
+# 2.1.17 Ensure NIS Server is not installed
+# The Network Information Service (NIS) (formally known as Yellow Pages) is a client-server
+# directory service protocol for distributing system configuration files. The NIS server is a
+# collection of programs that allow for the distribution of configuration files.
+- name: 2.1.17 Ensure NIS Server is not installed
+  apt:
+    name: nis
+    state: absent
+    purge: yes
+  when: remove_NISServer
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.1.17
+# 2.2 Service Clients
+# 2.2.1 Ensure NIS Client is not installed
+# The NIS service is inherently an insecure system that has been vulnerable to DOS attacks,
+# buffer overflows and has poor authentication for querying NIS maps. NIS generally has
+# been replaced by such protocols as Lightweight Directory Access Protocol (LDAP). It is
+# recommended that the service be removed.
+- name: 2.2.1 Ensure NIS Client is not installed
+  apt:
+    name: nis
+    state: absent
+    purge: yes
+  when: remove_NISClient
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.2.1
+# 2.2.2 Ensure rsh client is not installed
+# The rsh-client package contains the client commands for the rsh services.
+- name: 2.2.2 Ensure rsh client is not installed
+  apt:
+    name: rsh-client
+    state: absent
+    purge: yes
+  when: remove_rshclient
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.2.2
+# 2.2.3 Ensure talk client is not installed
+# The talk software makes it possible for users to send and receive messages across systems
+# through a terminal session. The talk client, which allows initialization of talk sessions, is
+# installed by default.
+- name: 2.2.3 Ensure talk client is not installed
+  apt:
+    name: talk
+    state: absent
+    purge: yes
+#  when: remove_talkclient
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.2.3
+# 2.2.4 Ensure telnet client is not installed
+# The telnet package contains the telnet client, which allows users to start connections to
+# other systems via the telnet protocol.
+# Many insecure service clients are used as troubleshooting tools and in testing
+# environments. Uninstalling them can inhibit capability to test and troubleshoot. If they are
+# required it is advisable to remove the clients after use to prevent accidental or intentional
+# misuse.
+- name: 2.2.4 Ensure telnet client is not installed
+  apt:
+    name: telnet
+    state: absent
+    purge: yes
+#  when: remove_telnetclient
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.2.4
+# 2.2.5 Ensure LDAP client is not installed
+# The Lightweight Directory Access Protocol (LDAP) was introduced as a replacement for
+# NIS/YP. It is a service that provides a method for looking up information from a central database.
+# Removing the LDAP client will prevent or inhibit using LDAP for authentication in your
+# environment.
+- name: 2.2.5 Ensure LDAP client is not installed
+  apt:
+    name: ldap-utils
+    state: absent
+    purge: yes
+  when: remove_LDAPclient
+  tags:
+    - section2
+    - level_1_server
+    - level_1_workstation
+    - 2.2.5
+
+
+# 3 Network Configuration
+# 3.1 Disable unused network protocols and devices
+
+# 3.1.2 Ensure wireless interfaces are disabled
+# If wireless is not to be used, wireless devices can be disabled to reduce the potential attack surface.
+# Edited to correct scripts. Do we need to remove other references to a wireless driver from /etc/modprobe.d/? The test system I used had a file iwlwifi.conf to load the correct drivers
+- name: 3.1.2 Ensure wireless interfaces are disabled
+  block:
+    - name: verify no wireless interfaces are active on the system
+      script: 3_1_2.sh
+      register: wifiStatus
+    - name: 3.1.2 Ensure wireless interfaces are disabled
+      script: 3_1_2_disable.sh
+      when:
+        - wifiStatus.stdout_lines ==  "Wireless is not enabled"
+        - disable_wifi
+  ignore_errors: true
+  tags:
+    - section3
+    - level_1_server
+    - level_2_workstation
+    - 3.1.2
+# 3.2 Network Parameters (Host Only)
+# 3.2.1 Ensure packet redirect sending is disabled
+# An attacker could use a compromised host to send invalid ICMP redirects to other router devices in an attempt to corrupt routing and have users access a system set up by the attacker as opposed to a valid system.
+- name: 3.2.1 Ensure packet redirect sending is disabled
+  block:
+    - name: 3.2.1 Ensure packet redirect sending is disabled | set
+      sysctl:
+        name: "{{ item.name }}"
+        value: "{{ item.value }}"
+        sysctl_set: true
+        state: present
+        reload: true
+      with_items:
+        - { name: net.ipv4.conf.all.send_redirects, value: 0 }
+        - { name: net.ipv4.conf.default.send_redirects, value: 0 }
+    - name: 3.2.1 Ensure packet redirect sending is disabled | load
+      shell: |
+        sysctl -w net.ipv4.conf.all.send_redirects=0
+        sysctl -w net.ipv4.conf.default.send_redirects=0
+        sysctl -w net.ipv4.route.flush=1
+  tags:
+    - section3
+    - level_1_server
+    - level_1_workstation
+    - 3.2.1
+# 3.2.2 Ensure IP forwarding is disabled
+# Setting the flags to 0 ensures that a system with multiple interfaces (for example, a hard proxy), will never be able to forward packets, and therefore, never serve as a router.
+- name: 3.2.2 Ensure IP forwarding is disabled"
+  block:
+    - name: 3.2.2 Ensure IP forwarding is disabled | ipv4"
+      sysctl:
+        name: net.ipv4.ip_forward
+        value: "0"
+        state: present
+        reload: true
+    - name: 3.2.2 Ensure IP forwarding is disabled | ipv6"
+      sysctl:
+        name: net.ipv6.conf.all.forwarding
+        value: "0"
+        state: present
+        reload: true
+      when: IPv6_is_enabled
+    - name: 3.2.2 Ensure IP forwarding is disabled | IPV4 load"
+      script: 3_2_2.sh
+    - name: 3.2.2 Ensure IP forwarding is disabled | IPV6 load"
+      script: 3_2_2_2.sh
+      when: IPv6_is_enabled
+  tags:
+    - section3
+    - level_1_server
+    - level_1_workstation
+    - 3.2.2
+# 3.3 Network Parameters (Host and Router)
+# 3.3.1 Ensure source routed packets are not accepted
+# Setting net.ipv4.conf.all.accept_source_route,
+# net.ipv4.conf.default.accept_source_route,
+# net.ipv6.conf.all.accept_source_route and
+# net.ipv6.conf.default.accept_source_route to 0 disables the system from accepting
+# source routed packets. Assume this system was capable of routing packets to Internet
+# routable addresses on one interface and private addresses on another interface. Assume
+# that the private addresses were not routable to the Internet routable addresses and vice
+# versa. Under normal routing circumstances, an attacker from the Internet routable
+# addresses could not use the system as a way to reach the private address systems. If,
+# however, source routed packets were allowed, they could be used to gain access to the
+# private address systems as the route could be specified, rather than rely on routing
+# protocols that did not allow this routing.
+- name: 3.3.1 Ensure source routed packets are not accepted"
+  block:
+    - name: 3.3.1 Ensure source routed packets are not accepted | ipv4"
+      sysctl:
+        name: "{{ item.name }}"
+        value: "{{ item.value }}"
+        sysctl_set: true
+        state: present
+        reload: true
+      with_items:
+        - { name: net.ipv4.conf.all.accept_source_route, value: 0 }
+        - { name: net.ipv4.conf.default.accept_source_route, value: 0 }
+    - name: 3.3.1 Ensure source routed packets are not accepted | ipv4 load"
+      shell: |
+        sysctl -w net.ipv4.conf.all.accept_source_route=0
+        sysctl -w net.ipv4.conf.default.accept_source_route=0
+        sysctl -w net.ipv4.route.flush=1
+    - name: 3.3.1 Ensure source routed packets are not accepted | ipv6"
+      sysctl:
+        name: "{{ item.name }}"
+        value: "{{ item.value }}"
+        sysctl_set: true
+        state: present
+        reload: true
+      with_items:
+        - { name: net.ipv6.conf.all.accept_source_route, value: 0 }
+        - { name: net.ipv6.conf.default.accept_source_route, value: 0 }
+      when:
+        - IPv6_is_enabled
+    - name: 3.3.1 Ensure source routed packets are not accepted | ipv6 load"
+      shell: |
+        sysctl -w net.ipv6.conf.all.accept_source_route=0
+        sysctl -w net.ipv6.conf.default.accept_source_route=0
+        sysctl -w net.ipv6.route.flush=1
+      when:
+        - IPv6_is_enabled
+  tags:
+    - section3
+    - level_1_server
+    - level_1_workstation
+    - 3.3.1
+# 3.3.2 Ensure ICMP redirects are not accepted
+# Attackers could use bogus ICMP redirect messages to maliciously alter the system routing
+# tables and get them to send packets to incorrect networks and allow your system packets
+# to be captured.
+- name: 3.3.2 Ensure ICMP redirects are not accepted | ipv4,ipv6"
+  block:
+    - name: 3.3.2 Ensure ICMP redirects are not accepted | ipv4"
+      sysctl:
+        name: "{{ item.name }}"
+        value: "{{ item.value }}"
+        sysctl_set: true
+        state: present
+        reload: true
+      with_items:
+        - { name: net.ipv4.conf.all.accept_redirects, value: 0 }
+        - { name: net.ipv4.conf.default.accept_redirects, value: 0 }
+    - name:
+      shell: |
+        sysctl -w net.ipv4.conf.all.accept_redirects=0
+        sysctl -w net.ipv4.conf.default.accept_redirects=0
+        sysctl -w net.ipv4.route.flush=1
+    - name: 3.3.2 Ensure ICMP redirects are not accepted | ipv6"
+      sysctl:
+        name: "{{ item.name }}"
+        value: "{{ item.value }}"
+        sysctl_set: true
+        state: present
+        reload: true
+      with_items:
+        - { name: net.ipv6.conf.all.accept_redirects, value: 0 }
+        - { name: net.ipv6.conf.default.accept_redirects, value: 0 }
+      when:
+        - IPv6_is_enabled
+    - name:
+      shell: |
+        sysctl -w net.ipv6.conf.all.accept_redirects=0
+        sysctl -w net.ipv6.conf.default.accept_redirects=0
+        sysctl -w net.ipv6.route.flush=1
+      when: IPv6_is_enabled
+  tags:
+    - section3
+    - level_1_server
+    - level_1_workstation
+    - 3.3.2
+# 3.3.3 Ensure secure ICMP redirects are not accepted
+# It is still possible for even known gateways to be compromised. Setting
+# net.ipv4.conf.all.secure_redirects to 0 protects the system from routing table
+# updates by possibly compromised known gateways.
+- name: 3.3.3 Ensure secure ICMP redirects are not accepted
+  block:
+    - name: 3.3.3 Ensure secure ICMP redirects are not accepted | save
+      sysctl:
+        name: "{{ item.name }}"
+        value: "{{ item.value }}"
+        sysctl_set: true
+        state: present
+        reload: true
+        ignoreerrors: true
+      with_items:
+        - { name: net.ipv4.conf.all.secure_redirects, value: 0 }
+        - { name: net.ipv4.conf.default.secure_redirects, value: 0 }
+    - name: 3.3.3 Ensure secure ICMP redirects are not accepted | load
+      shell: |
+        sysctl -w net.ipv4.conf.all.secure_redirects=0
+        sysctl -w net.ipv4.conf.default.secure_redirects=0
+        sysctl -w net.ipv4.route.flush=1
+  tags:
+    - section3
+    - level_1_server
+    - level_1_workstation
+    - 3.3.3
+# 3.3.4 Ensure suspicious packets are logged
+# Enabling this feature and logging these packets allows an administrator to investigate the
+# possibility that an attacker is sending spoofed packets to their system.
+- name: 3.3.4 Ensure suspicious packets are logged
+  block:
+    - name: 3.3.4 Ensure suspicious packets are logged | save
+      sysctl:
+        name: "{{ item.name }}"
+        value: "{{ item.value }}"
+        sysctl_set: true
+        state: present
+        reload: true
+      with_items:
+        - { name: net.ipv4.conf.all.log_martians, value: 1 }
+        - { name: net.ipv4.conf.default.log_martians, value: 1 }
+    - name: 3.3.4 Ensure suspicious packets are logged | load
+      shell: |
+        sysctl -w net.ipv4.conf.all.log_martians=1
+        sysctl -w net.ipv4.conf.default.log_martians=1
+        sysctl -w net.ipv4.route.flush=1
+    - name: 3.3.4 Ensure suspicious packets are logged | remove flags from /etc/ufw/sysctl.conf
+      replace:
+        path: /etc/ufw/sysctl.conf
+        regexp: '^(net/ipv4/conf/.*/log_martians=.*)$'
+        replace: '# \g<1>'
+      # Shouldn't fail if target file doesn't exist
+      ignore_errors: yes
+    - name: 3.3.4 Ensure suspicious packets are logged | verify if ufw is installed before doing anything 
+      shell: ufw status
+      changed_when: False
+      ignore_errors: True
+      register: ufw_check 
+    
+      
+    - name: 3.3.4 Ensure suspicious packets are logged | restart ufw after changes in /etc/ufw/sysctl.conf
+      service:
+        name: ufw
+        state: restarted
+      when: 
+        - UFWEnable
+        - "'not found' not in ufw_check.stdout"
+
+  tags:
+    - section3
+    - level_1_server
+    - level_1_workstation
+    - 3.3.4
+# 3.3.5 Ensure broadcast ICMP requests are ignored
+# Accepting ICMP echo and timestamp requests with broadcast or multicast destinations for
+# your network could be used to trick your host into starting (or participating) in a Smurf
+# attack. A Smurf attack relies on an attacker sending large amounts of ICMP broadcast
+# messages with a spoofed source address. All hosts receiving this message and responding
+# would send echo-reply messages back to the spoofed address, which is probably not
+# routable. If many hosts respond to the packets, the amount of traffic on the network could
+# be significantly multiplied.
+- name: 3.3.5 Ensure broadcast ICMP requests are ignored
+  block:
+    - name: 3.3.5 Ensure broadcast ICMP requests are ignored | save
+      sysctl:
+        name: net.ipv4.icmp_echo_ignore_broadcasts
+        value: "1"
+        state: present
+        reload: true
+    - name: 3.3.5 Ensure broadcast ICMP requests are ignored | load
+      shell: |
+        sysctl -w net.ipv4.icmp_echo_ignore_broadcasts=1
+        sysctl -w net.ipv4.route.flush=1
+  tags:
+    - section3
+    - level_1_server
+    - level_1_workstation
+    - 3.3.5
+# 3.3.6 Ensure bogus ICMP responses are ignored
+# Some routers (and some attackers) will send responses that violate RFC-1122 and attempt
+# to fill up a log file system with many useless error messages.
+- name: 3.3.6 Ensure bogus ICMP responses are ignored
+  block:
+    - name: 3.3.6 Ensure bogus ICMP responses are ignored | save
+      sysctl:
+        name: net.ipv4.icmp_ignore_bogus_error_responses
+        value: "1"
+        state: present
+        reload: true
+    - name: 3.3.6 Ensure bogus ICMP responses are ignored | load
+      shell: |
+        sysctl -w net.ipv4.icmp_ignore_bogus_error_responses=1
+        sysctl -w net.ipv4.route.flush=1
+  tags:
+    - section3
+    - level_1_server
+    - level_1_workstation
+    - 3.3.6
+# 3.3.7 Ensure Reverse Path Filtering is enabled
+# Setting these flags is a good way to deter attackers from sending your system bogus
+# packets that cannot be responded to. One instance where this feature breaks down is if
+# asymmetrical routing is employed. This would occur when using dynamic routing protocols
+# (bgp, ospf, etc) on your system. If you are using asymmetrical routing on your system, you
+# will not be able to enable this feature without breaking the routing.
+- name: 3.3.7 Ensure Reverse Path Filtering is enabled
+  block:
+    - name: 3.3.7 Ensure Reverse Path Filtering is enabled | save
+      sysctl:
+        name: "{{ item.name }}"
+        value: "{{ item.value }}"
+        sysctl_set: true
+        state: present
+        reload: true
+      with_items:
+        - { name: net.ipv4.conf.all.rp_filter, value: 1 }
+        - { name: net.ipv4.conf.default.rp_filter, value: 1 }
+    - name: 3.3.7 Ensure Reverse Path Filtering is enabled | load
+      shell: |
+        sysctl -w net.ipv4.conf.all.rp_filter=1
+        sysctl -w net.ipv4.conf.default.rp_filter=1
+        sysctl -w net.ipv4.route.flush=1
+  tags:
+    - section3
+    - level_1_server
+    - level_1_workstation
+    - 3.3.7
+# 3.3.8 Ensure TCP SYN Cookies is enabled
+# Attackers use SYN flood attacks to perform a denial of service attacked on a system by
+# sending many SYN packets without completing the three way handshake. This will quickly
+# use up slots in the kernel's half-open connection queue and prevent legitimate connections
+# from succeeding. SYN cookies allow the system to keep accepting valid connections, even if
+# under a denial of service attack.
+- name: 3.3.8 Ensure TCP SYN Cookies is enabled
+  block:
+    - name: 3.3.8 Ensure TCP SYN Cookies is enabled | save
+      sysctl:
+        name: net.ipv4.tcp_syncookies
+        value: "1"
+        state: present
+        reload: true
+    - name: 3.3.8 Ensure TCP SYN Cookies is enabled | load
+      shell: |
+        sysctl -w net.ipv4.tcp_syncookies=1
+        sysctl -w net.ipv4.route.flush=1
+  ignore_errors: yes
+  tags:
+    - section3
+    - level_1_server
+    - level_1_workstation
+    - 3.3.8
+# 3.3.9 Ensure IPv6 router advertisements are not accepted
+# It is recommended that systems do not accept router advertisements as they could be
+# tricked into routing traffic to compromised machines. Setting hard routes within the
+# system (usually a single default route to a trusted router) protects the system from bad
+# routes.
+- name: 3.3.9 Ensure IPv6 router advertisements are not accepted
+  block:
+    - name: 3.3.9 Ensure IPv6 router advertisements are not accepted | save
+      sysctl:
+        name: "{{ item.name }}"
+        value: "{{ item.value }}"
+        state: present
+        reload: true
+      with_items:
+        - { name: net.ipv6.conf.all.accept_ra, value: 0 }
+        - { name: net.ipv6.conf.default.accept_ra, value: 0 }
+    - name: 3.3.9 Ensure IPv6 router advertisements are not accepted | load
+      shell: |
+        sysctl -w net.ipv6.conf.all.accept_ra=0
+        sysctl -w net.ipv6.conf.default.accept_ra=0
+        sysctl -w net.ipv6.route.flush=1
+  when: IPv6_is_enabled
+  tags:
+    - section3
+    - level_1_server
+    - level_1_workstation
+    - 3.3.9
+
+# 3.5 Firewall Configuration
+# Only one method should be used to configure a firewall on the system. Use of more
+# than one method could produce unexpected results
+# 3.5.1 Configure UncomplicatedFirewall
+# 3.5.1.1 Ensure Uncomplicated Firewall is installed
+# The Uncomplicated Firewall (ufw) is a frontend for iptables and is particularly well-suited
+# for host-based firewalls. ufw provides a framework for managing netfilter, as well as a
+# command-line interface for manipulating the firewall
+# Rationale:
+# A firewall utility is required to configure the Linux kernel's netfilter framework via the
+# iptables or nftables back-end.
+# The Linux kernel's netfilter framework host-based firewall can protect against threats
+# originating from within a corporate network to include malicious mobile code and poorly
+# configured software on a host.
+# Note: Only one firewall utility should be installed and configured. UFW is dependent on the
+# iptables package
+- name: 3.5.1.1 Ensure ufw is installed | ufw
+  block:
+    - name: 3.5.1.1 Ensure ufw is installed | ufw
+      apt:
+        name: ufw
+        state: present
+        install_recommends: false
+      when: UFWEnable
+  when: enable_firewall
+  tags:
+    - section3
+    - level_1_server
+    - level_1_workstation
+    - 3.5.1.1
+# 3.5.1.2 Ensure iptables-persistent is not installed
+# The iptables-persistent is a boot-time loader for netfilter rules, iptables plugin
+# Running both ufw and the services included in the iptables-persistent package may lead to  conflict
+- name: 3.5.1.2 Ensure iptables-persistent is not installed
+  apt:
+    name: iptables-persistent
+    state: absent
+  when: enable_firewall
+  tags:
+    - section3
+    - level_1_server
+    - level_1_workstation
+    - 3.5.1.2
+
+
+# 3.5.2 Configure nftables
+# 3.5.2.1 Ensure nftables is installed
+# 3.5.2.2 Ensure Uncomplicated Firewall is not installed or disabled
+# 3.5.2.3 Ensure iptables are flushed with nftables
+# 3.5.2.4 Ensure a nftables table exists
+# 3.5.2.5 Ensure nftables base chains exist
+# 3.5.2.6 Ensure nftables loopback traffic is configured
+# 3.5.2.7 Ensure nftables outbound and established connections are configured
+# 3.5.2.8 Ensure nftables default deny firewall policy
+# 3.5.2.9 Ensure nftables service is enabled
+# 3.5.2.10 Ensure nftables rules are permanent
+# 3.5.3 Configure iptables
+
+# 3.5.3.1.2 Ensure nftables is not installed with iptables
+# 3.5.3.2.1 Ensure iptables loopback traffic is configured
+# 3.5.3.2.2 Ensure iptables outbound and established connections are configured
+# 3.5.3.2.3 Ensure iptables default deny firewall policy 
+# 3.5.3.2.4 Ensure iptables firewall rules exist for all open ports
+# 3.5.3.3.1 Ensure ip6tables loopback traffic is configured
+# 3.5.3.3.2 Ensure ip6tables outbound and established connections are configured
+# 3.5.3.3.3 Ensure ip6tables default deny firewall policy
+# 3.5.3.3.4 Ensure ip6tables firewall rules exist for all open ports
+
+
+# 4 Logging and Auditing
+# 4.2 Configure Logging
+# 4.2.1 Configure rsyslog
+# 4.2.1.1 Ensure rsyslog is installed
+- name: 4.2.1.1 Ensure rsyslog is installed
+  apt:
+    name: rsyslog
+    state: present
+    install_recommends: false
+  tags:
+    - section4
+    - level_1_server
+    - level_1_workstation
+    - 4.2.1.1
+# 4.2.1.2 Ensure rsyslog Service is enabled
+- name: 4.2.1.2 Ensure rsyslog Service is enabled
+  service:
+    name: rsyslog
+    enabled: yes
+  tags:
+    - section4
+    - level_1_server
+    - level_1_workstation
+    - 4.2.1.2
+# 4.2.1.3 Ensure logging is configured
+- name: 4.2.1.3 Ensure logging is configured
+  blockinfile:
+    path: /etc/rsyslog.conf
+    backup: yes
+    block: |
+      *.emerg                 :omusrmsg:*
+      mail.*                  -/var/log/mail
+      mail.info               -/var/log/mail.info
+      mail.warning            -/var/log/mail.warn
+      mail.err                 /var/log/mail.err
+      news.crit               -/var/log/news/news.crit
+      news.err                -/var/log/news/news.err
+      news.notice             -/var/log/news/news.notice
+      *.=warning;*.=err       -/var/log/warn
+      *.crit                   /var/log/warn
+      *.*;mail.none;news.none -/var/log/messages
+      local0,local1.*         -/var/log/localmessages
+      local2,local3.*         -/var/log/localmessages
+      local4,local5.*         -/var/log/localmessages
+      local6,local7.*         -/var/log/localmessages
+  tags:
+    - section4
+    - level_1_server
+    - level_1_workstation
+    - 4.2.1.3
+# 4.2.1.4 Ensure rsyslog default file permissions configured
+# It is important to ensure that log files have the correct permissions to ensure that sensitive data is archived and protected.
+- name: 4.2.1.4 Ensure rsyslog default file permissions configured
+  lineinfile:
+    dest: /etc/rsyslog.conf
+    regexp: '^\$FileCreateMode'
+    line: "$FileCreateMode 0640"
+  tags:
+    - section4
+    - level_1_server
+    - level_1_workstation
+    - 4.2.1.4
+# 4.2.1.5 Ensure rsyslog is configured to send logs to a remote log host
+# # Storing log data on a remote host protects log integrity from local attacks. If an attacker gains root access on the local system, they could tamper with or remove log data that is stored on the local system
+- name: 4.2.1.5 Ensure rsyslog default file permissions configured
+  lineinfile:
+    path: /etc/rsyslog.conf
+    backup: yes
+    line: ' *.* action(type="omfwd" target="192.168.2.100" port="514" protocol="tcp"action.resumeRetryCount="100"queue.type="LinkedList" queue.size="1000")'
+    state: present
+  when: remoteSyslog.enable == True
+  tags:
+    - section4
+    - level_1_server
+    - level_1_workstation
+    - 4.2.1.5
+
+# 4.2.2 Configure journald
+# 4.2.2.1 Ensure journald is configured to send logs to rsyslog
+# Storing log data on a remote host protects log integrity from local attacks. If an attacker gains root access on the local system, they could tamper with or remove log data that is stored on the local system.
+- name: 4.2.2.1 Ensure journald is configured to send logs to rsyslog
+  lineinfile:
+    dest: /etc/systemd/journald.conf
+    regexp: "(#)?ForwardToSyslog=(yes|no)"
+    line: ForwardToSyslog=yes
+  tags:
+    - section4
+    - level_1_server
+    - level_1_workstation
+    - 4.2.2.1
+# 4.2.2.2 Ensure journald is configured to compress large log files
+- name: 4.2.2.2 Ensure journald is configured to compress large log files
+  lineinfile:
+    dest: /etc/systemd/journald.conf
+    regexp: "(#)?Compress=(yes|no)"
+    line: Compress=yes
+  tags:
+    - section4
+    - level_1_server
+    - level_1_workstation
+    - 4.2.2.2
+# 4.2.2.3 Ensure journald is configured to write logfiles to persistent disk
+# Writing log data to disk will provide the ability to forensically reconstruct events which may have impacted the operations or security of a system even after a system crash or reboot.
+- name: 4.2.2.3 Ensure journald is configured to write logfiles to persistent disk
+  lineinfile:
+    dest: /etc/systemd/journald.conf
+    regexp: "(#)?Storage=(auto|persistent)"
+    line: Storage=persistent
+#  notify:
+#    - journald restart
+#  ignore_errors: yes
+  tags:
+    - section4
+    - level_1_server
+    - level_1_workstation
+    - 4.2.2.3
+# 4.2.3 Ensure permissions on all logfiles are configured
+# It is important to ensure that log files have the correct permissions to ensure that sensitive data is archived and protected.
+- name: 4.2.3 Ensure permissions on all logfiles are configured
+  shell: |
+    find /var/log -type f -exec chmod g-wx,o-rwx "{}" + -o -type d -exec chmod g-w,o-rwx "{}" +
+  tags:
+    - section4
+    - level_1_server
+    - level_1_workstation
+    - 4.2.3
+
+# 5 Access, Authentication and Authorization
+# 5.1 Configure time-based job schedulers
+# 5.1.1 Ensure cron daemon is enabled and running
+- name: 5.1.1 Ensure cron daemon is enabled and running
+  service:
+    name: cron
+    enabled: yes
+    state: started
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.1
+# 5.1.2 Ensure permissions on /etc/crontab are configured
+- name: 5.1.2 Ensure permissions on /etc/crontab are configured
+  file:
+    dest: /etc/crontab
+    owner: root
+    group: root
+    mode: 0600
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.2
+# 5.1.3 Ensure permissions on /etc/cron.hourly are configured
+- name: 5.1.3 Ensure permissions on /etc/cron.hourly are configured
+  file:
+    dest: /etc/cron.hourly
+    state: directory
+    owner: root
+    group: root
+    mode: 0600
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.3
+# 5.1.4 Ensure permissions on /etc/cron.daily are configured
+- name: 5.1.4 Ensure permissions on /etc/cron.daily are configured
+  file:
+    dest: /etc/cron.daily
+    state: directory
+    owner: root
+    group: root
+    mode: 0600
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.4
+# 5.1.5 Ensure permissions on /etc/cron.weekly are configured
+- name: 5.1.5 Ensure permissions on /etc/cron.weekly are configured
+  file:
+    dest: /etc/cron.weekly
+    state: directory
+    owner: root
+    group: root
+    mode: 0600
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.5
+# 5.1.6 Ensure permissions on /etc/cron.monthly are configured
+- name: 5.1.6 Ensure permissions on /etc/cron.monthly are configured
+  file:
+    dest: /etc/cron.monthly
+    state: directory
+    owner: root
+    group: root
+    mode: 0600
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.6
+# 5.1.7 Ensure permissions on /etc/cron.d are configured
+- name: 5.1.7 Ensure permissions on /etc/cron.d are configured
+  file:
+    dest: /etc/cron.d
+    state: directory
+    owner: root
+    group: root
+    mode: 0600
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.7
+# 5.1.8 Ensure cron is restricted to authorized users
+- name: 5.1.8 Ensure cron is restricted to authorized users
+  block:
+    - name: 5.1.8 Ensure cron is restricted to authorized users | /etc/cron.deny
+      file:
+        path: /etc/cron.deny
+        state: absent
+      ignore_errors: yes
+    - stat:
+        path: /etc/cron.allow
+      register: cfile
+    - name: 5.1.8 Ensure cron is restricted to authorized users | /etc/cron.allow
+      file:
+        path: /etc/cron.allow
+        state: "{{ 'file' if cfile.stat.exists else 'touch' }}"
+        owner: root
+        group: root
+        mode: "g-wx,o-rwx"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.8
+# 5.1.9 Ensure at is restricted to authorized users
+- name: 5.1.9 Ensure at is restricted to authorized users
+  block:
+    - name: 5.1.9 Ensure at is restricted to authorized users | /etc/at.deny
+      file:
+        path: /etc/at.deny
+        state: absent
+      ignore_errors: yes
+    - stat:
+        path: /etc/at.allow
+      register: cfile
+    - name: 5.1.9 Ensure at is restricted to authorized users | /etc/at.allow
+      file:
+        path: /etc/at.allow
+        state: "{{ 'file' if cfile.stat.exists else 'touch' }}"
+        owner: root
+        group: root
+        mode: "g-wx,o-rwx"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.1.9
+
+# 5.2 Configure sudo
+# sudo allows a permitted user to execute a command as the superuser or another user, as
+# specified by the security policy. The invoking user's real (not effective) user ID is used to
+# determine the user name with which to query the security policy.
+# sudo supports a plugin architecture for security policies and input/output logging. Third
+# parties can develop and distribute their own policy and I/O logging plugins to work
+# seamlessly with the sudo front end. The default security policy is sudoers, which is
+# configured via the file /etc/sudoers.
+- name: 5.2.1 Ensure sudo is installed
+  apt:
+    name: sudo
+    state: present
+    install_recommends: false
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.2.1
+# 5.2.2 Ensure sudo commands use pty
+# sudo can be configured to run only from a pseudo-pty
+# Note: visudo edits the sudoers file in a safe fashion, analogous to vipw(8). visudo locks the
+# sudoers file against multiple simultaneous edits, provides basic sanity checks, and checks or
+# parse errors. If the sudoers file is currently being edited you will receive a message to try
+# again later.
+- name: 5.2.2 Ensure sudo commands use pty
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: "^Defaults use_pty"
+    line: "Defaults use_pty"
+    validate: "visudo -cf %s"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.2.2
+# 5.2.3 Ensure sudo log file exists
+# sudo can use a custom log file.
+# Note: visudo edits the sudoers file in a safe fashion, analogous to vipw(8). visudo locks the
+# sudoers file against multiple simultaneous edits, provides basic sanity checks, and checks or
+# parse errors. If the sudoers file is currently being edited you will receive a message to try
+# again later.
+- name: 5.2.3 Ensure sudo log file exists
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: "^Defaults    logfile*"
+    line: 'Defaults    logfile=/var/log/sudo.log'
+    validate: "visudo -cf %s"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.2.3
+
+# 5.3 Configure SSH Server
+# 5.3.1 Ensure permissions on /etc/ssh/sshd_config are configured
+- name: 5.3.1 Ensure permissions on /etc/ssh/sshd_config are configured
+  file:
+    dest: /etc/ssh/sshd_config
+    state: file
+    owner: root
+    group: root
+    mode: 0600
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.3.1
+# 5.3.2 Ensure permissions on SSH private host key files are configured
+- name: 5.3.2 Ensure permissions on SSH private host key files are configured
+  block:
+    - name: 5.3.2 Ensure permissions on SSH private host key files are configured | find keys
+      shell: |
+        find /etc/ssh -xdev -type f -name 'ssh_host_*_key'  && true || true
+      register: private_keys
+    - name: 5.3.2 Ensure permissions on SSH private host key files are configured | fix permissions
+      file:
+        dest: "{{ item }}"
+        state: file
+        owner: root
+        group: root
+        mode: 0600
+      with_items: "{{ private_keys.stdout_lines }}"
+      when: "{{ private_keys.stdout_lines|length > 0 }}"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.3.2
+# 5.3.3 Ensure permissions on SSH public host key files are configured
+- name: 5.3.3 Ensure permissions on SSH public host key files are configured
+  block:
+    - name: 5.3.3 Ensure permissions on SSH public host key files are configured | find keys
+      shell: |
+        find /etc/ssh -xdev -type f -name 'ssh_host_*_key.pub' && true || true
+      register: public_keys
+    - name: 5.3.3 Ensure permissions on SSH public host key files are configured | fix permissions
+      file:
+        dest: "{{ item }}"
+        state: file
+        owner: root
+        group: root
+        mode: "go-wx"
+      with_items: "{{ public_keys.stdout_lines }}"
+      when: "{{ public_keys.stdout_lines|length > 0 }}"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.3.3
+# 5.3.4 Ensure SSH access is limited
+# Restricting which users can remotely access the system via SSH will help ensure that only authorized users access the system.
+- name: 5.3.4 Ensure SSH access is limited
+  block:
+    - name: 5.3.4 Ensure SSH access is limited | allow users
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: "^AllowUsers"
+        line: "AllowUsers {{ allowed_users }}"
+      when:
+        - "{{ allowed_users|length > 0 }}"
+    - name: 5.3.4 Ensure SSH access is limited | allow groups
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: "^AllowGroups"
+        line: "AllowGroups {{ allowed_groups }}"
+      when:
+        - allowed_groups != "None"
+    - name: 5.3.4 Ensure SSH access is limited | denyusers
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: "^DenyUsers"
+        line: "DenyUsers {{ deny_users }}"
+      when:
+        - deny_users != "None"
+    - name: 5.3.4 Ensure SSH access is limited | denygroups
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: "^DenyGroups"
+        line: "DenyGroups {{ deny_groups }}"
+      when:
+        - deny_groups != "None"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.3.4
+# 5.3.5 Ensure SSH LogLevel is appropriate
+- name: 5.3.5 Ensure SSH LogLevel is appropriate
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^LogLevel"
+    line: "LogLevel VERBOSE"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.3.5
+
+# 5.3.7 Ensure SSH MaxAuthTries is set to 4 or less
+# Setting the MaxAuthTries parameter to a low number will minimize the risk of successful brute force attacks to the SSH server. While the recommended setting is 4, set the number based on site policy.
+- name: 5.3.7 Ensure SSH MaxAuthTries is set to 4 or less
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: '^(#)?MaxAuthTries \d'
+    line: "MaxAuthTries {{ max_auth_tries }}"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.3.7
+# 5.3.8 Ensure SSH IgnoreRhosts is enabled
+# Setting this parameter forces users to enter a password when authenticating with ssh.
+- name: 5.3.8 Ensure SSH IgnoreRhosts is enabled
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^IgnoreRhosts"
+    line: "IgnoreRhosts yes"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.3.8
+# 5.3.9 Ensure SSH HostbasedAuthentication is disabled
+# Even though the .rhosts files are ineffective if support is disabled in /etc/pam.conf ,disabling the ability to use .rhosts files in SSH provides an additional layer of protection.
+- name: 5.3.9 Ensure SSH HostbasedAuthentication is disabled
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^HostbasedAuthentication"
+    line: "HostbasedAuthentication no"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.3.9
+
+# 5.3.11 Ensure SSH PermitEmptyPasswords is disabled
+# Disallowing remote shell access to accounts that have an empty password reduces the probability of unauthorized access to the system
+- name: 5.3.11 Ensure SSH PermitEmptyPasswords is disabled
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^PermitEmptyPasswords"
+    line: "PermitEmptyPasswords no"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.3.11
+# 5.3.12 Ensure SSH PermitUserEnvironment is disabled
+# Permitting users the ability to set environment variables through the SSH daemon could potentially allow users to bypass security controls (e.g. setting an execution path that has ssh executing trojan'd programs)
+- name: 5.3.12 Ensure SSH PermitUserEnvironment is disabled
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^PermitUserEnvironment"
+    line: "PermitUserEnvironment no"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.3.12
+# 5.3.13 Ensure only strong Ciphers are used
+# Weak ciphers that are used for authentication to the cryptographic module cannot be relied upon to provide confidentiality or integrity, and system data may be compromised
+- name: 5.3.13 Ensure only strong Ciphers are used
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^Ciphers"
+    line: "Ciphers {{ ssh_ciphers }}"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.3.13
+# 5.3.14 Ensure only strong MAC algorithms are used
+# MD5 and 96-bit MAC algorithms are considered weak and have been shown to increase exploitability in SSH downgrade attacks. Weak algorithms continue to have a great deal of attention as a weak spot that can be exploited with expanded computing power. An attacker that breaks the algorithm could take advantage of a MiTM position to decrypt the SSH tunnel and capture credentials and information
+- name: 5.3.14 Ensure only strong MAC algorithms are used
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^MACs"
+    line: "MACs {{ ssh_MACs }}"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.3.14
+# 5.3.15 Ensure only strong Key Exchange algorithms are used
+# Key exchange methods that are considered weak should be removed. A key exchange method may be weak because too few bits are used, or the hashing algorithm is considered too weak. Using weak algorithms could expose connections to man-in-the-middle attacks
+- name: 5.3.15 Ensure only strong Key Exchange algorithms are used
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^KexAlgorithms"
+    line: "KexAlgorithms {{ ssh_key_algorithms }}"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.3.15
+# 5.3.16 Ensure SSH Idle Timeout Interval is configured
+# Having no timeout value associated with a connection could allow an unauthorized user access to another user's ssh session (e.g. user walks away from their computer and doesn't lock the screen). Setting a timeout value reduces this risk.
+- name: 5.3.16 Ensure SSH Idle Timeout Interval is configured
+  block:
+    - name: 5.3.16 Ensure SSH Idle Timeout Interval is configured | clientalive
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: "^ClientAliveInterval"
+        line: "ClientAliveInterval 300"
+    - name: 5.3.16 Ensure SSH Idle Timeout Interval is configured | MaxAlive
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: "^ClientAliveCountMax"
+        line: "ClientAliveCountMax 3"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.3.16
+# 5.3.17 Ensure SSH LoginGraceTime is set to one minute or less
+# Setting the LoginGraceTime parameter to a low number will minimize the risk of successful brute force attacks to the SSH server. It will also limit the number of concurrent unauthenticated connections While the recommended setting is 60 seconds (1 Minute), set the number based on site policy.
+- name: 5.3.17 Ensure SSH LoginGraceTime is set to one minute or less
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^LoginGraceTime"
+    line: "LoginGraceTime 30s"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.3.17
+
+# 5.3.18 Ensure SSH warning banner is configured
+# Banners are used to warn connecting users of the particular site's policy regarding connection. Presenting a warning message prior to the normal user login may assist the prosecution of trespassers on the computer system.
+- name: 5.3.18 Ensure SSH warning banner is configured
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^Banner"
+    line: "Banner /etc/ssh/banner"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.3.18
+# 5.3.19 Ensure SSH PAM is enabled
+# When usePAM is set to yes, PAM runs through account and session types properly. This is important if you want to restrict access to services based off of IP, time or other factors of the account. Additionally, you can make sure users inherit certain environment variables on login or disallow access to the server
+- name: 5.3.19 Ensure SSH PAM is enabled
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^UsePAM"
+    line: "UsePAM yes"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.3.19
+
+# 5.3.21 Ensure SSH MaxStartups is configured
+# To protect a system from denial of service due to a large number of pending authentication connection attempts, use the rate limiting function of MaxStartups to protect availability of sshd logins and prevent overwhelming the daemon.
+- name: "5.3.21 Ensure SSH MaxStartups is configured to {{ ssh_max_startups }}"
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^MaxStartups"
+    line: "MaxStartups {{ ssh_max_startups }}"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.3.21
+# 5.3.22 Ensure SSH MaxSessions is limited
+# To protect a system from denial of service due to a large number of concurrent sessions, use the rate limiting function of MaxSessions to protect availability of sshd logins and prevent overwhelming the daemon.
+- name: "5.3.22 Ensure SSH MaxSessions is limited to {{ ssh_max_sessions }}"
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^MaxSessions"
+    line: "MaxSessions {{ ssh_max_sessions }}"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.3.22
+# 5.3.X Restart sshd service so that any previous changes take effect
+- name: "5.3.X Restart sshd"
+  service:
+    name: sshd
+    state: restarted
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.3.X
+
+# 5.4 Configure PAM
+
+# 5.4.3 Ensure password reuse is limited
+# Locking out user IDs after n unsuccessful consecutive login attempts mitigates brute force password attacks against your systems.
+
+- name: 5.4.3.1 Ensure password reuse is limited | delete possible duplicate lines
+  lineinfile:
+    dest: /etc/pam.d/common-password
+    regexp: '^password.*pam_pwhistory\.so.*remember.*'
+    state: absent
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.4.3
+
+- name: 5.4.3.2 Ensure password reuse is limited | update file according to CIS
+  lineinfile:
+    dest: /etc/pam.d/common-password
+    line: "password       required                        pam_pwhistory.so remember=5"
+    insertafter: '^password\s+?requisite.*'
+    state: present
+    firstmatch: true
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.4.3
+
+# 5.4.4 Ensure password hashing algorithm is SHA-512
+# The SHA-512 algorithm provides much stronger hashing than MD5, thus providing additional protection to the system by increasing the level of effort for an attacker to successfully determine passwords.
+- name: 5.4.4 Ensure password hashing algorithm is SHA-512
+  lineinfile:
+    dest: /etc/pam.d/common-password
+    regexp: '^password\s+\[success(.*)(md5|blowfish|bigcrypt|sha256|sha512)(.*)$'
+#    line: 'password       [success\1sha512 \3'
+    line: "password [success=1 default=ignore] pam_unix.so sha512"
+    backrefs: true
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.4.4
+# 5.5 User Accounts and Environment
+# 5.5.1 Set Shadow Password Suite Parameters
+# # # The window of opportunity for an attacker to leverage compromised credentials or successfully compromise credentials via an online brute force attack is limited by the age of the password. Therefore, reducing the maximum age of a password also reduces an attacker's window of opportunity.
+# - name: 5.5.1 Set Shadow Password Suite Parameters
+#   lineinfile:
+#     dest: /etc/pam.d/common-password
+#     regexp: '^password\s+\[success'
+#     line: "password [success=1 default=ignore] pam_unix.so sha512"
+#   tags:
+#     - section5
+#     - level_1_server
+#     - level_1_workstation
+#     - 5.5.1
+# 5.5.1.1 Ensure password expiration is 365 days or less
+# 5.5.1.1 Ensure minimum days between password changes is configured
+# 5.5.1.3 Ensure password expiration warning days is 7 or more
+- name: "5.5.1.1 Ensure minimum days between password changes is configured\n
+        5.5.1.2 Ensure password expiration is 365 days or less\n
+        5.5.1.3 Ensure password expiration warning days is 7 or more"
+  block:
+    - name: 5.5.1.1 Ensure minimum days between password changes is configured | PASS_MIN_DAYS
+      lineinfile:
+        state: present
+        dest: /etc/login.defs
+        regexp: "^PASS_MIN_DAYS"
+        line: "PASS_MIN_DAYS {{ pass_min_days }}"
+
+    - name: 5.5.1.1 Ensure minimum days between password changes is configured  | chage --mindays
+      command: "chage --mindays {{ pass_min_days }} {{ item }}"
+      loop: "{{ list_of_os_users}}"
+
+    - name: 5.5.1.3 Ensure password expiration warning days is 7 or more | PASS_WARN_AGE
+      lineinfile:
+        state: present
+        dest: /etc/login.defs
+        regexp: "^PASS_WARN_AGE"
+        line: "PASS_WARN_AGE  {{ pass_warn_age }}"
+
+    - name: 5.5.1.3 Ensure password expiration warning days is 7 or more  | chage --warndays
+      command: "chage --warndays {{ pass_warn_age }} {{ item }}"
+      loop: "{{ list_of_os_users}}"
+  ignore_errors: yes
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.5.1.1
+    - 5.5.1.3
+
+# 5.5.1.5 Ensure all users last password change date is in the past
+# Investigate any users with a password change date in the future and correct them. Locking the account, expiring the password, or resetting the password manually may be appropriate.
+- name: 5.5.1.5 Ensure all users last password change date is in the past
+  block:
+    - name: 5.5.1.5 Ensure all users last password change date is in the past | get list
+      shell: |
+        awk -F: '{print $1}' /etc/shadow | while read -r user
+        do
+          if [[ $(date --date="$(chage --list "$user" | grep '^Last password change' | cut -d: -f2)" +%s) > $(date +%s) ]];then
+            echo "$user"
+          fi
+        done
+      register: output_5_4_1_5
+    - name: 5.5.1.5 Ensure all users last password change date is in the past | save list
+      copy:
+        dest: "{{ outputfiles }}/5.5.1.5"
+        content: "{{ output_5_4_1_5.stdout_lines }}"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.5.1.5
+    - manual
+# 5.5.2 Ensure system accounts are secured
+- name: 5.5.2 Ensure system accounts are secured
+  block:
+    - name: 5.5.2 Ensure system accounts are secured | set all system accounts to a non login shell
+      shell: |
+        for user in `awk -F: '($3 < 1000) {print $1 }' /etc/passwd`; do
+        if [ $user != "root" ]; then
+          usermod -L $user
+          if [ $user != "sync" ] && [ $user != "shutdown" ] && [ $user != "halt" ];
+          then
+            usermod -s /usr/sbin/nologin $user
+          fi
+        fi
+        done
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.5.2
+# 5.5.3 Ensure default group for the root account is GID 0
+# Using GID 0 for the root account helps prevent root -owned files from accidentally becoming accessible to non-privileged users.
+- name: 5.5.3 Ensure default group for the root account is GID 0
+  command: usermod -g 0 root
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.5.3
+# 5.5.4 Ensure default user umask is 027 or more restrictive
+# # # # Setting a very secure default value for umask ensures that users make a conscious choice about their file permissions. A default umask setting of 077 causes files and directories created by users to not be readable by any other user on the system. A umask of 027 would make files and directories readable by users in the same Unix group, while a umask of 022 would make files readable by every user on the system.
+- name: 5.5.4 Ensure default user umask is {{ umask_value | default('027') }} or more restrictive
+  block:
+    - name: 5.5.4 Ensure default user umask is {{ umask_value | default('027') }} or more restrictive | /etc/login.defs
+      lineinfile:
+        state: present
+        dest: /etc/login.defs
+        regexp: '^UMASK\s'
+        line: "UMASK {{ umask_value | default('027') }}"
+        mode: "0644"
+    - name: 5.5.4 Ensure default user umask is {{ umask_value | default('027') }} or more restrictive  | /etc/pam.d/common-session
+      lineinfile:
+        dest: /etc/pam.d/common-session
+        regexp: '^session optional\s+pam_umask.so'
+        line: "session optional                       pam_umask.so"
+    - name: 5.5.4 Ensure default user umask is {{ umask_value | default('027') }} or more restrictive - /etc/bash.bashrc
+      lineinfile:
+        state: present
+        dest: /etc/bash.bashrc
+        create: true
+        regexp: "^umask "
+        line: "umask {{ umask_value | default('027') }}"
+    - name: 5.5.4 Ensure default user umask is {{ umask_value | default('027') }} or more restrictive - /etc/profile
+      lineinfile:
+        state: present
+        dest: /etc/profile
+        create: true
+        regexp: "^umask "
+        line: "umask {{ umask_value | default('027') }}"
+    - name: 5.5.4 Ensure default user umask is {{ umask_value | default('027') }} or more restrictive - /etc/profile.d/umask.sh
+      lineinfile:
+        state: present
+        dest: /etc/profile.d/umask.sh
+        create: true
+        regexp: "^umask "
+        line: "umask {{ umask_value | default('027') }}"
+    - name: 5.5.4 Ensure default user umask is {{ umask_value | default('027') }} or more restrictive - Fix for /etc/apt/apt.conf.d/50command-not-found
+      lineinfile:
+        state: present
+        dest: /etc/apt/apt.conf.d/50command-not-found
+        create: false
+        regexp: '"if /usr/bin/test -w /var/lib/command-not-found/ -a -e .*'
+        line:   '    "if /usr/bin/test -w /var/lib/command-not-found/ -a -e /usr/lib/cnf-update-db; then umask 022 && /usr/lib/cnf-update-db > /dev/null; fi";'
+        backrefs: true
+      when: fix_command_not_found
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.5.4
+# 5.5.5 Ensure default user shell timeout is 900 seconds or less
+# # Setting a timeout value reduces the window of opportunity for unauthorized user access to another user's shell session that has been left unattended. It also ends the inactive session and releases the resources associated with that session
+- name: 5.5.5 Ensure default user shell timeout is 900 seconds or less
+  block:
+    - name: 5.5.5 Ensure default user shell timeout is 900 seconds or less | /etc/bash.bashrc
+      lineinfile:
+        state: present
+        dest: /etc/bash.bashrc
+        create: true
+        regexp: "^TMOUT=|^readonly TMOUT=|^unset TMOUT"
+        line: "readonly TMOUT={{ shell_timeout_sec }} ; export TMOUT"
+    - name: 5.5.5 Ensure default user shell timeout is 900 seconds or less | /etc/profile
+      lineinfile:
+        state: present
+        dest: /etc/profile
+        create: true
+        regexp: "^TMOUT=|^readonly TMOUT=|^unset TMOUT"
+        line: "readonly TMOUT={{ shell_timeout_sec }} ; export TMOUT"
+    - name: 5.5.5 Ensure default user shell timeout is 900 seconds or less | /etc/profile.d/timeout.sh
+      lineinfile:
+        state: present
+        dest: /etc/profile.d/tmout.sh
+        create: true
+        regexp: "^TMOUT=|^readonly TMOUT=|^unset TMOUT"
+        line: "readonly TMOUT={{ shell_timeout_sec }} ; export TMOUT"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.5.5
+
+# 5.7 Ensure access to the su command is restricted
+# Restricting the use of su , and using sudo in its place, provides system administrators better control of the escalation of user privileges to execute privileged commands. The sudo utility also provides a better logging and audit mechanism, as it can log each command executed via sudo , whereas su can only record that a user executed the su program.
+- name: 5.7 Ensure access to the su command is restricted
+  block:
+    - name: 5.7 Ensure access to the su command is restricted  | create su-group-access
+      template:
+        src: files/templates/etc/su-group-access.j2
+        dest: "/etc/security/su-group-access"
+        owner: root
+        group: root
+        mode: 0644
+    - name: 5.7 Ensure access to the su command is restricted  | create pam-d-su
+      template:
+        src: files/templates/etc/pam-d-su.j2
+        dest: "/etc/pam.d/su"
+        owner: root
+        group: root
+        mode: 0644
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - "5.7"
+
+# 6 System Maintenanc
+# 6.1 System File Permission
+# 6.1.1 Audit system file permissions
+
+# 6.1.2 Ensure permissions on /etc/passwd are configured
+- name: 6.1.2 Ensure permissions on /etc/passwd are configured
+  file:
+    dest: /etc/passwd
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.1.2
+# 6.1.3 Ensure permissions on /etc/passwd- are configured
+- name: 6.1.3 Ensure permissions on /etc/passwd- are configured
+  file:
+    dest: /etc/passwd-
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.1.3
+# 6.1.4 Ensure permissions on /etc/group are configured
+- name: 6.1.4 Ensure permissions on /etc/group are configured
+  file:
+    dest: /etc/group
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.1.4
+# 6.1.5 Ensure permissions on /etc/group- are configured
+- name: 6.1.5 Ensure permissions on /etc/group- are configured
+  file:
+    dest: /etc/group-
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.1.5
+
+# 6.1.6 Ensure permissions on /etc/shadow are configured
+- name: 6.1.6 Ensure permissions on /etc/shadow are configured, with group '{{ etc_shadow_group }}'
+  file:
+    dest: /etc/shadow
+    owner: root
+    group: "{{ etc_shadow_group }}"
+    mode: 0640
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.1.6
+
+# 6.1.7 Ensure permissions on /etc/shadow- are configured
+- name: 6.1.7 Ensure permissions on /etc/shadow- are configured
+  file:
+    dest: /etc/shadow-
+    owner: root
+    group: shadow
+    mode: "{{ etc_shadow_mode }}"
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.1.7
+
+# 6.1.8 Ensure permissions on /etc/gshadow are configured
+- name: 6.1.8 Ensure permissions on /etc/gshadow are configured
+  file:
+    dest: /etc/gshadow
+    owner: root
+    group: shadow
+    mode: 0640
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.1.8
+
+# 6.1.9 Ensure permissions on /etc/gshadow- are configured
+- name: 6.1.9 Ensure permissions on /etc/gshadow- are configured
+  file:
+    dest: /etc/gshadow-
+    owner: root
+    group: shadow
+    mode: 0640
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.1.9
+
+# 6.1.10 Ensure no world writable files exist
+- name: 6.1.10 Ensure no world writable files exist
+  block:
+    - name: 6.1.10 Ensure no world writable files exist | find files
+      shell: df --local -P | awk '{if (NR!=1) print $6}' | sudo xargs -I '{}' find '{}' -xdev -type f -perm -0002 2> /dev/null && true || true
+      register: output_6_1_10
+    - name: 6.1.10 Ensure no world writable files exist | save output
+      copy:
+        dest: "{{ outputfiles }}/6.1.10"
+        content: "{{ output_6_1_10.stdout_lines }}"
+    - name: 6.1.10 Ensure no world writable files exist | fix permission
+      file:
+        path: "{{ item }}"
+        mode: "o-w"
+      with_items: "{{ output_6_1_10.stdout_lines }}"
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.1.10
+    - warn
+# 6.1.11 Ensure no unowned files or directories exist
+- name: 6.1.11 Ensure no unowned files or directories exist
+  block:
+    - name: 6.1.11 Ensure no unowned files or directories exist | No skipped strings
+      block:
+        - name: 6.1.11 Ensure no unowned files or directories exist | Find
+          shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nouser 2> /dev/null && true || true
+          register: output_6_1_11
+      when: unowned_files_strings_to_skip == None
+    - name: 6.1.11 Ensure no unowned files or directories exist | Skipping specified strings
+      block:
+        - name: 6.1.11 Ensure no unowned files or directories exist | Find
+          shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nouser 2> /dev/null | grep -v -e  $(echo "{{ unowned_files_strings_to_skip }}" |  sed 's/,/\\|/g') && true || true
+          register: output_6_1_11
+      when: unowned_files_strings_to_skip != None
+    - name: 6.1.11 Ensure no unowned files or directories exist | Save output
+      copy:
+        dest: "{{ outputfiles }}/6.1.11"
+        content: "{{ output_6_1_11.stdout_lines }}"
+    - name: 6.1.11 Ensure no unowned files or directories exist | Fix
+      file:
+        path: "{{ item }}"
+        owner: "{{ withoutOwnerFileDirOwner }}"
+        group: "{{ withoutGroupFilesDirGroup }}"
+      with_items: "{{ output_6_1_11.stdout_lines }}"
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.1.11
+# 6.1.12 Ensure no ungrouped files or directories exist
+- name: 6.1.12 Ensure no ungrouped files or directories exist
+  block:
+    - name: 6.1.12 Ensure no ungrouped files or directories exist | Find
+      shell: df --local -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev -nogroup 2> /dev/null && true || true
+      register: output_6_1_12
+    - name: 6.1.12 Ensure no ungrouped files or directories exist | Save output
+      copy:
+        dest: "{{ outputfiles }}/6.1.12"
+        content: "{{ output_6_1_12.stdout_lines }}"
+    - name: 6.1.12 Ensure no ungrouped files or directories exist | Fix
+      file:
+        path: "{{ item }}"
+        owner: "{{ withoutOwnerFileDirOwner }}"
+        group: "{{ withoutGroupFilesDirGroup }}"
+      with_items: "{{ output_6_1_12.stdout_lines }}"
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.1.12      
+# 6.2 User and Group Settings
+# 6.2.1 Ensure accounts in /etc/passwd use shadowed passwords
+# Investigate to determine if the account is logged in and what it is being used for, to determine if it needs to be forced off.
+- name: 6.2.1 Ensure accounts in /etc/passwd use shadowed passwords
+  shell: |
+    sed -e 's/^\([a-zA-Z0-9_]*\):[^:]*:/\1:x:/' -i /etc/passwd
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.1
+    - manual
+# 6.2.2 Ensure password fields are not empty
+- name: 6.2.2 Ensure password fields are not empty
+  block:
+    - name: 6.2.2  Ensure password fields are not empty | list
+      shell: |
+        awk -F: '($2 == "" ) { print $1 }' /etc/shadow
+      register: output_6_2_1
+    - name: 6.2.2 Ensure password fields are not empty | Save output
+      copy:
+        dest: "{{ outputfiles }}/6.2.2"
+        content: "{{ output_6_2_1.stdout_lines }}"
+    - name: 6.2.2 Ensure password fields are not empty | Lock account
+      user:
+        name: "{{ item }}"
+        password_lock: yes
+      with_items: "{{ output_6_2_1.stdout_lines }}"
+      when:
+        - "{{ output_6_2_1.stdout_lines }}"
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.2
+    - manual
+
+
+# 6.2.3 Ensure all groups in /etc/passwd exist in /etc/group
+- name: 6.2.3 Ensure all groups in /etc/passwd exist in /etc/group
+  block:
+    - name: 6.2.3 Ensure all groups in /etc/passwd exist in /etc/group | list
+      shell: |
+        for i in $(cut -s -d: -f4 /etc/passwd | sort -u); do
+            grep -q -P "^.*?:[^:]*:$i:" /etc/group
+            if [ $? -ne 0 ]; then
+                echo "Group $i is referenced by /etc/passwd but does not exist in /etc/group"
+            fi
+        done
+      register: output_6_2_12
+    - name: 6.2.3 Ensure all groups in /etc/passwd exist in /etc/group | save output
+      copy:
+        dest: "{{ outputfiles }}/6.2.3"
+        content: "{{ output_6_2_12 }}"
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.3
+    - manual
+
+# 6.2.4 Ensure all users' home directories exist
+- name: 6.2.4 Ensure all users' home directories exist
+  block:
+    - name: 6.2.4 Ensure all users' home directories exist | list
+      shell: |
+        grep -E -v '^(halt|sync|shutdown)' /etc/passwd | awk -F: '($7 != "'"$(which nologin)"'" && $7 != "/bin/false") { print $1 " " $6 }' | while
+        read -r user dir
+        do
+            if [ ! -d "$dir" ]; then
+                echo "${user}"
+            fi
+        done
+      register: output_6_2_4
+    - name: 6.2.4 Ensure all users' home directories exist | save
+      copy:
+        dest: "{{ outputfiles }}/6.2.4"
+        content: "{{ output_6_2_4.stdout_lines }}"
+    - name: 6.2.4 Ensure all users' home directories exist | fix
+      user:
+        name: "{{ item }}"
+        create_home: yes
+      with_items: "{{ output_6_2_4.stdout_lines }}"
+      when: "{{ output_6_2_4.stdout_lines|length > 0 }}"
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.4
+# 6.2.5 Ensure users own their home directories
+- name: 6.2.5 Ensure users own their home directories
+  block:
+    - name: 6.2.5 Ensure users own their home directories | list
+      script: 6_2_5.sh
+      register: output_6_2_5
+    - name: 6.2.5 Ensure users own their home directories | Var
+      set_fact:
+        output_6_2_5_list: "{{ output_6_2_5.stdout_lines | list }}"
+    - name: 6.2.5 Ensure users own their home directories | save output
+      copy:
+        dest: "{{ outputfiles }}/6.2.5"
+        content: "{{ output_6_2_5_list }}"
+    - name: 6.2.5 Ensure users own their home directories | fix
+      file:
+        path: "{{ item.split(',')[0] }}"
+        group: "{{ item.split(',')[1] }}"
+        owner: "{{ item.split(',')[1] }}"
+        recurse: yes
+      with_items: "{{ output_6_2_5_list }}"
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.5
+
+# 6.2.6 Ensure users' home directories permissions are 750 or more restrictive
+- name: 6.2.6 Ensure users' home directories permissions are 750 or more restrictive
+  block:
+    - name: 6.2.6 Ensure users home directories permissions are 750 or more restrictive - list
+      script: 6_2_6.sh
+      register: output_6_2_6
+    - name: 6.2.6 Ensure users' home directories permissions are 750 or more restrictive - print output
+      copy:
+        dest: "{{ outputfiles }}/6.2.6"
+        content: "{{ output_6_2_6.stdout_lines }}"
+    - name: 6.2.6 Ensure users home directories permissions are 750 or more restrictive - fix
+      file:
+        name: "{{ item }}"
+        mode: "g-w,o-rwx"
+      with_items: "{{ output_6_2_6.stdout_lines }}"
+      when: "{{ output_6_2_6.stdout_lines|length > 0 }}"
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.6
+
+# 6.2.7 Ensure users' dot files are not group or world writable
+- name: 6.2.7 Ensure users dot files are not group or world writable
+  block:
+    - name: 6.2.7 Ensure users' dot files are not group or world writable | list
+      script: 6_2_7.sh
+      register: output_6_2_7_files
+      when: not fix_dot_include_folders
+    - name: 6.2.7 Ensure users' dot files and folders are not group or world writable | list
+      script: 6_2_7_include_folders.sh
+      register: output_6_2_7_folders
+      when: fix_dot_include_folders
+    - name: 6.2.7 Ensure users' dot files are not group or world writable | save output
+      copy:
+        dest: "{{ outputfiles }}/6.2.7"
+        content: "{{ output_6_2_7_files.stdout }}"
+      when: not fix_dot_include_folders
+    - name: 6.2.7 Ensure users' dot files and folders are not group or world writable | save output
+      copy:
+        dest: "{{ outputfiles }}/6.2.7"
+        content: "{{ output_6_2_7_folders.stdout }}"
+      when: fix_dot_include_folders
+    - name: 6.2.7 Ensure users' dot files are not group or world writable | correct file permissions
+      # files with go+w will be touched twice, as they figure twice in the filter result
+      file:
+        path: "{{ item.split()[-1] }}"
+        mode: g-w,o-w
+      with_items: "{{ output_6_2_7_files.stdout_lines }}"
+      when:
+        - fix_dot_file_permissions
+        - "'stdout_lines' in output_6_2_7_files"
+        - not fix_dot_include_folders
+    - name: 6.2.7 Ensure users' dot files and folders are not group or world writable | correct file permissions
+      # files with go+w will be touched twice, as they figure twice in the filter result
+      file:
+        path: "{{ item.split()[-1] }}"
+        mode: g-w,o-w
+      with_items: "{{ output_6_2_7_folders.stdout_lines }}"
+      when:
+        - fix_dot_file_permissions
+        - "'stdout_lines' in output_6_2_7_folders"
+        - fix_dot_include_folders
+  ignore_errors: yes
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.7
+    - manual
+
+# 6.2.8 Ensure no users have .netrc files
+- name: 6.2.8 Ensure no users have .netrc files
+  block:
+    - name: 6.2.8 Ensure no users have .netrc files | list
+      script: 6_2_8.sh
+      register: output_6_2_8
+    - name: 6.2.8 Ensure no users have .netrc files | save output
+      copy:
+        dest: "{{ outputfiles }}/6.2.8"
+        content: "{{ output_6_2_8.stdout }}"
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.8
+    - manual
+
+# 6.2.9 Ensure no users have .forward files
+- name: 6.2.9 Ensure no users have .forward files
+  block:
+    - name: 6.2.9 Ensure no users have .forward files | list
+      script: 6_2_9.sh
+      register: output_6_2_9
+    - name: 6.2.9 Ensure no users have .forward files  | save output
+      copy:
+        dest: "{{ outputfiles }}/6.2.9"
+        content: "{{ output_6_2_9.stdout }}"
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.9
+    - manual
+# 6.2.10 Ensure no users have .rhosts files
+- name: 6.2.10 Ensure no users have .rhosts files
+  block:
+    - name: 6.2.10 Ensure no users have .rhosts files | list
+      script: files/6_2_11.sh
+      register: output_6_2_11
+    - name: 6.2.10 Ensure no users have .rhosts files | save output
+      copy:
+        dest: "{{ outputfiles }}/6.2.10"
+        content: "{{ output_6_2_11.stdout }}"
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.10
+    - manual
+
+# 6.2.11 Ensure root is the only UID 0 account
+- name: 6.2.11 Ensure root is the only UID 0 account
+  block:
+    - name: 6.2.11 Ensure root is the only UID 0 account| list
+      shell: |
+        awk -F: '($3 == 0) { print $1 }' /etc/passwd | grep -v root && true || true
+      register: output_6_2_2
+    - name: 6.2.11 Ensure root is the only UID 0 account | Save output
+      copy:
+        dest: "{{ outputfiles }}/6.2.11"
+        content: "{{ output_6_2_2.stdout_lines }}"
+    # - name: 6.2.11 Ensure root is the only UID 0 account | Lock account
+    #   user:
+    #     name: "{{ item }}"
+    #     uid: 1992
+    #     force: yes
+    #   with_items: "{{ output_6_2_2.stdout_lines }}"
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.11
+    - manual
+
+# 6.2.12 Ensure root PATH Integrity
+- name: 6.2.12 Ensure root PATH Integrity
+  block:
+    - name: 6.2.12 Ensure root PATH Integrity | run | Delete non-existing folders from PATH
+      block:
+      - name: 6.2.12 Ensure root PATH Integrity | run | Delete non-existing folders from PATH
+        script: 6_2_12_delete_nonexisting.sh
+        register: output_6_2_12
+      when: root_path_delete_nonexisting_paths
+    - name: 6.2.12 Ensure root PATH Integrity | run
+      block:
+      - name: 6.2.12 Ensure root PATH Integrity | run
+        script: 6_2_12.sh
+        register: output_6_2_12
+      when: not root_path_delete_nonexisting_paths
+    - name: 6.2.12 Ensure root PATH Integrity | run
+      script: 6_2_12.sh
+      register: output_6_2_12
+    - name: 6.2.12 Ensure root PATH Integrity | save output
+      copy:
+        dest: "{{ outputfiles }}/6.2.12"
+        content: "{{ output_6_2_12 }}"
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.12
+    - manual
+
+
+# 6.2.13 Ensure no duplicate UIDs exist
+- name: 6.2.13 Ensure no duplicate UIDs exist
+  block:
+    - name: 6.2.13 Ensure no duplicate UIDs exist | list
+      shell: |
+        cut -f3 -d":" /etc/passwd | sort -n | uniq -c | while read x; do
+            [ -z "$x" ] && break
+            set - $x
+            if [ $1 -gt 1 ]; then
+                users=$(awk -F: '($3 == n) { print $1 }' n=$2 /etc/passwd | xargs)
+                echo "Duplicate UID ($2): $users"
+            fi
+        done
+      register: output_6_2_13
+    - name: 6.2.13 Ensure no duplicate UIDs exist | save output
+      copy:
+        dest: "{{ outputfiles }}/6.2.13"
+        content: "{{ output_6_2_13 }}"
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.13
+    - manual
+
+
+# 6.2.14 Ensure no duplicate GIDs exist
+- name: 6.2.14 Ensure no duplicate GIDs exist
+  block:
+    - name: 6.2.14 Ensure no duplicate GIDs exist | list
+      shell: |
+        cut -d: -f3 /etc/group | sort | uniq -d | while read x; do
+            echo "Duplicate GID ($x) in /etc/group"
+        done
+      register: output_6_2_14
+    - name: 6.2.14 Ensure no duplicate GIDs exist | save output
+      copy:
+        dest: "{{ outputfiles }}/6.2.14"
+        content: "{{ output_6_2_14 }}"
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.14
+    - manual
+
+
+# 6.2.15 Ensure no duplicate user names exist
+- name: 6.2.15 Ensure no duplicate user names exist
+  block:
+    - name: 6.2.15 Ensure no duplicate user names exist | list
+      shell: |
+        cut -d: -f1 /etc/passwd | sort | uniq -d | while read x; do
+            echo "Duplicate login name ${x} in /etc/passwd"
+        done
+      register: output_6_2_15
+    - name: 6.2.15 Ensure no duplicate user names exist | save output
+      copy:
+        dest: "{{ outputfiles }}/6.2.15"
+        content: "{{ output_6_2_15.stdout_lines }}"
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.15
+    - manual
+
+# 6.2.16 Ensure no duplicate group names exist
+- name: 6.2.16 Ensure no duplicate group names exist
+  block:
+    - name: 6.2.16 Ensure no duplicate group names exist | list
+      shell: |
+        cut -d: -f1 /etc/group | sort | uniq -d | while read x; do
+            echo "Duplicate group name ${x} in /etc/group"
+        done
+      register: output_6_2_16
+    - name: 6.2.16 Ensure no duplicate group names exist | save output
+      copy:
+        dest: "{{ outputfiles }}/2.6.16"
+        content: "{{ output_6_2_16 }}"
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.16
+    - manual
+
+# 6.2.17 Ensure shadow group is empty
+- name: 6.2.17 Ensure shadow group is empty
+  block:
+    - name: 6.2.17 Ensure shadow group is empty | list
+      shell: |
+        grep ^shadow:[^:]*:[^:]*:[^:]+ /etc/group
+        awk -F: '($4 == "<shadow-gid>") { print }' /etc/passwd
+      register: output_6_2_17
+    - name: 6.2.17 Ensure shadow group is empty | save output
+      copy:
+        dest: "{{ outputfiles }}/6.2.17"
+        content: "{{ output_6_2_17 }}"
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.17
+    - manual
