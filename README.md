@@ -28,6 +28,7 @@ Benchmark Versions:
 | Oracle Linux 8 | v1.0.0 |
 | SUSE Linux Enterprise 15 SP1 | \(SUSE Linux Enterprise 12\) v2.1.0 |
 | Ubuntu 18.04 LTS | v2.0.1 |
+| Ubuntu 20.04 LTS | v2.0.1 |
 | Windows Server 2019 | v1.8.1 |
 
 - Some distributions use older CIS benchmarks that were the most recent at the time of creation. Efforts have
