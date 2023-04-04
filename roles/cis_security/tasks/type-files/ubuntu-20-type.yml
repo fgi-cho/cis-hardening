@@ -2511,12 +2511,12 @@
 - name: 5.5.5 Ensure default user shell timeout is 900 seconds or less
   block:
     - name: 5.5.5 Ensure default user shell timeout is 900 seconds or less | /etc/bash.bashrc
-      lineinfile:
-        state: present
-        dest: /etc/bash.bashrc
-        create: true
-        regexp: "^TMOUT=|^readonly TMOUT=|^unset TMOUT"
-        line: "readonly TMOUT={{ shell_timeout_sec }} ; export TMOUT"
+#      lineinfile:
+#        state: present
+#        dest: /etc/bash.bashrc
+#        create: true
+#        regexp: "^TMOUT=|^readonly TMOUT=|^unset TMOUT"
+#        line: "readonly TMOUT={{ shell_timeout_sec }} ; export TMOUT"
     - name: 5.5.5 Ensure default user shell timeout is 900 seconds or less | /etc/profile
       lineinfile:
         state: present
@@ -2524,13 +2524,13 @@
         create: true
         regexp: "^TMOUT=|^readonly TMOUT=|^unset TMOUT"
         line: "readonly TMOUT={{ shell_timeout_sec }} ; export TMOUT"
-    - name: 5.5.5 Ensure default user shell timeout is 900 seconds or less | /etc/profile.d/timeout.sh
-      lineinfile:
-        state: present
-        dest: /etc/profile.d/tmout.sh
-        create: true
-        regexp: "^TMOUT=|^readonly TMOUT=|^unset TMOUT"
-        line: "readonly TMOUT={{ shell_timeout_sec }} ; export TMOUT"
+ #   - name: 5.5.5 Ensure default user shell timeout is 900 seconds or less | /etc/profile.d/timeout.sh
+ #     lineinfile:
+ #       state: present
+ #       dest: /etc/profile.d/tmout.sh
+ #       create: true
+ #       regexp: "^TMOUT=|^readonly TMOUT=|^unset TMOUT"
+ #       line: "readonly TMOUT={{ shell_timeout_sec }} ; export TMOUT"
   tags:
     - section5
     - level_1_server
