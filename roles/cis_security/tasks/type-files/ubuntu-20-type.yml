@@ -512,8 +512,8 @@
     name: kernel.randomize_va_space
     value: "2"
     state: present
-    reload: true
     sysctl_set: true
+    reload: true
     ignoreerrors: true
   tags:
     - section1
@@ -2063,7 +2063,7 @@
         state: present
         dest: /etc/ssh/sshd_config
         regexp: "^AllowUsers"
-        line: "AllowUsers {{ allowed_users }}"
+        line: "#AllowUsers {{ allowed_users }}"
       when:
         - "{{ allowed_users|length > 0 }}"
     - name: 5.3.4 Ensure SSH access is limited | allow groups
@@ -2510,7 +2510,7 @@
 # # Setting a timeout value reduces the window of opportunity for unauthorized user access to another user's shell session that has been left unattended. It also ends the inactive session and releases the resources associated with that session
 - name: 5.5.5 Ensure default user shell timeout is 900 seconds or less
   block:
-    - name: 5.5.5 Ensure default user shell timeout is 900 seconds or less | /etc/bash.bashrc
+#    - name: 5.5.5 Ensure default user shell timeout is 900 seconds or less | /etc/bash.bashrc
 #      lineinfile:
 #        state: present
 #        dest: /etc/bash.bashrc

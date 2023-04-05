@@ -1409,12 +1409,13 @@
   # skipping
 
   - name: 5.5.3 - Ensure default shell timeout is {{ shell_timeout }} seconds or less
-    ansible.builtin.blockinfile:
-      path: "{{ item }}"
-      block: "TMOUT={{ shell_timeout }}"
-      marker: "# {mark} Ansible Managed CIS Timeout"
+    ansible.builtin.lineinfile:
+      dest: "{{ item }}"
+      regexp: '^readonly\s*((?!TMOUT=900 ; export TMOUT).)*$'
+      line: "readonly TMOUT={{ shell_timeout }} ; export TMOUT"
+#      marker: "# {mark} Ansible Managed CIS Timeout"
     loop:
-      - /etc/bashrc
+#      - /etc/bashrc
       - /etc/profile
     tags:
       - 5.5.3

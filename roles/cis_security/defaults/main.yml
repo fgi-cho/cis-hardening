@@ -315,8 +315,8 @@ ssh_ciphers: chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@ope
 allowed_users: root #Put None or list of users space between each user
 allowed_groups: None
 deny_users: None
-deny_groups: None
-max_auth_tries: 4
+deny_groups: Games
+max_auth_tries: 2
 ## 5.2.21 Ensure SSH MaxStartups is configured
 ssh_max_startups: "10:30:60"
 ## 5.2.22 Ensure SSH MaxSessions is limited
