@@ -1055,7 +1055,7 @@
 - name: 2.1.12 Ensure Samba is not installed
   become: yes
   apt:
-    name: samba*
+    name: samba
     state: absent
     force: yes
     purge: yes
