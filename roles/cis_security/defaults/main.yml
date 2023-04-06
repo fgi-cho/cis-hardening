@@ -75,7 +75,7 @@ ssh_alive_interval: 300         # Linux: Control is 5 minutes
 ssh_alive_count_max: 0          # Linux: Control is 0 count
 ssh_grace_time: 30             # Linux: Control is for 60 seconds or less
 ssh_max_sessions: 4             # Linux: Control is 4 sessions from a single host
-ssh_login_banner: issue.net     # Linux: a file with no path will exist in the role's files directory, an absolute path will exist on the control host
+ssh_login_banner: issue     # Linux: a file with no path will exist in the role's files directory, an absolute path will exist on the control host
 
 # Password and account settings, all settings below match controls
 password_min_length: 14           # Common
@@ -200,7 +200,7 @@ set_bootloader_credentials: no
 ### Update the default bootloader user and password
 bootloader_credentials: { user: "root", password: "b00tl04derPwd" }
 # 1.4.3 Ensure authentication required for single user mode
-set_root_password: yes
+set_root_password: no
 root_password: r00tP4ssw0rd
 ## 1.7.1 Ensure permissions on /etc/motd are configured: allow for custom motd template (if the file doesn't exist, the
 ## default template in files/templates/motd.j2 will be used)

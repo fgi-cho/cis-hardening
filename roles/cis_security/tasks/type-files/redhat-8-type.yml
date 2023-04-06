@@ -714,7 +714,8 @@
   - name: create empty list for unneeded packages
     ansible.builtin.set_fact:
       unneeded_packages: []
-
+    tags:
+      - 2.2.X
   - name: 2.2.3 - Remove rsync; add to removal list
     ansible.builtin.set_fact:
       unneeded_packages: "{{ unneeded_packages + [ 'rsync' ] }}"
@@ -758,9 +759,12 @@
       - name: 2.2.7 Cheking for Samba service 
         debug:
           var: smbd_service.status.ActiveState
-    ansible.builtin.set_fact:
-      unneeded_packages: "{{ unneeded_packages + [ 'samba' ] }}"
-    when: smb_server is defined and not smb_server and smbd_service.status.ActiveState == "inactive" and smbd_logs.matched == 0
+#    tags:
+#      - samba
+      - name: 2.2.7 - Remove samba; add to removal list
+        ansible.builtin.set_fact:
+          unneeded_packages: "{{ unneeded_packages + [ 'samba' ] }}"
+        when: smb_server is defined and not smb_server and smbd_service.status.ActiveState == "inactive" and smbd_logs.matched == 0
     tags:
       - 2.2.7
 
@@ -842,7 +846,8 @@
   - name: 2.3.3 - list of packages to remove
     ansible.builtin.debug:
       var: unneeded_packages
-
+    tags:
+      - remove
   # With the list complete, use it with the system's package manager
   #  to remove packages from the system that are not needed.
   - name: Process removal list
