@@ -1052,13 +1052,25 @@
 # file systems and directories with Windows desktops. Samba will advertise the file systems
 # and directories via the Server Message Block (SMB) protocol. Windows desktop users will
 # be able to mount these directories and file systems as letter drives on their systems.
-- name: 2.1.12 Ensure Samba is not installed
-  become: yes
-  apt:
-    name: samba
-    state: absent
-    force: yes
-    purge: yes
+- 2.1.12 Check is Samba is operational and Purge it
+  block:
+    - name: 2.1.12 Check is Samba is operational
+      systemd:
+        name: smb.service
+        enabled: true
+        state: started
+      triger: smb_service
+      ignore_errors: yes
+#    - name: 2.1.12 Cheking for Samba logs
+
+    - name: 2.1.12 Ensure Samba is not installed
+      become: yes
+      apt:
+        name: samba
+        state: absent
+        force: yes
+        purge: yes
+      when: not smb_service
   when: remove_Samba 
   tags:
     - section2
