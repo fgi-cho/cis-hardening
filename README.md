@@ -1,6 +1,6 @@
 # cis_security
 
-A collection to implement Center for Internet Security (CIS) controls for RHEL (7-8) and RHEL clones (Oracle, CentOS), SLES 15, and Ubuntu 18.04 LTS and certain Windows servers.
+A collection to implement Center for Internet Security (CIS) controls for RHEL (7-8) and RHEL clones (Oracle, CentOS), SLES 15, Ubuntu 18.04 LTS and Ubuntu 20.04 LTS and certain Windows servers.
 
 ### Introduction
 
@@ -17,26 +17,25 @@ This collection contains a role that is designed to layer under other Ansible ro
 files that are modified in this role.
 
 Benchmark Versions:
-| Operating System | OS Benchmark version |
-| -----------------|--------------------- |
-| RHEL 7 | v2.2.0 |
-| RHEL 8 | v1.0.0 |
-| CentOS 7 | v2.2.0 |
-| CentOS 8 | v1.0.0 |
-| Fedora 31 | \(Fedora 28\) v1.1.0 |
-| Oracle Linux 7 | v2.2.0 |
-| Oracle Linux 8 | v1.0.0 |
-| SUSE Linux Enterprise 15 SP1 | \(SUSE Linux Enterprise 12\) v2.1.0 |
-| Ubuntu 18.04 LTS | v2.0.1 |
-| Ubuntu 20.04 LTS | v2.0.1 |
-| Windows Server 2019 | v1.8.1 |
+| Operating System | 
+| -----------------|-------------- |
+| RHEL 7           |
+| RHEL 8           |
+| CentOS 7         |
+| CentOS 8         |
+| Fedora 31        |
+| Oracle Linux 7   |
+| Oracle Linux 8   |
+| SUSE 15 / SUSE 12|
+| Ubuntu 18.04 LTS |
+| Ubuntu 20.04 LTS |
+| Win Server 2019  |
 
 - Some distributions use older CIS benchmarks that were the most recent at the time of creation. Efforts have
 been made to update the controls to work with the newer operating systems. Older versions of the benchmarks are listed in parenthesis.
 - SUSE Linux Enterprise 15 SP1 uses the RHEL 7 task file since their controls are so similar. If you want to exclude a SUSE tag, make sure you use the associated RHEL 7 tag number if they are different.  Tags can be found in the appropriate controls_list file found in the docs directory.
 
 ### Requirements
-To implement the collection correctly, you will require the following
 
 Control machine:
 - Ansible 2.9+
@@ -45,8 +44,6 @@ Control machine:
 Target machine:
 - SSH connection with prviiledge escalation on Linux machines.
   - Python interpreter
-- WinRM connection with user with admin priviledge for Windows. Alternatively you can use an SSH connection.
-  - PowerShell v3 or higher
 
 Collection Requirements:
 - ansible.builtin
@@ -101,64 +98,11 @@ run, you must exclude both tags:
 ```
 ansible-playbook -i <inventory> <playbook.yml> --skip-tags "6.1.2,6.1.4"
 ```
-Some controls are surrouned by Ansible blocks that themselves have tags. Excluding the tag that applies
-to the block will exclude all of the tasks inside of the block. If the block's tag is **not** excluded,
-then individual tasks inside of the block can be excluded by excluding their tags.
-
-The list of tags and their associated crontol descriptions are listed in the [controls_list](./docs/controls_list.md) file for Linux and [control_list_win](./docs/controls_list_win.md_ file for Windows)
-in the docs directory.
-
 In addition to tags, there are a number of variables that can be set which will enable or disable
 tasks, or set values. These are explained and given default values in the **roles/cis-security/defaults/main.yml**
 file. Do not set these values in that file, but create and include your own variable file to override the
 defaults or set them as host variables.
 
-### Idempotency
-Every effort has been made to make the controls idempotent, however some Ansible modules do not have the ability
-to measure every need as currently written and shell or command has been utilized to implement controls. This
-has the effect of bringing down the quality score on Ansible Galaxy, but the roles can be run multiple times
-without fear of breaking.
-
-### Learning Tool
-A secondary purpose of this collection is to show numerous ways that Ansible can be used to
-manage systems with various modules. The first time a module is used it is commented on many times
-to explain what the module is doing. Other times you may see something like the following:
-
-```
-  - name: 5.4.4 - Ensure umask is set
-    replace:
-      path: "{{ item }}"
-      replace: "     umask {{ default_umask }}"
-      regexp: '^\s*umask\s*022'
-    loop:
-      - /etc/bashrc
-      - /etc/profile
-    when: ansible_distribution != "SLES"
-    tags:
-      - 5.4.4
-
-  - name: 5.4.5 - Ensure shell timeout is {{ shell_timeout }} seconds or less
-    blockinfile:
-      path: "{{ item }}"
-      block: "TMOUT={{ shell_timeout }}"
-      marker: "# {mark} Ansible Managed CIS Timeout"
-    loop:
-      - /etc/bashrc
-      - /etc/profile
-    when: ansible_distribution != "SLES"
-    tags:
-      - 5.4.5
-```
-Both of these tasks manipulate the same file in the same way. They could have been written
-with the same module, even in the same task with a loop, but here it illustrates different
-ways files can be manipuldated with modules.
-
-
 ### Change Log
-- 1/20/2020 - dsglaser@gmail.com - Initial creation
-- 1/22/2020 - dsglaser@gmail.com - Added enhanced selinux controls
-- 2/18/2020 - dsglaser@gmail.com - Added support for Ubuntu 18.04 LTS, added RHEL clone links
-- 2/20/2020 - dsglaser@gmail.com - Fixed numerous tests and rearranged network controls
-- 2/25/2020 - dsglaser@gmail.com - Added SLES 15 SP 1 support
-- 3/17/2020 - dsglaser@gmail.com - Added Windows 2019 support
-- 7/24/2022 - dsglaser@gmail.com - Coversion to full collection status (Namespace: dsglaser)
+Based on ansible-galaxy collection install dsglaser.cis_security
+
