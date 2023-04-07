@@ -1,4 +1,3 @@
-# Managed by ansible alivx/CIS-Ubuntu-20.04-Ansible
 #
 # The PAM configuration file for the Shadow `su' service
 #
@@ -13,7 +12,7 @@ auth       sufficient pam_rootok.so
 # denying "root" user, unless she's a member of "foo" or explicitly
 # permitted earlier by e.g. "sufficient pam_rootok.so").
 # (Replaces the `SU_WHEEL_ONLY' option from login.defs)
-# auth       required   pam_wheel.so
+auth           required        pam_wheel.so use_uid
 
 # Uncomment this if you want wheel members to be able to
 # su without a password.
@@ -21,7 +20,7 @@ auth       sufficient pam_rootok.so
 
 # Uncomment this if you want members of a specific group to not
 # be allowed to use su at all.
-# auth       required   pam_wheel.so deny group=nosu
+auth           required        pam_wheel.so use_uid deny group=nosu
 
 # Uncomment and edit /etc/security/time.conf if you need to set
 # time restrainst on su usage.
@@ -59,5 +58,4 @@ session    required   pam_limits.so
 @include common-account
 @include common-session
 
-auth  required    pam_wheel.so use_uid group={{adminGroup}} debug
-auth  required    pam_listfile.so item=user sense=allow onerr=fail file=/etc/security/su-group-access
+

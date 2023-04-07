@@ -70,7 +70,7 @@ ssh_log_level: INFO             # Linux: Control is INFO or VERBOSE. Stricter is
 ssh_max_auth_tries: 2           # Linux: Control is 4 retries
 ssh_mac_list: "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com"   # Linux: RHEL7 only control
 ssh_ciphers_list: "chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr"                        # Linux: Ubuntu control only
-ssh_kex_list: "curve25519-sha256,curve25519-sha256@libssh.org,ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256,diffie-hellman-group14-sha1,diffie-hellman-group1-sha1" # Linux: Ubuntu control only
+ssh_kex_list: "ntrup4591761x25519-sha512@tinyssh.org,curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256" # Linux: Ubuntu control only
 ssh_alive_interval: 300         # Linux: Control is 5 minutes
 ssh_alive_count_max: 0          # Linux: Control is 0 count
 ssh_grace_time: 30             # Linux: Control is for 60 seconds or less
@@ -309,8 +309,8 @@ allowd_hosts: "ALL: 0.0.0.0/0.0.0.0, 192.168.2.0/255.255.255.0"
 ## 5.2.13 Ensure only strong MAC algorithms are used
 ssh_MACs: "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256"
 ## 5.2.14 Ensure only strong Key Exchange algorithms are used
-ssh_key_algorithms: "curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group14-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256"
-ssh_ciphers: chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+ssh_key_algorithms: "sntrup4591761x25519-sha512@tinyssh.org,curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256"
+ssh_ciphers: "chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr"
 ## 5.2.17 Ensure SSH access is limited
 allowed_users: root #Put None or list of users space between each user
 allowed_groups: None
@@ -326,7 +326,7 @@ ssh_root_login_ips: None
 ## 5.4.1.1 Ensure password expiration is 365 days or less
 pass_expire_in_days: 300
 pass_warn_age: 7
-pass_min_days: 1
+pass_min_days: 7
 ## 5.4.1.1 Ensure password expiration is 365 days or less
 list_of_os_users:
   - root
