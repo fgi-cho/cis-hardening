@@ -279,6 +279,25 @@
         enabled: yes
         masked: no
         state: started
+    - name: Get file system
+      shell: findmnt -n /tmp | awk '{print $3}'
+      check_mode: no
+      register: filesystem
+    - debug:
+        msg: "{{ filesystem.stdout_lines }}"
+    - name: Check /tmp config
+      mount:
+        path: /tmp
+        src: /dev/mapper/system-tmp
+        fstype: "{{ filesystem.stdout_lines }}"
+        state: present
+        opts:  defaults,nosuid,nodev,noexec
+      register: tmp_conf
+    - name: Remount /tmp
+      mount:
+        path: /tmp
+        state: remounted
+      when: tmp_conf.changed
   tags:
     - section1
     - level_1_server
