@@ -540,92 +540,25 @@
     ignore_errors: yes
     tags:
       - 1.3.0
+# 1.5 Additional Process Hardening
 
-  # 1.5 Secure Boot settings
-
-  # Determine if we are using LILO or EFI
-  - name: 1.5.0 - Check if the EFI directory exists
-    ansible.builtin.stat:
-      path: "/boot/efi/EFI/{{ ansible_distribution | lower }}/grub.cfg"
-    register: efidir
+  - name: 1.5.2 - Ensure IgnoreRhosts is set
+    ansible.builtin.lineinfile:
+      path: /etc/systemd/coredump.conf
+      line: "ProcessSizeMax=0"
+      regexp: '^ProcessSizeMax=\s*[^y]'
     tags:
-      1.5.1
-
-  - name: 1.5.1 - set variable for grub.cfg in EFI location
-    ansible.builtin.set_fact:
-      grub_cfg_path: "{{ efidir.stat.path }}"
-    when: efidir.stat.path is defined
-    tags:
-      1.5.1
-
-  - name: 1.5.0 - Check if the LILO path exists
-    ansible.builtin.stat:
-      path: "/boot/grub2/grub.cfg"
-    register: grubdir
-    tags:
-      1.5.1
-
-  - name: 1.5.1 - set variable for grub.cfg in LILO location
-    ansible.builtin.set_fact:
-      grub_cfg_path: "{{ grubdir.stat.path }}"
-    when: grubdir.stat.path is defined
-    tags:
-      1.5.1
-
-  # Use file module to set permissions on grub files
-  - name: 1.5.1 - Set permissions on grub.cfg
-    ansible.builtin.file:
-      path: "{{ item }}"
-      owner: root
-      group: root
-      mode: 0600
-    loop:
-      - "{{ grub_cfg_path }}"
-      - /boot/grub2/grubenv
-    tags:
-      - 1.5.1
-
-  # Control 1.5.2, Grub bootloader password - skipped
-
-  # Use replace module to add the requirement to enter password on single user startup
-  # With Support for Fedora 31 added, you can build a machine with a disabled root account.
-  #  setting up secure single user mode shouldn't be done unless the root pasword is set or
-  #  you'll lock yourself out.
-  - name: 1.5.3 - Set single user password
-    block:
-      - name: 1.5.3 - Check if root has a password
-        ansible.builtin.lineinfile:
-          path: /etc/shadow
-          regexp: '^root:[*\!|*\*]*:'
-          state: absent
-        check_mode: true
-        changed_when: false
-        register: root_pw_check
-        failed_when: false
-
-      # The user module here uses a known salt to idompotently set the password for multiple runs
-      #  see https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html#hash-filters
-      - name: 1.5.3 - Set root password
-        ansible.builtin.user:
-          name: root
-          password: "{{ 'root_password' | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string) }}"
-        when: root_pw_check.found != "0" and root_password is defined
-
-      - name: 1.5.3 - Set single user to use use a secure shell
-        ansible.builtin.replace:
-          dest: /usr/lib/systemd/system/{{ item }}
-          regexp: '^ExecStart=-((?!/usr/lib/systemd/systemd-sulogin-shell).)*$'
-          replace: "ExecStart=-/usr/lib/systemd/systemd-sulogin-shell rescue"
-        when: root_pw_check.found != "0"
-        with_items:
-          - rescue.service
-          - emergency.service
-
-      - name: 1.5.3 - If no root password is set up, notify the user and do not set password or single user mode
-        ansible.builtin.debug:
-          msg: "Root password is not set and no password provided. Set root_password variable per instructions and restart playbook."
-        changed_when: true
-        when: root_pw_check.found and root_password is not defined
+      - 1.5.2
+      
+  - name: 1.5.3 - Ensure address space layout reandomization (ASLR) is enabled
+      # The sysctl module will set variables in /etc/sysctl.conf and tell sysctl
+      #  to reload them immediately if 'reload' is set to 'yes'.
+    ansible.builtin.sysctl:
+      name: kernel.randomize_va_space
+      value: "2"
+      reload: true
+      state: present
+      sysctl_set: true
     tags:
       - 1.5.3
 
@@ -1658,6 +1591,23 @@
     tags:
       - 4.2.1.4
 
+  - name: 4.2.1.7 - Ensure journald writes to peristent disk
+    replace:
+      dest: /etc/rsyslog.conf
+      regexp: '^#module.*load="imtcp".*'
+      replace: 'module(load="imtcp")'
+    tags:
+      - 4.2.1.7
+
+  - name: 4.2.1.7 - Ensure journald writes to peristent disk
+    replace:
+      dest: /etc/rsyslog.conf
+      regexp: '^#input.*type="imtcp" port="514".*'
+      replace: 'input(type="imtcp" port="514")'
+    tags:
+      - 4.2.1.7
+
+
   - name: 4.2.2.3 - Ensure journald is configured to compress large log files
     ansible.builtin.lineinfile:
       dest: /etc/systemd/journald.conf
@@ -1949,6 +1899,39 @@
           - 5.2.20
     tags:
       - 5.2.0
+
+
+  # use the system package module to ensure sudo is installed
+  - name: 5.3.1 - Ensure sudo is installed
+    ansible.builtin.dnf:
+      name: sudo
+      state: present
+    tags:
+      - 5.3.1
+
+  # Make sure the sudoers file includes the requirement to use pty
+  - name: 5.3.2 - Ensure sudo commands use pty
+    ansible.builtin.lineinfile:
+      path: /etc/sudoers
+      regexp: '^Defaults\s*use_pty'
+      line: "Defaults use_pty"
+      insertafter: "^# Defaults specification"
+      validate: /usr/sbin/visudo -cf %s
+    tags:
+      - 5.3.2
+
+  # Make sure the sudoers file includes the requirement to log to a file
+  - name: 1.3.3 - Ensure sudo log file exists
+    ansible.builtin.lineinfile:
+      path: /etc/sudoers
+      regexp: '^Defaults\s*logfile="{{ sudo_log }}"'
+      line: 'Defaults logfile="{{ sudo_log }}"'
+      insertafter: "^# Defaults specification"
+      validate: /usr/sbin/visudo -cf %s
+    tags:
+      - 5.3.3
+
+
 
   # Control section 5.3, authselect, cannot be used with Red Hat IPA or Microsoft AD
   # Skipping until can assure we know how to test against this.
