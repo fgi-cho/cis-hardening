@@ -82,6 +82,7 @@
     ansible.builtin.lineinfile:
       dest: "/etc/modprobe.d/{{ item }}.conf"
       line: "install {{ item }} /bin/false"
+      line: "blacklist {{ item }}"
       state: present
       create: true
       owner: root
@@ -403,6 +404,7 @@
         changed_when: false
         tags:
           - 1.4.1
+    ignore_errors: yes
     tags:
       - 1.4.0
 
@@ -1779,5 +1781,6 @@
           msg: "{{ nohomedir.stdout_lines }}"
         changed_when: true
         when: nohomedir.stdout
+    ignore_errors: yes
     tags:
       - 6.2.20
