@@ -284,12 +284,12 @@
       check_mode: no
       register: filesystem
     - debug:
-        msg: "{{ filesystem.stdout_lines }}"
+        var:  filesystem.stdout
     - name: Check /tmp config
       mount:
         path: /tmp
         src: /dev/mapper/system-tmp
-        fstype: "{{ filesystem.stdout_lines }}"
+        fstype: "{{ filesystem.stdout }}"
         state: present
         opts:  defaults,nosuid,nodev,noexec
       register: tmp_conf
