@@ -298,6 +298,7 @@
         path: /tmp
         state: remounted
       when: tmp_conf.changed
+  ignore_errors: yes
   tags:
     - section1
     - level_1_server
