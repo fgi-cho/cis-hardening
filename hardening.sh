@@ -1,5 +1,5 @@
 #!/bin/bash
-echo && echo "Reading Tags file." && echo
+echo && echo "Reading Tags files from tags-extract/" && echo
 if find tags-extract/  -mindepth 1 -maxdepth 1 | read; then
   cd tags-extract/
   for i in *
@@ -13,12 +13,12 @@ if find tags-extract/  -mindepth 1 -maxdepth 1 | read; then
     else 
       echo "Executing :  ansible-playbook -i $name, ../hardening.yml --diff" && echo
       sleep 5
-      script --flush --quiet --return ../logs/$name'.log' --command "ansible-playbook -i $name, --extra-vars 'ansible_ssh_user=root' ../hardening.yml --check --diff"
+      script --flush --quiet --return ../logs/$name'.log' --command "ansible-playbook -i $name, --extra-vars 'ansible_ssh_user=root' ../hardening.yml --diff"
     fi
-#    mv $i ../processed/
+    mv $i ../processed/
   done 
 fi
-echo "No more tag files, executing full playbook." && echo
+echo "No more tag files, executing full playbook on inventory file." && echo
 sleep 5
  cd tags-extract/
 if  [ -s ../inv.ini ]; then
@@ -29,6 +29,5 @@ if  [ -s ../inv.ini ]; then
     echo "Executing : ansible-playbook -i $name, hardening.yml --diff" && echo
     sleep 5 &
     script --flush --quiet --return ../logs/$name'.log' --command "ansible-playbook -i $name, --extra-vars 'ansible_ssh_user=root' ../hardening.yml --diff"
-#      mv $i ../processed/
 done 
 fi

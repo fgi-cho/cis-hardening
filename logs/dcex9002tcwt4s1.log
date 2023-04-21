@@ -1,4 +1,4 @@
-Script started on Tue 18 Apr 2023 07:56:15 AM CEST
+Script started on Fri 21 Apr 2023 10:10:07 AM CEST
 [1;35m[WARNING]: While constructing a mapping from /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/defaults/main.yml, line 6, column 1, found a duplicate dict key[0m
 [1;35m(enable_firewall). Using last defined value only.[0m
 [1;35m[WARNING]: While constructing a mapping from /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/defaults/main.yml, line 6, column 1, found a duplicate dict key[0m
@@ -16,7 +16,7 @@ TASK [cis_security : include] **************************************************
 [0;36mincluded: /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/tasks/CIS-Ubuntu-20.yml for dcex9002tcwt4s1[0m
 
 TASK [cis_security : include] ***************************************************************************************************************************************************************
-[1;35m[WARNING]: While constructing a mapping from /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/tasks/type-files/ubuntu-20-type.yml, line 2647, column 9, found a duplicate dict[0m
+[1;35m[WARNING]: While constructing a mapping from /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/tasks/type-files/ubuntu-20-type.yml, line 2656, column 9, found a duplicate dict[0m
 [1;35mkey (line). Using last defined value only.[0m
 [0;36mincluded: /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/tasks/type-files/ubuntu-20-type.yml for dcex9002tcwt4s1[0m
 
@@ -57,22 +57,10 @@ TASK [cis_security : 1.1.1.7 Ensure mounting of udf filesystems is disabled | mo
 [0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 1.1.2 Ensure /tmp is configured] ***************************************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
+[0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 1.1.2 Ensure /tmp is configured | edit file] ***************************************************************************************************************************
-[0;31m--- before: /etc/systemd/system/tmp.mount (content)[0m
-[0;31m[0m[0;32m+++ after: /etc/systemd/system/tmp.mount (content)[0m
-[0;32m[0m[0;36m@@ -22,7 +22,7 @@[0m
-[0;36m[0m What=tmpfs
- Where=/tmp
- Type=tmpfs
-[0;31m-Options=mode=1777,strictatime,nosuid,nodev[0m
-[0;31m[0m[0;32m+Options=mode=1777,strictatime,nosuid,nodev,noexec[0m
-[0;32m[0m 
- [Install]
- WantedBy=local-fs.target
-
-[0;33mchanged: [dcex9002tcwt4s1][0m
+[0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 1.1.2 Ensure /tmp is configured | reload demon] ************************************************************************************************************************
 [0;32mok: [dcex9002tcwt4s1][0m
@@ -81,18 +69,14 @@ TASK [cis_security : 1.1.2 Ensure /tmp is configured | enable and start tmp.moun
 [0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : Get file system] *******************************************************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
+[0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : debug] *****************************************************************************************************************************************************************
 [0;32mok: [dcex9002tcwt4s1] => {[0m
-[0;32m    "msg": [[0m
-[0;32m        "ext4"[0m
-[0;32m    ][0m
+[0;32m    "filesystem.stdout": "ext4"[0m
 [0;32m}[0m
 
 TASK [cis_security : Check /tmp config] *****************************************************************************************************************************************************
-[1;35m[WARNING]: The value ['ext4'] (type list) in a string field was converted to "['ext4']" (type string). If this does not look like what you expect, quote the entire value to ensure it does[0m
-[1;35mnot change.[0m
 [0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : Remount /tmp] **********************************************************************************************************************************************************
@@ -107,18 +91,18 @@ TASK [cis_security : 1.1.6 Ensure /dev/shm is configured
 TASK [cis_security : 1.1.12 Ensure nodev option set on /var/tmp partitions] *****************************************************************************************************************
 [1;35m[WARNING]: Consider using the mount module rather than running 'mount'.  If you need to use command because mount is insufficient you can add 'warn: false' to this command task or set[0m
 [1;35m'command_warnings=False' in ansible.cfg to get rid of this message.[0m
-[0;33mchanged: [dcex9002tcwt4s1][0m
+[0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : /var/tmp partitions] ***************************************************************************************************************************************************
 [0;32mok: [dcex9002tcwt4s1] => {[0m
 [0;32m    "msg": {[0m
-[0;32m        "changed": true, [0m
+[0;32m        "changed": false, [0m
 [0;32m        "cmd": "mount | grep \"on /var\" && true || true\n", [0m
-[0;32m        "delta": "0:00:00.008468", [0m
-[0;32m        "end": "2023-04-18 07:56:27.347822", [0m
+[0;32m        "delta": "0:00:00.008966", [0m
+[0;32m        "end": "2023-04-21 10:10:19.579642", [0m
 [0;32m        "failed": false, [0m
 [0;32m        "rc": 0, [0m
-[0;32m        "start": "2023-04-18 07:56:27.339354", [0m
+[0;32m        "start": "2023-04-21 10:10:19.570676", [0m
 [0;32m        "stderr": "", [0m
 [0;32m        "stderr_lines": [], [0m
 [0;32m        "stdout": "/dev/mapper/system-var on /var type ext4 (rw,nosuid,nodev,relatime)\n/dev/mapper/system-log on /var/log type ext4 (rw,nodev,relatime)\n/dev/mapper/system-audit on /var/log/audit type ext4 (rw,nodev,relatime)\nsensor_cpu,cpuacct on /var/opt/f-secure/mdr/baseguard/sensor/cgroup/sensor_cpu,cpuacct type cgroup (rw,nosuid,nodev,noexec,relatime,cpu,cpuacct)", [0m
@@ -140,13 +124,13 @@ TASK [cis_security : 1.1.18 Ensure nodev option set on /home partition] ********
 [0;32m}[0m
 
 TASK [cis_security : 1.1.22 Ensure sticky bit is set on all world-writable directories | get info] ******************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
+[0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 1.1.22 Ensure sticky bit is set on all world-writable directories | fix] ***********************************************************************************************
 [0;36mskipping: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 1.1.23 Disable Automounting | service disable] *************************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
+[0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 1.1.23 Disable Automounting | package remove] **************************************************************************************************************************
 [0;32mok: [dcex9002tcwt4s1][0m
@@ -160,16 +144,13 @@ TASK [cis_security : 1.1.24 Disable USB Storage] *******************************
 TASK [cis_security : 1.3.1 Ensure AIDE is installed] ****************************************************************************************************************************************
 [0;32mok: [dcex9002tcwt4s1][0m
 
-TASK [cis_security : 1.3.2 Ensure filesystem integrity is regularly checked | Cron] *********************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
 TASK [cis_security : 1.4.1 Ensure permissions on bootloader config are not overridden - step 1 - update chmod 444 to chmod 400 in /usr/sbin/grubmkconfig] ***********************************
 [1;35m[WARNING]: Consider using the replace, lineinfile or template module rather than running 'sed'.  If you need to use command because replace, lineinfile or template is insufficient you can[0m
 [1;35madd 'warn: false' to this command task or set 'command_warnings=False' in ansible.cfg to get rid of this message.[0m
-[0;33mchanged: [dcex9002tcwt4s1][0m
+[0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 1.4.1 Ensure permissions on bootloader config are not overridden - step 2 -  check on password not being set before running chmod command] *****************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
+[0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 1.4.3 Ensure permissions on bootloader config are configured] **********************************************************************************************************
 [0;32mok: [dcex9002tcwt4s1][0m
@@ -200,14 +181,14 @@ TASK [cis_security : 1.5.4 Ensure core dumps are restricted | coredump.conf] ***
 [0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 1.5.4 Ensure core dumps are restricted | reload] ***********************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
+[0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 1.6.1.1 Ensure AppArmor is installed] **********************************************************************************************************************************
 [0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 1.6.1.3 Ensure all AppArmor Profiles are in enforce or complain mode
  1.6.1.4 Ensure all AppArmor Profiles are enforcing] **********************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
+[0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 1.7.1 Ensure message of the day is configured properly
  1.7.4 Ensure permissions on /etc/motd are configured] **********************************************************
@@ -361,7 +342,7 @@ TASK [cis_security : 2.2.5 Ensure LDAP client is not installed] ****************
 [0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : verify no wireless interfaces are active on the system] ****************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
+[0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 3.1.2 Ensure wireless interfaces are disabled] *************************************************************************************************************************
 [0;36mskipping: [dcex9002tcwt4s1][0m
@@ -371,7 +352,7 @@ TASK [cis_security : 3.2.1 Ensure packet redirect sending is disabled | set] ***
 [0;32mok: [dcex9002tcwt4s1] => (item={u'name': u'net.ipv4.conf.default.send_redirects', u'value': 0})[0m
 
 TASK [cis_security : 3.2.1 Ensure packet redirect sending is disabled | load] ***************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
+[0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 3.2.2 Ensure IP forwarding is disabled | ipv4"] ************************************************************************************************************************
 [0;32mok: [dcex9002tcwt4s1][0m
@@ -380,7 +361,7 @@ TASK [cis_security : 3.2.2 Ensure IP forwarding is disabled | ipv6"] ***********
 [0;36mskipping: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 3.2.2 Ensure IP forwarding is disabled | IPV4 load"] *******************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
+[0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 3.2.2 Ensure IP forwarding is disabled | IPV6 load"] *******************************************************************************************************************
 [0;36mskipping: [dcex9002tcwt4s1][0m
@@ -390,7 +371,7 @@ TASK [cis_security : 3.3.1 Ensure source routed packets are not accepted | ipv4"
 [0;32mok: [dcex9002tcwt4s1] => (item={u'name': u'net.ipv4.conf.default.accept_source_route', u'value': 0})[0m
 
 TASK [cis_security : 3.3.1 Ensure source routed packets are not accepted | ipv4 load"] ******************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
+[0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 3.3.1 Ensure source routed packets are not accepted | ipv6"] ***********************************************************************************************************
 [0;36mskipping: [dcex9002tcwt4s1] => (item={u'name': u'net.ipv6.conf.all.accept_source_route', u'value': 0}) [0m
@@ -404,7 +385,7 @@ TASK [cis_security : 3.3.2 Ensure ICMP redirects are not accepted | ipv4"] *****
 [0;32mok: [dcex9002tcwt4s1] => (item={u'name': u'net.ipv4.conf.default.accept_redirects', u'value': 0})[0m
 
 TASK [cis_security : shell] *****************************************************************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
+[0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 3.3.2 Ensure ICMP redirects are not accepted | ipv6"] ******************************************************************************************************************
 [0;36mskipping: [dcex9002tcwt4s1] => (item={u'name': u'net.ipv6.conf.all.accept_redirects', u'value': 0}) [0m
@@ -418,39 +399,39 @@ TASK [cis_security : 3.3.3 Ensure secure ICMP redirects are not accepted | save]
 [0;32mok: [dcex9002tcwt4s1] => (item={u'name': u'net.ipv4.conf.default.secure_redirects', u'value': 0})[0m
 
 TASK [cis_security : 3.3.3 Ensure secure ICMP redirects are not accepted | load] ************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
+[0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 3.3.4 Ensure suspicious packets are logged | save] *********************************************************************************************************************
 [0;32mok: [dcex9002tcwt4s1] => (item={u'name': u'net.ipv4.conf.all.log_martians', u'value': 1})[0m
 [0;32mok: [dcex9002tcwt4s1] => (item={u'name': u'net.ipv4.conf.default.log_martians', u'value': 1})[0m
 
 TASK [cis_security : 3.3.4 Ensure suspicious packets are logged | load] *********************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
+[0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 3.3.5 Ensure broadcast ICMP requests are ignored | save] ***************************************************************************************************************
 [0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 3.3.5 Ensure broadcast ICMP requests are ignored | load] ***************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
+[0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 3.3.6 Ensure bogus ICMP responses are ignored | save] ******************************************************************************************************************
 [0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 3.3.6 Ensure bogus ICMP responses are ignored | load] ******************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
+[0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 3.3.7 Ensure Reverse Path Filtering is enabled | save] *****************************************************************************************************************
 [0;32mok: [dcex9002tcwt4s1] => (item={u'name': u'net.ipv4.conf.all.rp_filter', u'value': 1})[0m
 [0;32mok: [dcex9002tcwt4s1] => (item={u'name': u'net.ipv4.conf.default.rp_filter', u'value': 1})[0m
 
 TASK [cis_security : 3.3.7 Ensure Reverse Path Filtering is enabled | load] *****************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
+[0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 3.3.8 Ensure TCP SYN Cookies is enabled | save] ************************************************************************************************************************
 [0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 3.3.8 Ensure TCP SYN Cookies is enabled | load] ************************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
+[0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 3.3.9 Ensure IPv6 router advertisements are not accepted | save] *******************************************************************************************************
 [0;36mskipping: [dcex9002tcwt4s1] => (item={u'name': u'net.ipv6.conf.all.accept_ra', u'value': 0}) [0m
@@ -466,471 +447,4 @@ TASK [cis_security : 3.5.1.2 Ensure iptables-persistent is not installed] ******
 [0;32mok: [dcex9002tcwt4s1][0m
 
 TASK [cis_security : 3.5.3.1.2 Ensure ufw is uninstalled or disabled with nftables] *********************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 4.2.1.1 Ensure rsyslog is installed] ***********************************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 4.2.1.2 Ensure rsyslog Service is enabled] *****************************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 4.2.1.4 Ensure rsyslog default file permissions configured] ************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 4.2.1.5 Ensure rsyslog default file permissions configured] ************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 4.2.2.1 Ensure journald is configured to send logs to rsyslog] *********************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 4.2.2.2 Ensure journald is configured to compress large log files] *****************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 4.2.2.3 Ensure journald is configured to write logfiles to persistent disk] ********************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 4.2.3 Ensure permissions on all logfiles are configured] ***************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.1.1 Ensure cron daemon is enabled and running] ***********************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.1.2 Ensure permissions on /etc/crontab are configured] ***************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.1.3 Ensure permissions on /etc/cron.hourly are configured] ***********************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.1.4 Ensure permissions on /etc/cron.daily are configured] ************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.1.5 Ensure permissions on /etc/cron.weekly are configured] ***********************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.1.6 Ensure permissions on /etc/cron.monthly are configured] **********************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.1.7 Ensure permissions on /etc/cron.d are configured] ****************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.1.8 Ensure cron is restricted to authorized users | /etc/cron.deny] **************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : stat] ******************************************************************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.1.8 Ensure cron is restricted to authorized users | /etc/cron.allow] *************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.1.9 Ensure at is restricted to authorized users | /etc/at.deny] ******************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : stat] ******************************************************************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.1.9 Ensure at is restricted to authorized users | /etc/at.allow] *****************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.2.1 Ensure sudo is installed] ****************************************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.2.2 Ensure sudo commands use pty] ************************************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.2.3 Ensure sudo log file exists] *************************************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.3.1 Ensure permissions on /etc/ssh/sshd_config are configured] *******************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.3.2 Ensure permissions on SSH private host key files are configured | find keys] *************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.3.2 Ensure permissions on SSH private host key files are configured | fix permissions] *******************************************************************************
-[1;35m[WARNING]: conditional statements should not include jinja2 templating delimiters such as {{ }} or {% %}. Found: {{ private_keys.stdout_lines|length > 0 }}[0m
-[0;32mok: [dcex9002tcwt4s1] => (item=/etc/ssh/ssh_host_rsa_key)[0m
-[0;32mok: [dcex9002tcwt4s1] => (item=/etc/ssh/ssh_host_dsa_key)[0m
-[0;32mok: [dcex9002tcwt4s1] => (item=/etc/ssh/ssh_host_ed25519_key)[0m
-[0;32mok: [dcex9002tcwt4s1] => (item=/etc/ssh/ssh_host_ecdsa_key)[0m
-
-TASK [cis_security : 5.3.3 Ensure permissions on SSH public host key files are configured | find keys] **************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.3.3 Ensure permissions on SSH public host key files are configured | fix permissions] ********************************************************************************
-[1;35m[WARNING]: conditional statements should not include jinja2 templating delimiters such as {{ }} or {% %}. Found: {{ public_keys.stdout_lines|length > 0 }}[0m
-[0;32mok: [dcex9002tcwt4s1] => (item=/etc/ssh/ssh_host_rsa_key.pub)[0m
-[0;32mok: [dcex9002tcwt4s1] => (item=/etc/ssh/ssh_host_ed25519_key.pub)[0m
-[0;32mok: [dcex9002tcwt4s1] => (item=/etc/ssh/ssh_host_ecdsa_key.pub)[0m
-[0;32mok: [dcex9002tcwt4s1] => (item=/etc/ssh/ssh_host_dsa_key.pub)[0m
-
-TASK [cis_security : 5.3.4 Ensure SSH access is limited | allow groups] *********************************************************************************************************************
-[0;36mskipping: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.3.4 Ensure SSH access is limited | denyusers] ************************************************************************************************************************
-[0;36mskipping: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.3.4 Ensure SSH access is limited | denygroups] ***********************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.3.5 Ensure SSH LogLevel is appropriate] ******************************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.3.7 Ensure SSH MaxAuthTries is set to 4 or less] *********************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.3.8 Ensure SSH IgnoreRhosts is enabled] ******************************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.3.9 Ensure SSH HostbasedAuthentication is disabled] ******************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.3.11 Ensure SSH PermitEmptyPasswords is disabled] ********************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.3.12 Ensure SSH PermitUserEnvironment is disabled] *******************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.3.13 Ensure only strong Ciphers are used] ****************************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.3.14 Ensure only strong MAC algorithms are used] *********************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.3.15 Ensure only strong Key Exchange algorithms are used] ************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.3.17 Ensure SSH LoginGraceTime is set to one minute or less] *********************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.3.18 Ensure SSH warning banner is configured] ************************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.3.19 Ensure SSH PAM is enabled] **************************************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.3.21 Ensure SSH MaxStartups is configured to 10:30:60] ***************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.3.22 Ensure SSH MaxSessions is limited to 4] *************************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.3.X Restart sshd] ****************************************************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.4.3.1 Ensure password reuse is limited | delete possible duplicate lines] ********************************************************************************************
-[0;31m--- before: /etc/pam.d/common-password (content)[0m
-[0;31m[0m[0;32m+++ after: /etc/pam.d/common-password (content)[0m
-[0;32m[0m[0;36m@@ -23,7 +23,6 @@[0m
-[0;36m[0m 
- # here are the per-package modules (the "Primary" block)
- password	requisite			pam_pwquality.so retry=3
-[0;31m-password       required                        pam_pwhistory.so remember=5[0m
-[0;31m[0m password       [success=1 default=ignore]      pam_unix.so obscure use_authtok try_first_pass sha512
- # here's the fallback if no module succeeds
- password	requisite			pam_deny.so
-
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.4.3.2 Ensure password reuse is limited | update file according to CIS] ***********************************************************************************************
-[0;31m--- before: /etc/pam.d/common-password (content)[0m
-[0;31m[0m[0;32m+++ after: /etc/pam.d/common-password (content)[0m
-[0;32m[0m[0;36m@@ -23,6 +23,7 @@[0m
-[0;36m[0m 
- # here are the per-package modules (the "Primary" block)
- password	requisite			pam_pwquality.so retry=3
-[0;32m+password       required                        pam_pwhistory.so remember=5[0m
-[0;32m[0m password       [success=1 default=ignore]      pam_unix.so obscure use_authtok try_first_pass sha512
- # here's the fallback if no module succeeds
- password	requisite			pam_deny.so
-
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.4.4 Ensure password hashing algorithm is SHA-512] ********************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.5.1.1 Ensure minimum days between password changes is configured | PASS_MIN_DAYS] ************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.5.1.1 Ensure minimum days between password changes is configured  | chage --mindays] *********************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1] => (item=root)[0m
-
-TASK [cis_security : 5.5.1.3 Ensure password expiration warning days is 7 or more | PASS_WARN_AGE] ******************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.5.1.3 Ensure password expiration warning days is 7 or more  | chage --warndays] **************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1] => (item=root)[0m
-
-TASK [cis_security : 5.5.1.5 Ensure all users last password change date is in the past | get list] ******************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.5.1.5 Ensure all users last password change date is in the past | save list] *****************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.5.2 Ensure system accounts are secured | set all system accounts to a non login shell] *******************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.5.3 Ensure default group for the root account is GID 0] **************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.5.4 Ensure default user umask is 027 or more restrictive - /etc/profile] *********************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.5.4 Ensure default user umask is 027 or more restrictive - Fix for /etc/apt/apt.conf.d/50command-not-found] **********************************************************
-[0;36mskipping: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.5.5 Ensure default user shell timeout is 900 seconds or less | /etc/profile] *****************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.5.5.1 Ensure default user shell timeout is 900 seconds or less | /etc/bash.bashrc] ***********************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.5.5 Ensure default user shell timeout is 900 seconds or less | /etc/profile.d/timeout.sh] ****************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.7 Ensure access to the su command is restricted  | create su-group-access] *******************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 5.7 Ensure access to the su command is restricted  | create pam-d-su] **************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.1.2 Ensure permissions on /etc/passwd are configured] ****************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.1.3 Ensure permissions on /etc/passwd- are configured] ***************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.1.4 Ensure permissions on /etc/group are configured] *****************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.1.5 Ensure permissions on /etc/group- are configured] ****************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.1.6 Ensure permissions on /etc/shadow are configured, with group 'shadow'] *******************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.1.7 Ensure permissions on /etc/shadow- are configured] ***************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.1.8 Ensure permissions on /etc/gshadow are configured] ***************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.1.9 Ensure permissions on /etc/gshadow- are configured] **************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.1.10 Ensure no world writable files exist | find files] **************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.1.10 Ensure no world writable files exist | save output] *************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.1.10 Ensure no world writable files exist | fix permission] **********************************************************************************************************
-
-TASK [cis_security : 6.1.11 Ensure no unowned files or directories exist | Find] ************************************************************************************************************
-[0;36mskipping: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.1.11 Ensure no unowned files or directories exist | Find] ************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.1.11 Ensure no unowned files or directories exist | Save output] *****************************************************************************************************
-[0;31m--- before: /root//6.1.11[0m
-[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-14479jfjzgC/tmpTzMAuR[0m
-[0;32m[0m[0;36m@@ -1 +1 @@[0m
-[0;36m[0m[0;31m-[][0m
-[0;31m\ No newline at end of file[0m
-[0;31m[0m[0;32m+["/var/cache/private/fwupdmgr"][0m
-[0;32m\ No newline at end of file[0m
-[0;32m[0m
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.1.11 Ensure no unowned files or directories exist | Fix] *************************************************************************************************************
-[0;31m--- before[0m
-[0;31m[0m[0;32m+++ after[0m
-[0;32m[0m[0;36m@@ -1,5 +1,5 @@[0m
-[0;36m[0m {
-[0;31m-    "group": 62803,[0m
-[0;31m[0m[0;31m-    "owner": 62803,[0m
-[0;31m[0m[0;32m+    "group": 0,[0m
-[0;32m[0m[0;32m+    "owner": 0,[0m
-[0;32m[0m     "path": "/var/cache/private/fwupdmgr"
- }
-
-[0;33mchanged: [dcex9002tcwt4s1] => (item=/var/cache/private/fwupdmgr)[0m
-
-TASK [cis_security : 6.1.12 Ensure no ungrouped files or directories exist | Find] **********************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.1.12 Ensure no ungrouped files or directories exist | Save output] ***************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.1.12 Ensure no ungrouped files or directories exist | Fix] ***********************************************************************************************************
-
-TASK [cis_security : 6.2.1 Ensure accounts in /etc/passwd use shadowed passwords] ***********************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.2  Ensure password fields are not empty | list] ********************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.2 Ensure password fields are not empty | Save output] **************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.2 Ensure password fields are not empty | Lock account] *************************************************************************************************************
-
-TASK [cis_security : 6.2.3 Ensure all groups in /etc/passwd exist in /etc/group | list] *****************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.3 Ensure all groups in /etc/passwd exist in /etc/group | save output] **********************************************************************************************
-[0;31m--- before: /root//6.2.3[0m
-[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-14479jfjzgC/tmpprzk3z[0m
-[0;32m[0m[0;36m@@ -1 +1 @@[0m
-[0;36m[0m[0;31m-{"stderr_lines": [], "changed": true, "end": "2023-04-13 16:04:30.049659", "stdout": "", "cmd": "for i in $(cut -s -d: -f4 /etc/passwd | sort -u); do\n    grep -q -P \"^.*?:[^:]*:$i:\" /etc/group\n    if [ $? -ne 0 ]; then\n        echo \"Group $i is referenced by /etc/passwd but does not exist in /etc/group\"\n    fi\ndone\n", "failed": false, "delta": "0:00:00.083293", "stderr": "", "rc": 0, "stdout_lines": [], "start": "2023-04-13 16:04:29.966366"}[0m
-[0;31m\ No newline at end of file[0m
-[0;31m[0m[0;32m+{"stderr_lines": [], "changed": true, "end": "2023-04-18 07:58:04.483085", "stdout": "", "cmd": "for i in $(cut -s -d: -f4 /etc/passwd | sort -u); do\n    grep -q -P \"^.*?:[^:]*:$i:\" /etc/group\n    if [ $? -ne 0 ]; then\n        echo \"Group $i is referenced by /etc/passwd but does not exist in /etc/group\"\n    fi\ndone\n", "failed": false, "delta": "0:00:00.098284", "stderr": "", "rc": 0, "stdout_lines": [], "start": "2023-04-18 07:58:04.384801"}[0m
-[0;32m\ No newline at end of file[0m
-[0;32m[0m
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.4 Ensure all users' home directories exist | list] *****************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.4 Ensure all users' home directories exist | save] *****************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.4 Ensure all users' home directories exist | fix] ******************************************************************************************************************
-
-TASK [cis_security : 6.2.5 Ensure users own their home directories | list] ******************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.5 Ensure users own their home directories | Var] *******************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.5 Ensure users own their home directories | save output] ***********************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.5 Ensure users own their home directories | fix] *******************************************************************************************************************
-
-TASK [cis_security : 6.2.6 Ensure users home directories permissions are 750 or more restrictive - list] ************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.6 Ensure users' home directories permissions are 750 or more restrictive - print output] ***************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.6 Ensure users home directories permissions are 750 or more restrictive - fix] *************************************************************************************
-
-TASK [cis_security : 6.2.7 Ensure users' dot files are not group or world writable | list] **************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.7 Ensure users' dot files and folders are not group or world writable | list] **************************************************************************************
-[0;36mskipping: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.7 Ensure users' dot files are not group or world writable | save output] *******************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.7 Ensure users' dot files and folders are not group or world writable | save output] *******************************************************************************
-[0;36mskipping: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.7 Ensure users' dot files are not group or world writable | correct file permissions] ******************************************************************************
-
-TASK [cis_security : 6.2.7 Ensure users' dot files and folders are not group or world writable | correct file permissions] ******************************************************************
-[0;36mskipping: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.8 Ensure no users have .netrc files | list] ************************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.8 Ensure no users have .netrc files | save output] *****************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.9 Ensure no users have .forward files | list] **********************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.9 Ensure no users have .forward files  | save output] **************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.10 Ensure no users have .rhosts files | list] **********************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.10 Ensure no users have .rhosts files | save output] ***************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.11 Ensure root is the only UID 0 account| list] ********************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.11 Ensure root is the only UID 0 account | Save output] ************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.12 Ensure root PATH Integrity | run | Delete non-existing folders from PATH] ***************************************************************************************
-[0;36mskipping: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.12 Ensure root PATH Integrity | run] *******************************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.12 Ensure root PATH Integrity | run] *******************************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.12 Ensure root PATH Integrity | save output] ***********************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.13 Ensure no duplicate UIDs exist | list] **************************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.13 Ensure no duplicate UIDs exist | save output] *******************************************************************************************************************
-[0;31m--- before: /root//6.2.13[0m
-[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-14479jfjzgC/tmpOXPrIl[0m
-[0;32m[0m[0;36m@@ -1 +1 @@[0m
-[0;36m[0m[0;31m-{"stderr_lines": [], "changed": true, "end": "2023-04-13 16:04:40.049766", "stdout": "", "cmd": "cut -f3 -d\":\" /etc/passwd | sort -n | uniq -c | while read x; do\n    [ -z \"$x\" ] && break\n    set - $x\n    if [ $1 -gt 1 ]; then\n        users=$(awk -F: '($3 == n) { print $1 }' n=$2 /etc/passwd | xargs)\n        echo \"Duplicate UID ($2): $users\"\n    fi\ndone\n", "failed": false, "delta": "0:00:00.008550", "stderr": "", "rc": 0, "stdout_lines": [], "start": "2023-04-13 16:04:40.041216"}[0m
-[0;31m\ No newline at end of file[0m
-[0;31m[0m[0;32m+{"stderr_lines": [], "changed": true, "end": "2023-04-18 07:58:14.474601", "stdout": "", "cmd": "cut -f3 -d\":\" /etc/passwd | sort -n | uniq -c | while read x; do\n    [ -z \"$x\" ] && break\n    set - $x\n    if [ $1 -gt 1 ]; then\n        users=$(awk -F: '($3 == n) { print $1 }' n=$2 /etc/passwd | xargs)\n        echo \"Duplicate UID ($2): $users\"\n    fi\ndone\n", "failed": false, "delta": "0:00:00.008677", "stderr": "", "rc": 0, "stdout_lines": [], "start": "2023-04-18 07:58:14.465924"}[0m
-[0;32m\ No newline at end of file[0m
-[0;32m[0m
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.14 Ensure no duplicate GIDs exist | list] **************************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.14 Ensure no duplicate GIDs exist | save output] *******************************************************************************************************************
-[0;31m--- before: /root//6.2.14[0m
-[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-14479jfjzgC/tmpuNSCtG[0m
-[0;32m[0m[0;36m@@ -1 +1 @@[0m
-[0;36m[0m[0;31m-{"stderr_lines": [], "changed": true, "end": "2023-04-13 16:04:41.543899", "stdout": "", "cmd": "cut -d: -f3 /etc/group | sort | uniq -d | while read x; do\n    echo \"Duplicate GID ($x) in /etc/group\"\ndone\n", "failed": false, "delta": "0:00:00.021405", "stderr": "", "rc": 0, "stdout_lines": [], "start": "2023-04-13 16:04:41.522494"}[0m
-[0;31m\ No newline at end of file[0m
-[0;31m[0m[0;32m+{"stderr_lines": [], "changed": true, "end": "2023-04-18 07:58:15.979291", "stdout": "", "cmd": "cut -d: -f3 /etc/group | sort | uniq -d | while read x; do\n    echo \"Duplicate GID ($x) in /etc/group\"\ndone\n", "failed": false, "delta": "0:00:00.007474", "stderr": "", "rc": 0, "stdout_lines": [], "start": "2023-04-18 07:58:15.971817"}[0m
-[0;32m\ No newline at end of file[0m
-[0;32m[0m
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.15 Ensure no duplicate user names exist | list] ********************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.15 Ensure no duplicate user names exist | save output] *************************************************************************************************************
-[0;32mok: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.16 Ensure no duplicate group names exist | list] *******************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.16 Ensure no duplicate group names exist | save output] ************************************************************************************************************
-[0;31m--- before: /root//2.6.16[0m
-[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-14479jfjzgC/tmpLMNNGw[0m
-[0;32m[0m[0;36m@@ -1 +1 @@[0m
-[0;36m[0m[0;31m-{"stderr_lines": [], "changed": true, "end": "2023-04-13 16:04:44.223329", "stdout": "", "cmd": "cut -d: -f1 /etc/group | sort | uniq -d | while read x; do\n    echo \"Duplicate group name ${x} in /etc/group\"\ndone\n", "failed": false, "delta": "0:00:00.007840", "stderr": "", "rc": 0, "stdout_lines": [], "start": "2023-04-13 16:04:44.215489"}[0m
-[0;31m\ No newline at end of file[0m
-[0;31m[0m[0;32m+{"stderr_lines": [], "changed": true, "end": "2023-04-18 07:58:18.464771", "stdout": "", "cmd": "cut -d: -f1 /etc/group | sort | uniq -d | while read x; do\n    echo \"Duplicate group name ${x} in /etc/group\"\ndone\n", "failed": false, "delta": "0:00:00.007508", "stderr": "", "rc": 0, "stdout_lines": [], "start": "2023-04-18 07:58:18.457263"}[0m
-[0;32m\ No newline at end of file[0m
-[0;32m[0m
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.17 Ensure shadow group is empty | list] ****************************************************************************************************************************
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-TASK [cis_security : 6.2.17 Ensure shadow group is empty | save output] *********************************************************************************************************************
-[0;31m--- before: /root//6.2.17[0m
-[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-14479jfjzgC/tmpmNaz4v[0m
-[0;32m[0m[0;36m@@ -1 +1 @@[0m
-[0;36m[0m[0;31m-{"stderr_lines": [], "changed": true, "end": "2023-04-13 16:04:45.743041", "stdout": "", "cmd": "grep ^shadow:[^:]*:[^:]*:[^:]+ /etc/group\nawk -F: '($4 == \"<shadow-gid>\") { print }' /etc/passwd\n", "failed": false, "delta": "0:00:00.009062", "stderr": "", "rc": 0, "stdout_lines": [], "start": "2023-04-13 16:04:45.733979"}[0m
-[0;31m\ No newline at end of file[0m
-[0;31m[0m[0;32m+{"stderr_lines": [], "changed": true, "end": "2023-04-18 07:58:19.994789", "stdout": "", "cmd": "grep ^shadow:[^:]*:[^:]*:[^:]+ /etc/group\nawk -F: '($4 == \"<shadow-gid>\") { print }' /etc/passwd\n", "failed": false, "delta": "0:00:00.009121", "stderr": "", "rc": 0, "stdout_lines": [], "start": "2023-04-18 07:58:19.985668"}[0m
-[0;32m\ No newline at end of file[0m
-[0;32m[0m
-[0;33mchanged: [dcex9002tcwt4s1][0m
-
-PLAY RECAP **********************************************************************************************************************************************************************************
-[0;33mdcex9002tcwt4s1[0m            : [0;32mok=219 [0m [0;33mchanged=60  [0m unreachable=0    failed=0    [0;36mskipped=35  [0m rescued=0    [1;35mignored=1   [0m
-
+^C[0;31m [ERROR]: User interrupted execution[0m
