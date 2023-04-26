@@ -1,0 +1,4 @@
+---
+# indclude the type file for Ubuntu 22 type machines
+
+- include: type-files/ubuntu-22-type.yml
