@@ -992,7 +992,7 @@
 # servers through the network.
 - name: 2.1.7 Ensure NFS is not installed
   apt:
-    name: rpcbind
+    name: nfs-kernel-server
     state: absent
     purge: yes
   when: remove_NFS
