@@ -1,6 +1,9 @@
 # Welcome to the chrony configuration file. See chrony.conf(5) for more
 # information about usuable directives.
 
+# Include configuration files found in /etc/chrony/conf.d.
+confdir /etc/chrony/conf.d
+
 # This will use (up to):
 # - 4 sources from ntp.ubuntu.com which some are ipv6 enabled
 # - 2 sources from 2.ubuntu.pool.ntp.org which is ipv6 enabled as well
