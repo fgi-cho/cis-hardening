@@ -1723,8 +1723,6 @@
 # 3.5.3.3.2 Ensure ip6tables outbound and established connections are configured
 # 3.5.3.3.3 Ensure ip6tables default deny firewall policy
 # 3.5.3.3.4 Ensure ip6tables firewall rules exist for all open ports
-
-
 # 4 Logging and Auditing
 # 4.1.4.1 Ensure audit log files are mode 0640 or less permissive
 # 4.1.4.2 Ensure only authorized users own audit log files
@@ -1749,7 +1747,6 @@
     - 4.1.4.1
     - 4.1.4.2
     - 4.1.4.3
-
 # 4.1.4.5 Ensure audit configuration files are 640 or more restrictive
 # 4.1.4.6 Ensure audit configuration files are owned by root
 # 4.1.4.7 Ensure audit configuration files belong to group root
@@ -1796,8 +1793,71 @@
     - 4.1.4.8
     - 4.1.4.9
     - 4.1.4.10
-
 # 4.2 Configure Logging
+# 4.2.1 Configure journald
+# 4.2.1.1.1 Ensure systemd-journal-remote is installed
+
+# 4.2.1.2 Ensure auditd service is enabled
+# The capturing of system events provides system administrators with information to allow them to determine if unauthorized access to their system is occurring.
+- name: 4.2.1.2 Ensure auditd service is enabled
+  service:
+    name: auditd
+    state: started
+    enabled: true
+  tags:
+    - section4
+    - level_2_server
+    - level_2_workstation
+    - 4.2.1.2
+# 4.2.1.3 Ensure journald is configured to compress large log files
+- name: 4.2.1.3 Ensure journald is configured to compress large log files
+  lineinfile:
+    dest: /etc/systemd/journald.conf
+    regexp: "(#)?Compress=(yes|no)"
+    line: Compress=yes
+  tags:
+    - section4
+    - level_1_server
+    - level_1_workstation
+    - 4.2.1.3
+# 4.2.1.4 Ensure journald is configured to write logfiles to persistent disk
+# Writing log data to disk will provide the ability to forensically reconstruct events which may have impacted the operations or security of a system even after a system crash or reboot.
+- name: 4.2.1.4 Ensure journald is configured to write logfiles to persistent disk
+  lineinfile:
+    dest: /etc/systemd/journald.conf
+    regexp: "(#)?Storage=(auto|persistent)"
+    line: Storage=persistent
+#  notify:
+#    - journald restart
+#  ignore_errors: yes
+  tags:
+    - section4
+    - level_1_server
+    - level_1_workstation
+    - 4.2.1.4
+# 4.2.2.7 Ensure remote rsyslog messages are only accepted on designated log hosts.
+# The guidance in the section ensures that remote log hosts are configured to only accept rsyslog data from hosts within the specified domain and that those systems that are not designed to be log hosts do not accept any remote rsyslog messages. This provides protection from spoofed log data and ensures that system administrators are reviewing reasonably complete syslog data in a central location.
+- name: 4.2.2.7 Ensure remote rsyslog messages are only accepted on designated log hosts.
+  block:
+    - name: 4.2.2.7 Ensure remote rsyslog messages are only accepted on designated log hosts. | $ModLoad
+      lineinfile:
+        dest: /etc/rsyslog.conf
+        regexp: '^\$ModLoad'
+        line: "$ModLoad imtcp"
+    - name: 4.2.2.7 Ensure remote rsyslog messages are only accepted on designated log hosts. | $InputTCPServerRun
+      lineinfile:
+        dest: /etc/rsyslog.conf
+        regexp: '^\$InputTCPServerRun'
+        line: "$InputTCPServerRun 514"
+      notify:
+        - rsyslog restart
+  tags:
+    - section4
+    - level_1_server
+    - level_1_workstation
+    - 4.2.2.7
+
+
 # 4.2.2 Configure rsyslog
 # 4.2.2.1 Ensure rsyslog is installed
 - name: 4.2.2.1 Ensure rsyslog is installed
@@ -1820,32 +1880,6 @@
     - level_1_server
     - level_1_workstation
     - 4.2.2.2
-# 4.2.1.3 Ensure logging is configured
-#- name: 4.2.1.3 Ensure logging is configured
-#  blockinfile:
-#    path: /etc/rsyslog.conf
-#    backup: yes
-#    block: |
-#      *.emerg                 :omusrmsg:*
-#      mail.*                  -/var/log/mail
-#      mail.info               -/var/log/mail.info
-#      mail.warning            -/var/log/mail.warn
-#      mail.err                 /var/log/mail.err
-#      news.crit               -/var/log/news/news.crit
-#      news.err                -/var/log/news/news.err
-#      news.notice             -/var/log/news/news.notice
-#      *.=warning;*.=err       -/var/log/warn
-#      *.crit                   /var/log/warn
-#      *.*;mail.none;news.none -/var/log/messages
-#      local0,local1.*         -/var/log/localmessages
-#      local2,local3.*         -/var/log/localmessages
-#      local4,local5.*         -/var/log/localmessages
- #     local6,local7.*         -/var/log/localmessages
- # tags:
- #   - section4
- #   - level_1_server
- #   - level_1_workstation
- #   - 4.2.1.3
 # 4.2.2.4 Ensure rsyslog default file permissions configured
 # It is important to ensure that log files have the correct permissions to ensure that sensitive data is archived and protected.
 - name: 4.2.2.4 Ensure rsyslog default file permissions configured
@@ -1859,45 +1893,7 @@
     - level_1_workstation
     - 4.2.2.4
 
-# 4.2.1 Configure journald
 
-# 4.2.1.3 Ensure journald is configured to compress large log files
-- name: 4.2.1.3 Ensure journald is configured to compress large log files
-  lineinfile:
-    dest: /etc/systemd/journald.conf
-    regexp: "(#)?Compress=(yes|no)"
-    line: Compress=yes
-  tags:
-    - section4
-    - level_1_server
-    - level_1_workstation
-    - 4.2.1.3
-# 4.2.2.3 Ensure journald is configured to write logfiles to persistent disk
-# Writing log data to disk will provide the ability to forensically reconstruct events which may have impacted the operations or security of a system even after a system crash or reboot.
-- name: 4.2.1.4 Ensure journald is configured to write logfiles to persistent disk
-  lineinfile:
-    dest: /etc/systemd/journald.conf
-    regexp: "(#)?Storage=(auto|persistent)"
-    line: Storage=persistent
-#  notify:
-#    - journald restart
-#  ignore_errors: yes
-  tags:
-    - section4
-    - level_1_server
-    - level_1_workstation
-    - 4.2.1.4
-# 4.2.3 Ensure permissions on all logfiles are configured
-# It is important to ensure that log files have the correct permissions to ensure that sensitive data is archived and protected.
-- name: 4.2.3 Ensure permissions on all logfiles are configured
-  shell: |
-    find /var/log -type f -exec chmod g-wx,o-rwx "{}" + -o -type d -exec chmod g-w,o-rwx "{}" +
-  changed_when: false
-  tags:
-    - section4
-    - level_1_server
-    - level_1_workstation
-    - 4.2.3
 
 # 5 Access, Authentication and Authorization
 # 5.1 Configure time-based job schedulers
@@ -2035,62 +2031,6 @@
     - level_1_server
     - level_1_workstation
     - 5.1.9
-
-# 5.3 Configure sudo
-# sudo allows a permitted user to execute a command as the superuser or another user, as
-# specified by the security policy. The invoking user's real (not effective) user ID is used to
-# determine the user name with which to query the security policy.
-# sudo supports a plugin architecture for security policies and input/output logging. Third
-# parties can develop and distribute their own policy and I/O logging plugins to work
-# seamlessly with the sudo front end. The default security policy is sudoers, which is
-# configured via the file /etc/sudoers.
-- name: 5.3.1 Ensure sudo is installed
-  apt:
-    name: sudo
-    state: present
-    install_recommends: false
-  tags:
-    - section5
-    - level_1_server
-    - level_1_workstation
-    - 5.3.1
-# 5.2.2 Ensure sudo commands use pty
-# sudo can be configured to run only from a pseudo-pty
-# Note: visudo edits the sudoers file in a safe fashion, analogous to vipw(8). visudo locks the
-# sudoers file against multiple simultaneous edits, provides basic sanity checks, and checks or
-# parse errors. If the sudoers file is currently being edited you will receive a message to try
-# again later.
-- name: 5.3.2 Ensure sudo commands use pty
-  lineinfile:
-    dest: /etc/sudoers
-    state: present
-    regexp: "^Defaults use_pty"
-    line: "Defaults use_pty"
-    validate: "visudo -cf %s"
-  tags:
-    - section5
-    - level_1_server
-    - level_1_workstation
-    - 5.3.2
-# 5.2.3 Ensure sudo log file exists
-# sudo can use a custom log file.
-# Note: visudo edits the sudoers file in a safe fashion, analogous to vipw(8). visudo locks the
-# sudoers file against multiple simultaneous edits, provides basic sanity checks, and checks or
-# parse errors. If the sudoers file is currently being edited you will receive a message to try
-# again later.
-- name: 5.3.3 Ensure sudo log file exists
-  lineinfile:
-    dest: /etc/sudoers
-    state: present
-    regexp: "^Defaults    logfile*"
-    line: 'Defaults    logfile=/var/log/sudo.log'
-    validate: "visudo -cf %s"
-  tags:
-    - section5
-    - level_1_server
-    - level_1_workstation
-    - 5.3.3
-
 # 5.2 Configure SSH Server
 # 5.2.1 Ensure permissions on /etc/ssh/sshd_config are configured
 - name: sshd Config 
@@ -2210,37 +2150,20 @@
         - level_1_server
         - level_1_workstation
         - 5.2.5
-
-# 5.2.18 Ensure SSH MaxAuthTries is set to 4 or less
-# Setting the MaxAuthTries parameter to a low number will minimize the risk of successful brute force attacks to the SSH server. While the recommended setting is 4, set the number based on site policy.
-    - name: 5.2.18 Ensure SSH MaxAuthTries is set to 4 or less
+# 5.2.6 Ensure SSH PAM is enabled
+# When usePAM is set to yes, PAM runs through account and session types properly. This is important if you want to restrict access to services based off of IP, time or other factors of the account. Additionally, you can make sure users inherit certain environment variables on login or disallow access to the server
+    - name: 5.2.6 Ensure SSH PAM is enabled
       lineinfile:
         state: present
         dest: /etc/ssh/sshd_config
-        regexp: '^(#)?MaxAuthTries \d'
-        line: "MaxAuthTries {{ max_auth_tries }}"
-      register: ssh_config7
-#      set_fact: ssh_config_c={{ ssh_config_c | int + 1 }}
-#      ssh_config_c: "{{ ssh_config_c | int + 1 }}"
+        regexp: "^UsePAM"
+        line: "UsePAM yes"
+      register: ssh_config19
       tags:
         - section5
         - level_1_server
         - level_1_workstation
-        - 5.2.18
-# 5.2.11 Ensure SSH IgnoreRhosts is enabled
-# Setting this parameter forces users to enter a password when authenticating with ssh.
-    - name: 5.2.11 Ensure SSH  5.2.21sts is enabled
-      lineinfile:
-        state: present
-        dest: /etc/ssh/sshd_config
-        regexp: "^IgnoreRhosts"
-        line: "IgnoreRhosts yes"
-      register: ssh_config8
-      tags:
-        - section5
-        - level_1_server
-        - level_1_workstation
-        - 5.2.11
+        - 5.2.6
 # 5.2.8 Ensure SSH HostbasedAuthentication is disabled
 # Even though the .rhosts files are ineffective if support is disabled in /etc/pam.conf ,disabling the ability to use .rhosts files in SSH provides an additional layer of protection.
     - name: 5.2.8 Ensure SSH HostbasedAuthentication is disabled
@@ -2255,7 +2178,6 @@
         - level_1_server
         - level_1_workstation
         - 5.2.8
-
 # 5.2.9 Ensure SSH PermitEmptyPasswords is disabled
 # Disallowing remote shell access to accounts that have an empty password reduces the probability of unauthorized access to the system
     - name: 5.2.9 Ensure SSH PermitEmptyPasswords is disabled
@@ -2284,6 +2206,20 @@
         - level_1_server
         - level_1_workstation
         - 5.2.10
+# 5.2.11 Ensure SSH IgnoreRhosts is enabled
+# Setting this parameter forces users to enter a password when authenticating with ssh.
+    - name: 5.2.11 Ensure SSH  5.2.21sts is enabled
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: "^IgnoreRhosts"
+        line: "IgnoreRhosts yes"
+      register: ssh_config8
+      tags:
+        - section5
+        - level_1_server
+        - level_1_workstation
+        - 5.2.11
 # 5.2.13 Ensure only strong Ciphers are used
 # Weak ciphers that are used for authentication to the cryptographic module cannot be relied upon to provide confidentiality or integrity, and system data may be compromised
     - name: 5.2.13 Ensure only strong Ciphers are used
@@ -2326,6 +2262,78 @@
         - level_1_server
         - level_1_workstation
         - 5.2.15
+ 5.2.17 Ensure SSH warning banner is configured
+# Banners are used to warn connecting users of the particular site's policy regarding connection. Presenting a warning message prior to the normal user login may assist the prosecution of trespassers on the computer system.
+    - name: 5.2.17 Ensure SSH warning banner is configured
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: "^Banner"
+        line: "Banner /etc/ssh/banner"
+      register: ssh_config18
+      tags:
+        - section5
+        - level_1_server
+        - level_1_workstation
+        - 5.2.17
+# 5.2.18 Ensure SSH MaxAuthTries is set to 4 or less
+# Setting the MaxAuthTries parameter to a low number will minimize the risk of successful brute force attacks to the SSH server. While the recommended setting is 4, set the number based on site policy.
+    - name: 5.2.18 Ensure SSH MaxAuthTries is set to 4 or less
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: '^(#)?MaxAuthTries \d'
+        line: "MaxAuthTries {{ max_auth_tries }}"
+      register: ssh_config7
+#      set_fact: ssh_config_c={{ ssh_config_c | int + 1 }}
+#      ssh_config_c: "{{ ssh_config_c | int + 1 }}"
+      tags:
+        - section5
+        - level_1_server
+        - level_1_workstation
+        - 5.2.18
+# 5.2.19 Ensure SSH MaxStartups is configured
+# To protect a system from denial of service due to a large number of pending authentication connection attempts, use the rate limiting function of MaxStartups to protect availability of sshd logins and prevent overwhelming the daemon.
+    - name: "5.3.19 Ensure SSH MaxStartups is configured to {{ ssh_max_startups }}"
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: "^MaxStartups"
+        line: "MaxStartups {{ ssh_max_startups }}"
+      register: ssh_config21
+      tags:
+        - section5
+        - level_1_server
+        - level_1_workstation
+        - 5.2.19
+# 5.2.20 Ensure SSH MaxSessions is limited
+# To protect a system from denial of service due to a large number of concurrent sessions, use the rate limiting function of MaxSessions to protect availability of sshd logins and prevent overwhelming the daemon.
+    - name: "5.3.20 Ensure SSH MaxSessions is limited to {{ ssh_max_sessions }}"
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: "^MaxSessions"
+        line: "MaxSessions {{ ssh_max_sessions }}"
+      register: ssh_config22
+      tags:
+        - section5
+        - level_1_server
+        - level_1_workstation
+        - 5.2.20
+# 5.2.21 Ensure SSH LoginGraceTime is set to one minute or less
+# Setting the LoginGraceTime parameter to a low number will minimize the risk of successful brute force attacks to the SSH server. It will also limit the number of concurrent unauthenticated connections While the recommended setting is 60 seconds (1 Minute), set the number based on site policy.
+    - name: 5.2.21 Ensure SSH LoginGraceTime is set to one minute or less
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: "^LoginGraceTime"
+        line: "LoginGraceTime 30"
+      register: ssh_config17
+      tags:
+        - section5
+        - level_1_server
+        - level_1_workstation
+        - 5.2.21
 # 5.2.22 Ensure SSH Idle Timeout Interval is configured
 # Having no timeout value associated with a connection could allow an unauthorized user access to another user's ssh session (e.g. user walks away from their computer and doesn't lock the screen). Setting a timeout value reduces this risk.
     - name: 5.2.22 Ensure SSH Idle Timeout Interval is configured
@@ -2349,79 +2357,7 @@
         - level_1_server
         - level_1_workstation
         - 5.2.22
-# 5.2.21 Ensure SSH LoginGraceTime is set to one minute or less
-# Setting the LoginGraceTime parameter to a low number will minimize the risk of successful brute force attacks to the SSH server. It will also limit the number of concurrent unauthenticated connections While the recommended setting is 60 seconds (1 Minute), set the number based on site policy.
-    - name: 5.2.21 Ensure SSH LoginGraceTime is set to one minute or less
-      lineinfile:
-        state: present
-        dest: /etc/ssh/sshd_config
-        regexp: "^LoginGraceTime"
-        line: "LoginGraceTime 30"
-      register: ssh_config17
-      tags:
-        - section5
-        - level_1_server
-        - level_1_workstation
-        - 5.2.21
-
-# 5.2.17 Ensure SSH warning banner is configured
-# Banners are used to warn connecting users of the particular site's policy regarding connection. Presenting a warning message prior to the normal user login may assist the prosecution of trespassers on the computer system.
-    - name: 5.2.17 Ensure SSH warning banner is configured
-      lineinfile:
-        state: present
-        dest: /etc/ssh/sshd_config
-        regexp: "^Banner"
-        line: "Banner /etc/ssh/banner"
-      register: ssh_config18
-      tags:
-        - section5
-        - level_1_server
-        - level_1_workstation
-        - 5.2.17
-# 5.2.6 Ensure SSH PAM is enabled
-# When usePAM is set to yes, PAM runs through account and session types properly. This is important if you want to restrict access to services based off of IP, time or other factors of the account. Additionally, you can make sure users inherit certain environment variables on login or disallow access to the server
-    - name: 5.2.6 Ensure SSH PAM is enabled
-      lineinfile:
-        state: present
-        dest: /etc/ssh/sshd_config
-        regexp: "^UsePAM"
-        line: "UsePAM yes"
-      register: ssh_config19
-      tags:
-        - section5
-        - level_1_server
-        - level_1_workstation
-        - 5.2.6
-
-# 5.2.19 Ensure SSH MaxStartups is configured
-# To protect a system from denial of service due to a large number of pending authentication connection attempts, use the rate limiting function of MaxStartups to protect availability of sshd logins and prevent overwhelming the daemon.
-    - name: "5.3.21 Ensure SSH MaxStartups is configured to {{ ssh_max_startups }}"
-      lineinfile:
-        state: present
-        dest: /etc/ssh/sshd_config
-        regexp: "^MaxStartups"
-        line: "MaxStartups {{ ssh_max_startups }}"
-      register: ssh_config21
-      tags:
-        - section5
-        - level_1_server
-        - level_1_workstation
-        - 5.2.19
-# 5.2.20 Ensure SSH MaxSessions is limited
-# To protect a system from denial of service due to a large number of concurrent sessions, use the rate limiting function of MaxSessions to protect availability of sshd logins and prevent overwhelming the daemon.
-    - name: "5.3.22 Ensure SSH MaxSessions is limited to {{ ssh_max_sessions }}"
-      lineinfile:
-        state: present
-        dest: /etc/ssh/sshd_config
-        regexp: "^MaxSessions"
-        line: "MaxSessions {{ ssh_max_sessions }}"
-      register: ssh_config22
-      tags:
-        - section5
-        - level_1_server
-        - level_1_workstation
-        - 5.2.20
-# 5.3.X Restart sshd service so that any previous changes take effect
+# 5.2.X Restart sshd service so that any previous changes take effect
     - name: restart_sshd
       service:
         name: sshd
@@ -2433,13 +2369,158 @@
         - level_1_server
         - level_1_workstation
         - 5.3.X
-
   tags:
     - section5
     - level_1_server
     - level_1_workstation
-    - 5.3.XX
+    - 5.2.XX
+# 5.3 Configure sudo
+# sudo allows a permitted user to execute a command as the superuser or another user, as
+# specified by the security policy. The invoking user's real (not effective) user ID is used to
+# determine the user name with which to query the security policy.
+# sudo supports a plugin architecture for security policies and input/output logging. Third
+# parties can develop and distribute their own policy and I/O logging plugins to work
+# seamlessly with the sudo front end. The default security policy is sudoers, which is
+# configured via the file /etc/sudoers.
+- name: 5.3.1 Ensure sudo is installed
+  apt:
+    name: sudo
+    state: present
+    install_recommends: false
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.3.1
+# 5.3.2 Ensure sudo commands use pty
+# sudo can be configured to run only from a pseudo-pty
+# Note: visudo edits the sudoers file in a safe fashion, analogous to vipw(8). visudo locks the
+# sudoers file against multiple simultaneous edits, provides basic sanity checks, and checks or
+# parse errors. If the sudoers file is currently being edited you will receive a message to try
+# again later.
+- name: 5.3.2 Ensure sudo commands use pty
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: "^Defaults use_pty"
+    line: "Defaults use_pty"
+    validate: "visudo -cf %s"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.3.2
+# 5.3.3 Ensure sudo log file exists
+# sudo can use a custom log file.
+# Note: visudo edits the sudoers file in a safe fashion, analogous to vipw(8). visudo locks the
+# sudoers file against multiple simultaneous edits, provides basic sanity checks, and checks or
+# parse errors. If the sudoers file is currently being edited you will receive a message to try
+# again later.
+- name: 5.3.3 Ensure sudo log file exists
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: "^Defaults    logfile*"
+    line: 'Defaults    logfile=/var/log/sudo.log'
+    validate: "visudo -cf %s"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.3.3
+# 5.4 Configure PAM
+# 5.4.1 Ensure password creation requirements are configured
+# Strong passwords protect systems from being hacked through brute force methods.
+- name: 5.4.1 Ensure password creation requirements are configured
+  block:
+    - name: 5.4.1 Ensure password creation requirements are configured
+      apt:
+        name:
+          - libpam-pwquality
+          - cracklib-runtime
+        state: present
+        install_recommends: false
+    - name: 5.4.1 Ensure password creation requirements are configured
+      lineinfile:
+        state: present
+        create: yes
+        dest: /etc/security/pwquality.conf
+        regexp: "^{{ item.key }}"
+        line: "{{ item.key }} = {{ item.value }}"
+      with_items:
+        - { key: "minlen", value: "14" }
+        - { key: "dcredit", value: "-1" }
+        - { key: "ucredit", value: "-1" }
+        - { key: "ocredit", value: "-1" }
+        - { key: "lcredit", value: "-1" }
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.4.1
+# 5.4.2 Ensure lockout for failed password attempts is configured
+# Locking out user IDs after n unsuccessful consecutive login attempts mitigates brute force password attacks against your systems.
+- name: 5.4.2 Ensure lockout for failed password attempts is configured
+  block:
+    - name: 5.4.2 Ensure lockout for failed password attempts is configured | common-auth
+      lineinfile:
+        dest: /etc/pam.d/common-auth
+        line: "auth required pam_tally2.so onerr=fail audit silent deny=5 unlock_time=900"
+    - name: 5.4.2 Ensure lockout for failed password attempts is configured | pam_deny.so
+      lineinfile:
+        dest: /etc/pam.d/common-account
+        regexp: '^account\srequisite'
+        line: "account requisite pam_deny.so"
+    - name: 5.4.2 Ensure lockout for failed password attempts is configured | pam_tally2.so
+      lineinfile:
+        dest: /etc/pam.d/common-account
+        regexp: '^account\srequired'
+        line: "account required pam_tally2.so"
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.4.2
+# 5.4.3 Ensure password reuse is limited
+# Locking out user IDs after n unsuccessful consecutive login attempts mitigates brute force password attacks against your systems.
 
+- name: 5.4.3.1 Ensure password reuse is limited | delete possible duplicate lines
+  lineinfile:
+    dest: /etc/pam.d/common-password
+    regexp: '^password.*pam_pwhistory\.so.*remember.*'
+    state: absent
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.4.3
+
+- name: 5.4.3.2 Ensure password reuse is limited | update file according to CIS
+  lineinfile:
+    dest: /etc/pam.d/common-password
+    line: "password required pam_pwhistory.so remember=5"
+    insertafter: '^password\s+?requisite.*'
+    state: present
+    firstmatch: true
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.4.3
+
+# 5.4.4 Ensure password hashing algorithm is SHA-512
+# The SHA-512 algorithm provides much stronger hashing than MD5, thus providing additional protection to the system by increasing the level of effort for an attacker to successfully determine passwords.
+- name: 5.4.4 Ensure password hashing algorithm is SHA-512
+  lineinfile:
+    dest: /etc/pam.d/common-password
+    regexp: '^password\s+\[success(.*)(md5|blowfish|bigcrypt|sha256|sha512)(.*)$'
+    line: 'password [success\1 sha512 \3'
+    backrefs: true
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.4.4
 
 # 5.5 User Accounts and Environment
 # 5.5.1 Set Shadow Password Suite Parameters
@@ -2923,256 +3004,27 @@
     - level_1_workstation
     - 6.2.3
     - manual
-
-# 6.2.11 Ensure all users' home directories exist
-- name: 6.2.11 Ensure all users' home directories exist
+# 6.2.4 Ensure shadow group is empty
+- name: 6.2.4 Ensure shadow group is empty
   block:
-    - name: 6.2.11 Ensure all users' home directories exist | list
+    - name: 6.2.4 Ensure shadow group is empty | list
       shell: |
-        grep -E -v '^(halt|sync|shutdown)' /etc/passwd | awk -F: '($7 != "'"$(which nologin)"'" && $7 != "/bin/false") { print $1 " " $6 }' | while
-        read -r user dir
-        do
-            if [ ! -d "$dir" ]; then
-                echo "${user}"
-            fi
-        done
-      register: output_6_2_11
+        grep ^shadow:[^:]*:[^:]*:[^:]+ /etc/group
+        awk -F: '($4 == "<shadow-gid>") { print }' /etc/passwd
+      register: output_6_2_4
       changed_when: false
-    - name: 6.2.11 Ensure all users' home directories exist | save
+    - name: 6.2.4 Ensure shadow group is empty | save output
       copy:
-        dest: "{{ outputfiles }}/6.2.11"
-        content: "{{ output_6_2_11.stdout_lines }}"
-    - name: 6.2.4 Ensure all users' home directories exist | fix
-      user:
-        name: "{{ item }}"
-        create_home: yes
-      with_items: "{{ output_6_2_11.stdout_lines }}"
-      when: "{{ output_6_2_11.stdout_lines|length > 0 }}"
+        dest: "{{ outputfiles }}/6.2.4"
+        content: "{{ output_6_2_4 }}"
+      changed_when: false
   ignore_errors: yes
   tags:
     - section6
     - level_1_server
     - level_1_workstation
-    - 6.2.11
-# 6.2.5 Ensure users own their home directories
-- name: 6.2.12 Ensure users own their home directories
-  block:
-    - name: 6.2.12 Ensure users own their home directories | list
-      script: 6_2_5.sh
-      register: output_6_2_12
-      changed_when: false
-    - name: 6.2.12 Ensure users own their home directories | Var
-      set_fact:
-        output_6_2_12_list: "{{ output_6_2_12.stdout_lines | list }}"
-    - name: 6.2.12 Ensure users own their home directories | save output
-      copy:
-        dest: "{{ outputfiles }}/6.2.12"
-        content: "{{ output_6_2_12_list }}"
-    - name: 6.2.5 Ensure users own their home directories | fix
-      file:
-        path: "{{ item.split(',')[0] }}"
-        group: "{{ item.split(',')[1] }}"
-        owner: "{{ item.split(',')[1] }}"
-        recurse: yes
-      with_items: "{{ output_6_2_12_list }}"
-  ignore_errors: yes
-  tags:
-    - section6
-    - level_1_server
-    - level_1_workstation
-    - 6.2.12
-
-# 6.2.13 Ensure users' home directories permissions are 750 or more restrictive
-- name: 6.2.13 Ensure users' home directories permissions are 750 or more restrictive
-  block:
-    - name: 6.2.13 Ensure users home directories permissions are 750 or more restrictive - list
-      script: 6_2_6.sh
-      register: output_6_2_13
-      changed_when: false
-    - name: 6.2.13 Ensure users' home directories permissions are 750 or more restrictive - print output
-      copy:
-        dest: "{{ outputfiles }}/6.2.13"
-        content: "{{ output_6_2_13.stdout_lines }}"
-    - name: 6.2.13 Ensure users home directories permissions are 750 or more restrictive - fix
-      file:
-        name: "{{ item }}"
-        mode: "g-w,o-rwx"
-      with_items: "{{ output_6_2_13.stdout_lines }}"
-      when: "{{ output_6_2_13.stdout_lines|length > 0 }}"
-  ignore_errors: yes
-  tags:
-    - section6
-    - level_1_server
-    - level_1_workstation
-    - 6.2.13
-
-# 6.2.7 Ensure users' dot files are not group or world writable
-- name: 6.2.7 Ensure users dot files are not group or world writable
-  block:
-    - name: 6.2.7 Ensure users' dot files are not group or world writable | list
-      script: 6_2_7.sh
-      register: output_6_2_7_files
-      changed_when: false
-      when: not fix_dot_include_folders
-    - name: 6.2.7 Ensure users' dot files and folders are not group or world writable | list
-      script: 6_2_7_include_folders.sh
-      register: output_6_2_7_folders
-      when: fix_dot_include_folders
-    - name: 6.2.7 Ensure users' dot files are not group or world writable | save output
-      copy:
-        dest: "{{ outputfiles }}/6.2.7"
-        content: "{{ output_6_2_7_files.stdout }}"
-      when: not fix_dot_include_folders
-    - name: 6.2.7 Ensure users' dot files and folders are not group or world writable | save output
-      copy:
-        dest: "{{ outputfiles }}/6.2.7"
-        content: "{{ output_6_2_7_folders.stdout }}"
-      when: fix_dot_include_folders
-    - name: 6.2.7 Ensure users' dot files are not group or world writable | correct file permissions
-      # files with go+w will be touched twice, as they figure twice in the filter result
-      file:
-        path: "{{ item.split()[-1] }}"
-        mode: g-w,o-w
-      with_items: "{{ output_6_2_7_files.stdout_lines }}"
-      when:
-        - fix_dot_file_permissions
-        - "'stdout_lines' in output_6_2_7_files"
-        - not fix_dot_include_folders
-    - name: 6.2.7 Ensure users' dot files and folders are not group or world writable | correct file permissions
-      # files with go+w will be touched twice, as they figure twice in the filter result
-      file:
-        path: "{{ item.split()[-1] }}"
-        mode: g-w,o-w
-      with_items: "{{ output_6_2_7_folders.stdout_lines }}"
-      when:
-        - fix_dot_file_permissions
-        - "'stdout_lines' in output_6_2_7_folders"
-        - fix_dot_include_folders
-  ignore_errors: yes
-  tags:
-    - section6
-    - level_1_server
-    - level_1_workstation
-    - 6.2.7
+    - 6.2.4
     - manual
-
-# 6.2.14 Ensure no users have .netrc files
-- name: 6.2.14 Ensure no users have .netrc files
-  block:
-    - name: 6.2.14 Ensure no users have .netrc files | list
-      script: 6_2_14.sh
-      register: output_6_2_14
-      changed_when: false
-    - name: 6.2.14 Ensure no users have .netrc files | save output
-      copy:
-        dest: "{{ outputfiles }}/6.2.14"
-        content: "{{ output_6_2_14.stdout }}"
-  ignore_errors: yes
-  tags:
-    - section6
-    - level_1_server
-    - level_1_workstation
-    - 6.2.14
-    - manual
-
-# 6.2.15 Ensure no users have .forward files
-- name: 6.2.15 Ensure no users have .forward files
-  block:
-    - name: 6.2.15 Ensure no users have .forward files | list
-      script: 6_2_15.sh
-      register: output_6_2_15
-      changed_when: false
-    - name: 6.2.15 Ensure no users have .forward files  | save output
-      copy:
-        dest: "{{ outputfiles }}/6.2.15"
-        content: "{{ output_6_2_15.stdout }}"
-  ignore_errors: yes
-  tags:
-    - section6
-    - level_1_server
-    - level_1_workstation
-    - 6.2.15
-    - manual
-# 6.2.16 Ensure no users have .rhosts files
-- name: 6.2.16 Ensure no users have .rhosts files
-  block:
-    - name: 6.2.16 Ensure no users have .rhosts files | list
-      script: files/6_2_10.sh
-      register: output_6_2_16
-      changed_when: false
-    - name: 6.2.16 Ensure no users have .rhosts files | save output
-      copy:
-        dest: "{{ outputfiles }}/6.2.16"
-        content: "{{ output_6_2_10.stdout }}"
-  ignore_errors: yes
-  tags:
-    - section6
-    - level_1_server
-    - level_1_workstation
-    - 6.2.16
-    - manual
-
-# 6.2.10 Ensure root is the only UID 0 account
-- name: 6.2.10 Ensure root is the only UID 0 account
-  block:
-    - name: 6.2.10 Ensure root is the only UID 0 account| list
-      shell: |
-        awk -F: '($3 == 0) { print $1 }' /etc/passwd | grep -v root && true || true
-      register: output_6_2_2
-      changed_when: false
-    - name: 6.2.10 Ensure root is the only UID 0 account | Save output
-      copy:
-        dest: "{{ outputfiles }}/6.2.11"
-        content: "{{ output_6_2_2.stdout_lines }}"
-    # - name: 6.2.11 Ensure root is the only UID 0 account | Lock account
-    #   user:
-    #     name: "{{ item }}"
-    #     uid: 1992
-    #     force: yes
-    #   with_items: "{{ output_6_2_2.stdout_lines }}"
-  ignore_errors: yes
-  tags:
-    - section6
-    - level_1_server
-    - level_1_workstation
-    - 6.2.10
-    - manual
-
-# 6.2.9 Ensure root PATH Integrity
-- name: 6.2.9 Ensure root PATH Integrity
-  block:
-    - name: 6.2.9 Ensure root PATH Integrity | run | Delete non-existing folders from PATH
-      block:
-      - name: 6.2.9 Ensure root PATH Integrity | run | Delete non-existing folders from PATH
-        script: 6_2_9_delete_nonexisting.sh
-        register: output_6_2_9
-        changed_when: false
-      when: root_path_delete_nonexisting_paths
-    - name: 6.2.9 Ensure root PATH Integrity | run
-      block:
-      - name: 6.2.9 Ensure root PATH Integrity | run
-        script: 6_2_12.sh
-        register: output_6_2_9
-        changed_when: false
-      when: not root_path_delete_nonexisting_paths
-    - name: 6.2.9 Ensure root PATH Integrity | run
-      script: 6_2_12.sh
-      register: output_6_2_9
-      changed_when: false
-    - name: 6.2.9 Ensure root PATH Integrity | save output
-      copy:
-        dest: "{{ outputfiles }}/6.2.9"
-        content: "{{ output_6_2_9 }}"
-      changed_when: false
-  ignore_errors: yes
-  tags:
-    - section6
-    - level_1_server
-    - level_1_workstation
-    - 6.2.9
-    - manual
-
-
 # 6.2.5 Ensure no duplicate UIDs exist
 - name: 6.2.5 Ensure no duplicate UIDs exist
   block:
@@ -3270,25 +3122,247 @@
     - level_1_workstation
     - 6.2.8
     - manual
-
-# 6.2.17 Ensure shadow group is empty
-- name: 6.2.4 Ensure shadow group is empty
+# 6.2.9 Ensure root PATH Integrity
+- name: 6.2.9 Ensure root PATH Integrity
   block:
-    - name: 6.2.4 Ensure shadow group is empty | list
-      shell: |
-        grep ^shadow:[^:]*:[^:]*:[^:]+ /etc/group
-        awk -F: '($4 == "<shadow-gid>") { print }' /etc/passwd
-      register: output_6_2_4
+    - name: 6.2.9 Ensure root PATH Integrity | run | Delete non-existing folders from PATH
+      block:
+      - name: 6.2.9 Ensure root PATH Integrity | run | Delete non-existing folders from PATH
+        script: 6_2_9_delete_nonexisting.sh
+        register: output_6_2_9
+        changed_when: false
+      when: root_path_delete_nonexisting_paths
+    - name: 6.2.9 Ensure root PATH Integrity | run
+      block:
+      - name: 6.2.9 Ensure root PATH Integrity | run
+        script: 6_2_12.sh
+        register: output_6_2_9
+        changed_when: false
+      when: not root_path_delete_nonexisting_paths
+    - name: 6.2.9 Ensure root PATH Integrity | run
+      script: 6_2_12.sh
+      register: output_6_2_9
       changed_when: false
-    - name: 6.2.4 Ensure shadow group is empty | save output
+    - name: 6.2.9 Ensure root PATH Integrity | save output
       copy:
-        dest: "{{ outputfiles }}/6.2.4"
-        content: "{{ output_6_2_4 }}"
+        dest: "{{ outputfiles }}/6.2.9"
+        content: "{{ output_6_2_9 }}"
       changed_when: false
   ignore_errors: yes
   tags:
     - section6
     - level_1_server
     - level_1_workstation
-    - 6.2.4
+    - 6.2.9
+    - manual
+# 6.2.10 Ensure root is the only UID 0 account
+- name: 6.2.10 Ensure root is the only UID 0 account
+  block:
+    - name: 6.2.10 Ensure root is the only UID 0 account| list
+      shell: |
+        awk -F: '($3 == 0) { print $1 }' /etc/passwd | grep -v root && true || true
+      register: output_6_2_2
+      changed_when: false
+    - name: 6.2.10 Ensure root is the only UID 0 account | Save output
+      copy:
+        dest: "{{ outputfiles }}/6.2.11"
+        content: "{{ output_6_2_2.stdout_lines }}"
+    # - name: 6.2.11 Ensure root is the only UID 0 account | Lock account
+    #   user:
+    #     name: "{{ item }}"
+    #     uid: 1992
+    #     force: yes
+    #   with_items: "{{ output_6_2_2.stdout_lines }}"
+  ignore_errors: yes
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.10
+    - manual
+
+# 6.2.11 Ensure all users' home directories exist
+- name: 6.2.11 Ensure all users' home directories exist
+  block:
+    - name: 6.2.11 Ensure all users' home directories exist | list
+      shell: |
+        grep -E -v '^(halt|sync|shutdown)' /etc/passwd | awk -F: '($7 != "'"$(which nologin)"'" && $7 != "/bin/false") { print $1 " " $6 }' | while
+        read -r user dir
+        do
+            if [ ! -d "$dir" ]; then
+                echo "${user}"
+            fi
+        done
+      register: output_6_2_11
+      changed_when: false
+    - name: 6.2.11 Ensure all users' home directories exist | save
+      copy:
+        dest: "{{ outputfiles }}/6.2.11"
+        content: "{{ output_6_2_11.stdout_lines }}"
+    - name: 6.2.4 Ensure all users' home directories exist | fix
+      user:
+        name: "{{ item }}"
+        create_home: yes
+      with_items: "{{ output_6_2_11.stdout_lines }}"
+      when: "{{ output_6_2_11.stdout_lines|length > 0 }}"
+  ignore_errors: yes
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.11
+# 6.2.12 Ensure users own their home directories
+- name: 6.2.12 Ensure users own their home directories
+  block:
+    - name: 6.2.12 Ensure users own their home directories | list
+      script: 6_2_5.sh
+      register: output_6_2_12
+      changed_when: false
+    - name: 6.2.12 Ensure users own their home directories | Var
+      set_fact:
+        output_6_2_12_list: "{{ output_6_2_12.stdout_lines | list }}"
+    - name: 6.2.12 Ensure users own their home directories | save output
+      copy:
+        dest: "{{ outputfiles }}/6.2.12"
+        content: "{{ output_6_2_12_list }}"
+    - name: 6.2.5 Ensure users own their home directories | fix
+      file:
+        path: "{{ item.split(',')[0] }}"
+        group: "{{ item.split(',')[1] }}"
+        owner: "{{ item.split(',')[1] }}"
+        recurse: yes
+      with_items: "{{ output_6_2_12_list }}"
+  ignore_errors: yes
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.12
+# 6.2.13 Ensure users' home directories permissions are 750 or more restrictive
+- name: 6.2.13 Ensure users' home directories permissions are 750 or more restrictive
+  block:
+    - name: 6.2.13 Ensure users home directories permissions are 750 or more restrictive - list
+      script: 6_2_6.sh
+      register: output_6_2_13
+      changed_when: false
+    - name: 6.2.13 Ensure users' home directories permissions are 750 or more restrictive - print output
+      copy:
+        dest: "{{ outputfiles }}/6.2.13"
+        content: "{{ output_6_2_13.stdout_lines }}"
+    - name: 6.2.13 Ensure users home directories permissions are 750 or more restrictive - fix
+      file:
+        name: "{{ item }}"
+        mode: "g-w,o-rwx"
+      with_items: "{{ output_6_2_13.stdout_lines }}"
+      when: "{{ output_6_2_13.stdout_lines|length > 0 }}"
+  ignore_errors: yes
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.13
+# 6.2.14 Ensure no users have .netrc files
+- name: 6.2.14 Ensure no users have .netrc files
+  block:
+    - name: 6.2.14 Ensure no users have .netrc files | list
+      script: 6_2_14.sh
+      register: output_6_2_14
+      changed_when: false
+    - name: 6.2.14 Ensure no users have .netrc files | save output
+      copy:
+        dest: "{{ outputfiles }}/6.2.14"
+        content: "{{ output_6_2_14.stdout }}"
+  ignore_errors: yes
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.14
+    - manual
+
+# 6.2.15 Ensure no users have .forward files
+- name: 6.2.15 Ensure no users have .forward files
+  block:
+    - name: 6.2.15 Ensure no users have .forward files | list
+      script: 6_2_15.sh
+      register: output_6_2_15
+      changed_when: false
+    - name: 6.2.15 Ensure no users have .forward files  | save output
+      copy:
+        dest: "{{ outputfiles }}/6.2.15"
+        content: "{{ output_6_2_15.stdout }}"
+  ignore_errors: yes
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.15
+    - manual
+# 6.2.16 Ensure no users have .rhosts files
+- name: 6.2.16 Ensure no users have .rhosts files
+  block:
+    - name: 6.2.16 Ensure no users have .rhosts files | list
+      script: files/6_2_10.sh
+      register: output_6_2_16
+      changed_when: false
+    - name: 6.2.16 Ensure no users have .rhosts files | save output
+      copy:
+        dest: "{{ outputfiles }}/6.2.16"
+        content: "{{ output_6_2_10.stdout }}"
+  ignore_errors: yes
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.16
+    - manual
+    
+# 6.2.17 Ensure users' dot files are not group or world writable
+- name: 6.2.17 Ensure users dot files are not group or world writable
+  block:
+    - name: 6.2.17 Ensure users' dot files are not group or world writable | list
+      script: 6_2_17.sh
+      register: output_6_2_17_files
+      changed_when: false
+      when: not fix_dot_include_folders
+    - name: 6.2.17 Ensure users' dot files and folders are not group or world writable | list
+      script: 6_2_17_include_folders.sh
+      register: output_6_2_17_folders
+      when: fix_dot_include_folders
+    - name: 6.2.17 Ensure users' dot files are not group or world writable | save output
+      copy:
+        dest: "{{ outputfiles }}/6.2.17"
+        content: "{{ output_6_2_17_files.stdout }}"
+      when: not fix_dot_include_folders
+    - name: 6.2.17 Ensure users' dot files and folders are not group or world writable | save output
+      copy:
+        dest: "{{ outputfiles }}/6.2.17"
+        content: "{{ output_6_2_17_folders.stdout }}"
+      when: fix_dot_include_folders
+    - name: 6.2.17 Ensure users' dot files are not group or world writable | correct file permissions
+      # files with go+w will be touched twice, as they figure twice in the filter result
+      file:
+        path: "{{ item.split()[-1] }}"
+        mode: g-w,o-w
+      with_items: "{{ output_6_2_17_files.stdout_lines }}"
+      when:
+        - fix_dot_file_permissions
+        - "'stdout_lines' in output_6_2_17_files"
+        - not fix_dot_include_folders
+    - name: 6.2.17 Ensure users' dot files and folders are not group or world writable | correct file permissions
+      # files with go+w will be touched twice, as they figure twice in the filter result
+      file:
+        path: "{{ item.split()[-1] }}"
+        mode: g-w,o-w
+      with_items: "{{ output_6_2_17_folders.stdout_lines }}"
+      when:
+        - fix_dot_file_permissions
+        - "'stdout_lines' in output_6_2_17_folders"
+        - fix_dot_include_folders
+  ignore_errors: yes
+  tags:
+    - section6
+    - level_1_server
+    - level_1_workstation
+    - 6.2.17
     - manual
