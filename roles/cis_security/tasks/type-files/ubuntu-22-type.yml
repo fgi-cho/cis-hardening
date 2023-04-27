@@ -1730,7 +1730,7 @@
 - name: 4.1.4.1 Ensure audit log files are mode 0640 or less permissive
   block:
     - name: Locate files  
-      shell: stat -Lc "%n %a" "$(dirname $( awk -F"=" '/^\s*log_file\s*=\s*/ {print $2}' /etc/audit/auditd.conf | xargs))"/* | grep -v '[0,2,4,6][0,4]0' | awk -F" " '{print $1}'
+      shell: stat -Lc "%n" "$(dirname $( awk -F"=" '/^\s*log_file\s*=\s*/ {print $2}' /etc/audit/auditd.conf | xargs))"/* | grep -v '[0,2,4,6][0,4]0'
       register: audit_log_files
       changed_when: false    
     - name: Change permisions
@@ -1741,6 +1741,73 @@
   ignore_errors: yes
   tags:
     - 4.1.4.1
+# 4.1.4.2 Ensure only authorized users own audit log files
+# 4.1.4.3 Ensure only authorized groups are assigned ownership of audit log files
+- name: "4.1.4.2 Ensure only authorized users own audit log files\n
+         4.1.4.3 Ensure only authorized groups are assigned ownership of audit log files"
+  block:
+    - name: Locate files  
+      shell: stat -Lc "%n %U" "$(dirname $(awk -F"=" '/^\s*log_file\s*=\s*/ {print $2}' /etc/audit/auditd.conf | xargs))"/* | grep -Pv -- '^\H+\h+root\b'
+      register: audit_log_owner
+      changed_when: false    
+    - name: Change permisions
+      file:
+        name: "{{ item }}"
+        owner: root
+        group: adm
+        mode: "0640"
+      with_items: "{{ audit_log_owner.stdout_lines }}"
+  ignore_errors: yes
+  tags:
+    - 4.1.4.2
+    - 4.1.4.3
+
+# 4.1.4.5 Ensure audit configuration files are 640 or more restrictive
+# 4.1.4.6 Ensure audit configuration files are owned by root
+# 4.1.4.7 Ensure audit configuration files belong to group root
+- name: "4.1.4.5 Ensure audit configuration files are 640 or more restrictive\n
+         4.1.4.6 Ensure audit configuration files are owned by root\n
+         4.1.4.7 Ensure audit configuration files belong to group root"
+  block: 
+    - name: Locate files
+      shell:  find /etc/audit/ -type f \( -name '*.conf' -o -name '*.rules' \)
+      register: audit_conf
+      changed_when: false    
+    - name: Change permisions
+      file:
+        name: "{{ item }}"
+        owner: root
+        group: root
+        mode: "0640"
+      with_items: "{{ audit_conf.stdout_lines }}"
+  ignore_errors: yes
+  tags:
+    - 4.1.4.5
+    - 4.1.4.6
+    - 4.1.4.7
+# 4.1.4.8 Ensure audit tools are 755 or more restrictive
+# 4.1.4.9 Ensure audit tools are owned by root
+# 4.1.4.10 Ensure audit tools belong to group root
+- name: "4.1.4.8 Ensure audit tools are 755 or more restrictive\n
+         4.1.4.9 Ensure audit tools are owned by root\n
+         4.1.4.10 Ensure audit tools belong to group root"
+  block: 
+    - name: Locate files
+      shell: stat -c "%n" /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/augenrules
+      register: audit_tools_conf
+      changed_when: false    
+    - name: Change permisions
+      file:
+        name: "{{ item }}"
+        owner: root
+        group: root
+        mode: "755"
+      with_items: "{{ audit_tools_conf.stdout_lines }}"
+  ignore_errors: yes
+  tags:
+    - 4.1.4.8
+    - 4.1.4.9
+    - 4.1.4.10
 
 # 4.2 Configure Logging
 # 4.2.2 Configure rsyslog
