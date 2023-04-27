@@ -742,7 +742,6 @@
     purge: yes
   tags:
     - 1.8
-- name: 
 
 # 2.1 Special Purpose Services
 # 2.1.1 Time Synchronization
@@ -1731,14 +1730,15 @@
 - name: 4.1.4.1 Ensure audit log files are mode 0640 or less permissive
   block:
     - name: Locate files  
-      shell: stat -Lc "%n %a" "$(dirname $( awk -F"=" '/^\s*log_file\s*=\s*/ {print $2}' /etc/audit/auditd.conf | xargs))"/* | grep -v '[0,2,4,6][0,4]0'|awk -F" " '{print $1}'
+      shell: stat -Lc "%n %a" "$(dirname $( awk -F"=" '/^\s*log_file\s*=\s*/ {print $2}' /etc/audit/auditd.conf | xargs))"/* | grep -v '[0,2,4,6][0,4]0' | awk -F" " '{print $1}'
       register: audit_log_files
-        changed_when: false    
+      changed_when: false    
     - name: Change permisions
       file:
         name: "{{ item }}"
         mode: "0640"
       with_items: "{{ audit_log_files.stdout_lines }}"
+  ignore_errors: yes
   tags:
     - 4.1.4.1
 
