@@ -508,9 +508,10 @@
         create: true
         insertbefore: "# End of file"
     - name: Stop apport service
-      apt:
+      service:
         name: apport
-        status: stopped
+        state: stopped
+        enabled: no
   tags:
     - section1
     - level_1_server
