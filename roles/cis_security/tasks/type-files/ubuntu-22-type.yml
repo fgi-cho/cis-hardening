@@ -256,8 +256,8 @@
 # 1.1.7 Ensure /home configured
 # Ensure nosuid option set on /home partition
 # Ensure nodev option set on /home partition
-- name: "1.1.6.2 Ensure nodev option set on /var/log/audit partition\n
-         1.1.6.3 Ensure nosuid option set on /var/log/audit partition"
+- name: "1.1.7.2 Ensure nodev option set on /var/log/audit partition\n
+         1.1.7.3 Ensure nosuid option set on /var/log/audit partition"
   block:
     - name: Get file system
       shell: findmnt -n /home | awk '{print $3}'
@@ -496,8 +496,26 @@
     - level_1_server
     - level_1_workstation
     - 1.5.2
-
-    
+# 1.5.3 Ensure Automatic Error Reporting is not enabled
+- name: 1.5.3 Ensure Automatic Error Reporting is not enabled
+  block:
+    - name: Edit config
+      lineinfile:
+        dest: /etc/default/apport
+        line: "enabled=0"
+        regexp: '(^#)?\s*enabled\s*='
+        state: present
+        create: true
+        insertbefore: "# End of file"
+    - name: Stop apport service
+      apt:
+        name: apport
+        status: stopped
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.5.3       
 # 1.5.4 Ensure core dumps are restricted
 # A core dump is the memory of an executable program. It is generally used to determine
 # why a program aborted. It can also be used to glean confidential information from a core
