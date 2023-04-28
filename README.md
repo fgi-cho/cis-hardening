@@ -26,15 +26,12 @@ Benchmark Versions:
 | Fedora 31        |
 | Oracle Linux 7   |
 | Oracle Linux 8   |
-| SUSE 15 / SUSE 12|
 | Ubuntu 18.04 LTS |
 | Ubuntu 20.04 LTS |
-| Win Server 2019  |
+| Ubuntu 22.04 LTS |
 
 - Some distributions use older CIS benchmarks that were the most recent at the time of creation. Efforts have
 been made to update the controls to work with the newer operating systems. Older versions of the benchmarks are listed in parenthesis.
-- SUSE Linux Enterprise 15 SP1 uses the RHEL 7 task file since their controls are so similar. If you want to exclude a SUSE tag, make sure you use the associated RHEL 7 tag number if they are different.  Tags can be found in the appropriate controls_list file found in the docs directory.
-
 ### Requirements
 
 Control machine:
@@ -48,7 +45,6 @@ Target machine:
 Collection Requirements:
 - ansible.builtin
 - community.general
-- ansible.windows
 
 Requries Ansible 3 or ansible-core 2.11 or better due to runtime.yml being set up for Automation Hub.
 
@@ -104,5 +100,5 @@ file. Do not set these values in that file, but create and include your own vari
 defaults or set them as host variables.
 
 ### Change Log
-Based on ansible-galaxy collection install dsglaser.cis_security
+Based on ansible-galaxy collection dsglaser.cis_security
 
