@@ -2957,19 +2957,19 @@
     - name: 6.2.2  Ensure password fields are not empty | list
       shell: |
         awk -F: '($2 == "" ) { print $1 }' /etc/shadow
-      register: output_6_2_2
+      register: output_6_2_1
       changed_when: false
     - name: 6.2.2 Ensure password fields are not empty | Save output
       copy:
         dest: "{{ outputfiles }}/6.2.2"
-        content: "{{ output_6_2_2.stdout_lines }}"
+        content: "{{ output_6_2_1.stdout_lines }}"
     - name: 6.2.2 Ensure password fields are not empty | Lock account
       user:
         name: "{{ item }}"
         password_lock: yes
-      with_items: "{{ output_6_2_2.stdout_lines }}"
+      with_items: "{{ output_6_2_1.stdout_lines }}"
       when:
-        - "{{ output_6_2_2.stdout_lines }}"
+        - "{{ output_6_2_1.stdout_lines }}"
   ignore_errors: yes
   tags:
     - section6
@@ -2990,12 +2990,12 @@
                 echo "Group $i is referenced by /etc/passwd but does not exist in /etc/group"
             fi
         done
-      register: output_6_2_12
+      register: output_6_2_9
       changed_when: false
     - name: 6.2.3 Ensure all groups in /etc/passwd exist in /etc/group | save output
       copy:
         dest: "{{ outputfiles }}/6.2.3"
-        content: "{{ output_6_2_12 }}"
+        content: "{{ output_6_2_99 }}"
       changed_when: false
   ignore_errors: yes
   tags:
@@ -3128,7 +3128,7 @@
     - name: 6.2.9 Ensure root PATH Integrity | run | Delete non-existing folders from PATH
       block:
       - name: 6.2.9 Ensure root PATH Integrity | run | Delete non-existing folders from PATH
-        script: 6_2_9_delete_nonexisting.sh
+        script: 6_2_12_delete_nonexisting.sh
         register: output_6_2_9
         changed_when: false
       when: root_path_delete_nonexisting_paths
@@ -3165,7 +3165,7 @@
       changed_when: false
     - name: 6.2.10 Ensure root is the only UID 0 account | Save output
       copy:
-        dest: "{{ outputfiles }}/6.2.11"
+        dest: "{{ outputfiles }}/6.2.10"
         content: "{{ output_6_2_2.stdout_lines }}"
     # - name: 6.2.11 Ensure root is the only UID 0 account | Lock account
     #   user:
@@ -3265,7 +3265,7 @@
 - name: 6.2.14 Ensure no users have .netrc files
   block:
     - name: 6.2.14 Ensure no users have .netrc files | list
-      script: 6_2_14.sh
+      script: 6_2_8.sh
       register: output_6_2_14
       changed_when: false
     - name: 6.2.14 Ensure no users have .netrc files | save output
@@ -3284,7 +3284,7 @@
 - name: 6.2.15 Ensure no users have .forward files
   block:
     - name: 6.2.15 Ensure no users have .forward files | list
-      script: 6_2_15.sh
+      script: 6_2_9.sh
       register: output_6_2_15
       changed_when: false
     - name: 6.2.15 Ensure no users have .forward files  | save output
@@ -3302,8 +3302,8 @@
 - name: 6.2.16 Ensure no users have .rhosts files
   block:
     - name: 6.2.16 Ensure no users have .rhosts files | list
-      script: files/6_2_10.sh
-      register: output_6_2_16
+      script: files/6_2_11.sh
+      register: output_6_2_10
       changed_when: false
     - name: 6.2.16 Ensure no users have .rhosts files | save output
       copy:
@@ -3321,12 +3321,12 @@
 - name: 6.2.17 Ensure users dot files are not group or world writable
   block:
     - name: 6.2.17 Ensure users' dot files are not group or world writable | list
-      script: 6_2_17.sh
+      script: 6_2_7.sh
       register: output_6_2_17_files
       changed_when: false
       when: not fix_dot_include_folders
     - name: 6.2.17 Ensure users' dot files and folders are not group or world writable | list
-      script: 6_2_17_include_folders.sh
+      script: 6_2_7_include_folders.sh
       register: output_6_2_17_folders
       when: fix_dot_include_folders
     - name: 6.2.17 Ensure users' dot files are not group or world writable | save output
