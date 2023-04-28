@@ -309,7 +309,7 @@ allowd_hosts: "ALL: 0.0.0.0/0.0.0.0, 192.168.2.0/255.255.255.0"
 ## 5.2.13 Ensure only strong MAC algorithms are used
 ssh_MACs: "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256"
 ## 5.2.14 Ensure only strong Key Exchange algorithms are used
-ssh_key_algorithms: "sntrup4591761x25519-sha512@tinyssh.org,curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256"
+ssh_key_algorithms: "curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256"
 ssh_ciphers: "chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr"
 ## 5.2.17 Ensure SSH access is limited
 allowed_users: root #Put None or list of users space between each user
