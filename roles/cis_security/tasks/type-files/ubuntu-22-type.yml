@@ -33,7 +33,9 @@
       lineinfile:
         dest: /etc/modprobe.d/CIS.conf
         regexp: "^(#)?install cramfs(\\s|$)"
-        line: "install cramfs /bin/true"
+        line: |
+              install cramfs /bin/true
+              blacklist cramfs
         state: present
         owner: root
         group: root
@@ -354,7 +356,9 @@
       lineinfile:
         dest: /etc/modprobe.d/CIS.conf
         regexp: "^(#)?install usb-storage(\\s|$)"
-        line: "install usb-storage /bin/true"
+        line: |
+              install usb-storage /bin/true
+              blacklist usb-storage
         state: present
         create: true
     - name: 1.1.10 Disable USB Storage

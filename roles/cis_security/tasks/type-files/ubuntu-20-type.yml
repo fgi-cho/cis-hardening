@@ -1868,15 +1868,16 @@
     - 4.2.2.3
 # 4.2.3 Ensure permissions on all logfiles are configured
 # It is important to ensure that log files have the correct permissions to ensure that sensitive data is archived and protected.
-- name: 4.2.3 Ensure permissions on all logfiles are configured
-  shell: |
-    find /var/log -type f -exec chmod g-wx,o-rwx "{}" + -o -type d -exec chmod g-w,o-rwx "{}" +
-  changed_when: false
-  tags:
-    - section4
-    - level_1_server
-    - level_1_workstation
-    - 4.2.3
+#- name: 4.2.3 Ensure permissions on all logfiles are configured
+#  shell: |
+#    find /var/log -type f -exec chmod g-wx,o-rwx "{}" + -o -type d -exec chmod g-w,o-rwx "{}" +
+#  changed_when: false
+#  ignore_errors: yes  
+#  tags:
+#    - section4
+#    - level_1_server
+#    - level_1_workstation
+#    - 4.2.3
 
 # 5 Access, Authentication and Authorization
 # 5.1 Configure time-based job schedulers
