@@ -23,8 +23,8 @@ time_operators:                 # Windows: Users that can set the system time
 sudo_log: "/var/log/sudoers"    # Linux: log file for sudo
 
 # AIDE configuration settings
-aide_db_name: "/var/lib/aide/aide.db.gz"        # Linux: Database name that AIDE will look for for comparison
-aide_new_db_name: "/var/lib/aide/aide.db.new.gz" # Linux: Database name created during an --init run
+aide_db_name: "@@{DBDIR}/aide.db.gz"        # Linux: Database name that AIDE will look for for comparison
+aide_new_db_name: "@@{DBDIR}/aide.db.new.gz" # Linux: Database name created during an --init run
 aide_gzip: "yes"                                 # Linux: 'yes' or 'no' to enable gzip compression on database
 
 # Yum repos and system updates

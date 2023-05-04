@@ -100,7 +100,7 @@
       - name: Ensure the local-fs directory is created
         ansible.builtin.file:
           path: /etc/systemd/system/local-fs.target.wants
-          state: directory
+          state: absent
           owner: root
           group: root
           mode: 0755
@@ -445,7 +445,7 @@
       path: "{{ item }}"
       owner: root
       group: root
-      mode: 0644
+      mode: 0600
     loop:
       - "{{ grub_cfg_path }}"
       - /boot/grub2/grubenv
