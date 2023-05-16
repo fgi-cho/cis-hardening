@@ -214,8 +214,8 @@ custom_issue_net_file_path: "{{ inventory_dir }}/custom_templates/issue_net_cust
 
 # Section 2 Settings
 ##Setting for systemd-timesyncd
-enable_systemdtimesyncd: no #If you enable this make sure to disable NTP below, only one time service must be run in the server
-timesync_timezone: Etc/UTC
+enable_systemdtimesyncd: yes #If you enable this make sure to disable NTP below, only one time service must be run in the server
+#timesync_timezone: Etc/UTC
 timesync_fallback_ntp_hosts:
   - uxtime1.gfk.de
   - uxtime2.gfk.de
