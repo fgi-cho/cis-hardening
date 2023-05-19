@@ -201,6 +201,27 @@
       - 1.1.4
       - 1.1.5
 
+# The /var/tmp directory is a world-writable directory used for temporary storage by all
+# users and some applications.
+#  - name: "1.1.8 Ensure nodev option set on /var/tmp partition\n
+#           1.1.9 Ensure nosuid option set on /var/tmp partition\n
+#           1.1.10 Ensure noexec option set on /var/tmp partition"
+#    block:
+#      - name: 1.1.8 Ensure nodev option set on /var/tmp partitions
+#        shell: |
+#          mount | grep "on /var" && true || true
+#        register: vartemp
+#        changed_when: false
+#      - name: /var/tmp partitions
+#        debug:
+#          msg: "{{ vartemp }}"
+#    tags:
+#      - section1
+#      - 1.1.8
+#      - 1.1.9
+#      - 1.1.10
+#      - var
+
   - name: 1.1.8 - /var/tmp partition and mount options
     block:
 
@@ -242,6 +263,21 @@
   #  mount command directly. This requires the use of the shell command which
   #  is not ideal.
   # Grep out /dev/shm and see if the given option is set.
+  - name: " Ensure /dev/shm is configured\n
+           1.1.15 Ensure nodev option set on /dev/shm partition\n
+           1.1.16 Ensure nosuid option set on /dev/shm partition\n
+           1.1.17 Ensure noexec option set on /dev/shm partition"
+    mount:
+      name: /dev/shm
+      src: tmpfs
+      state: mounted 
+      fstype: tmpfs
+      opts: defaults,nosuid,nodev,noexec 
+    tags:
+      - 1.1.15
+      - 1.1.16
+      - 1.1.17
+
   - name: 1.1.15 - Report if /dev/shm does not have nodev set
     block:
       - name: Determine if /dev/shm has nodev set
@@ -394,6 +430,7 @@
     ansible.builtin.dnf:
       name: sudo
       state: present
+    ignore_errors: yes
     tags:
       - 1.3.1
 
@@ -1883,5 +1920,3 @@
         changed_when: true
         when: nohomedir.stdout
     ignore_errors: yes
-    tags:
-      - 6.2.20
