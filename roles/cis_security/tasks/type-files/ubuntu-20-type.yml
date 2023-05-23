@@ -3292,3 +3292,13 @@
     - level_1_workstation
     - 6.2.17
     - manual
+- name: Add hardening file.
+  file:
+    path: /etc/.hardening
+    state: touch
+    owner: root
+    group: root
+    mode: '0400'
+  tags:
+    - hard
+

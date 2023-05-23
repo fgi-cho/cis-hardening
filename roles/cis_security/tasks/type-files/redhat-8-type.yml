@@ -752,20 +752,21 @@
  ### Part 2, Services ###
   # Remove old, unused, insecure services
   - name: 2.1.1 - Remove xinetd service
-    ansible.builtin.dnf:
+    dnf:
       name: xinetd
       state: absent
     when: tftp_server is defined and not tftp_server
-
+    ignore_errors: yes
     tags:
       - 2.1.1
 
   # RHEL 8 does not distribute ntp any longer, so we are not using the time_server
   #  variable for RHEL8 controls
   - name: 2.2.1.1 - Verify chrony is  installed
-    ansible.builtin.dnf:
+    dnf:
       name: "chrony"
       state: present
+    ignore_errors: yes
     tags:
       - 2.2.1.1
 
@@ -989,7 +990,7 @@
     ansible.builtin.dnf:
       name: "{{ unneeded_packages }}"
       state: absent
-
+    ignore_errors: yes
   # Cups should be remove per control 2.2.16, but it may not be able to due to
   #  dependencies, so disable the service instead
   - name: 2.2.16 - Disable cups as we my not be able to uninstall it
@@ -1920,3 +1921,12 @@
         changed_when: true
         when: nohomedir.stdout
     ignore_errors: yes
+  - name: Add hardening file.
+    file:
+      path: /etc/.hardening
+      state: touch
+      owner: root
+      group: root
+      mode: '0400'
+    tags:
+      - hard
