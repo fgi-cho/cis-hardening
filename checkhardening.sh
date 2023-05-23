@@ -1,4 +1,6 @@
 #!/bin/bash
+mkdir -p tags-extract
+mkdir -p check-logs
 echo && echo "Reading Tags files from tags-extract/*." && echo
 if find tags-extract/  -mindepth 1 -maxdepth 1 | read; then
   cd tags-extract/
