@@ -114,11 +114,13 @@
           create: true
         with_items:
            - { From: '(?m)^\S+\s+install squashfs', To: 'install squashfs /bin/true'}
-           - { From: '(?m)^\S+\s+blacklist squashfs', To: 'blacklist squashfs'}
+           -  { From: '(?m)^\S+\s+blacklist squashfs', To: 'blacklist squashfs'}
       - name: 1.1.1.3 Ensure mounting of cramfs filesystems is disabled | modprobe
         modprobe:
           name: squashfs
           state: absent
+          persistent: disabled
+        ignore_errors: yes
     tags:
       - 1.1.1.3
       - filesystems
@@ -506,23 +508,23 @@
       # stat returns a lot of information. 'exists' is true if the file exists and 'isreg'
       #  is true if the file is a regular file. If either of these are not true, then
       #  run the initializatoin again.
-      - name: 1.4.1 - Initialize AIDE if it hasn't been already (/usr/sbin/aide)
-        command: /usr/sbin/aide --init
-        when: ( not aide_path.stat.exists or not aide_path.stat.isreg ) and ansible_distribution != "SLES"
-        register: aide
-        async: 1200 # 20 minutes until timeout
-        poll: 0 # run concurrently
-        tags:
-          - 1.4.1
+ #     - name: 1.4.1 - Initialize AIDE if it hasn't been already (/usr/sbin/aide)
+ #       command: /usr/sbin/aide --init
+#        when: ( not aide_path.stat.exists or not aide_path.stat.isreg ) and ansible_distribution != "SLES"
+#        register: aide
+#        async: 1200 # 20 minutes until timeout
+#        poll: 0 # run concurrently
+#        tags:
+#          - 1.4.1
 
-      - name: Wait for AIDE initialization to complete
-        ansible.builtin.async_status: jid={{ aide.ansible_job_id }}
-        register: aide_status
-        until: aide_status.finished
-        when: ( not aide_path.stat.exists or not aide_path.stat.isreg ) and ansible_distribution != "SLES"
-        retries: 300
-        tags:
-          - 1.4.1
+#      - name: Wait for AIDE initialization to complete
+#        ansible.builtin.async_status: jid={{ aide.ansible_job_id }}
+#        register: aide_status
+#        until: aide_status.finished
+#        when: ( not aide_path.stat.exists or not aide_path.stat.isreg ) and ansible_distribution != "SLES"
+#        retries: 300
+#        tags:
+#          - 1.4.1
 
       # AIDE creates the new database as a different name. Use the copy module with
       #  the remote_src argument to copy the file on the remote machine to another location
