@@ -49,343 +49,230 @@
   # This collection of tasks creates a empty list and save it as a fact.
   #  For every item that is encountered (without the tag being skipped),
   #  add a string to the list.
-  - name: 1.1 Disable unused filesystems
-    block:
-  # With the list complete, use it with the system's package manager
-  #  to remove packages from the system that are not needed.
-      - name: Remove unused_filesystem list
-        ansible.builtin.dnf:
-          name: cramfs
-          state: absent
+  - name: 1.1.1.1 Ensure mounting of cramfs filesystems is disabled
+   block:
+     - name: 1.1.1.1 Ensure mounting of cramfs filesystems is disabled
+       lineinfile:
+         dest: /etc/modprobe.d/cramfs.conf
+         regexp: '{{item.From}}'
+         line:  '{{item.To}}'
+         state: present
+         owner: root
+         group: root
+         mode: 0644
+         create: true
+       with_items:
+          - { From: '(?m)^\S+\s+install cramfs', To: 'install cramfs /bin/true'}
+          - { From: '(?m)^\S+\s+blacklist cramfs', To: 'blacklist cramfs'}
+     - name: 1.1.1.1 Ensure mounting of cramfs filesystems is disabled | modprobe
+       modprobe:
+         name: cramfs
+         state: absent
+   tags:
+     - 1.1.1.1
+     - filesystems
+     - cramfs
 
-      - name: Add unused_filesystems to /etc/modprobe.d/*.conf
-        lineinfile:
-          dest: "/etc/modprobe.d/cramfs.conf"
-          line: '{{item}}'
-          state: present
-          create: true
-          owner: root
-          group: root
-          mode: 0640
-        loop:
-          - 'install cramfs /bin/false'
-          - 'blacklist cramfs'
-    tags:
-      - 1.1.1.1
+# 1.1.3 Ensure /tmp configured
   # Create and configure the local-fs systemd service file
-  - name: 1.1.[2-5] - Ensure /tmp is configured
-    block:
-      # Create a file to hold the system specific local-fs service information
-      #  be sure to set the selinux security context. Even if selinux is disabled,
-      #  it's a good idea to make sure it is set on files
-      - name: Ensure the local-fs directory is created
-        ansible.builtin.file:
-          path: /etc/systemd/system/local-fs.target.wants
-          state: directory
-          owner: root
-          group: root
-          mode: 0755
-          setype: etc_t
+    - name: Get file system
+      shell: findmnt -n /tmp | awk '{print $3}'
+      check_mode: no
+      register: filesystem
+      changed_when: false
+    - debug:
+        var:  filesystem.stdout
+    - name: Check /tmp config
+      mount:
+        path: /tmp
+        src: /dev/mapper/system-tmp
+        fstype: "{{ filesystem.stdout }}"
+        state: present
+        opts:  rw,nosuid,nodev,noexec,relatime,attr2,inode64,logbufs=8,logbsize=32k,noquota
+      register: tmp_conf
+    - name: Remount /tmp
+      mount:
+        path: /tmp
+        state: remounted
+      when: tmp_conf.changed
+  ignore_errors: yes
+  tags:
+    - section1
+    - level_1_server
+    - level_1_workstation
+    - 1.1.2.4
+    - 1.1.2.1
+    - 1.1.2.2
+    - 1.1.2.3
+    - tmp
+    - mount
 
-      # Add content to the file we created using the blockinfile command.
-      # Notify systemd to reload its daemons and start the local-fs service
-      - name: 1.1.[2-5] - Configure config file for tmpfs
-        ansible.builtin.blockinfile:
-          path: /etc/systemd/system/local-fs.target.wants/tmp.mount
-          block: |
-            [Mount]
-            What=tmpfs
-            Where=/tmp
-            Type=tmpfs
-            Options=mode=1777,strictatime,noexec,nodev,nosuid
-          create: true
-          owner: root
-          group: root
-          mode: 0644
-        notify: restart tmpfs
-    tags:
-      - 1.1.2
-      - 1.1.3
-      - 1.1.4
-      - 1.1.5
-
-  # Determine if a filesystem is on a separate partition, if so, then
-  #  check to see if various filesystem options exist for the filesystem
-  - name: 1.1.6 - Report if /var is not on a separate partition
-    block:
-      # Create a empty integer variable and set it as a fact on the managed
-      #  machine.
-      - name: 1.1.6 - Set/reset mount counter
-        ansible.builtin.set_fact:
-          mount_count: 0
-
-      # Examine the ansible_mounts variable which includes all of the system mounts
-      #  on machine. Search for the appropriate mount information. If it exists,
-      #  increment the integer variable by '1' and save the filesystems options to a
-      #  new variable called mount_options.
-      - name: 1.1.6 - Determine if /var is on a separate partition
-        ansible.builtin.set_fact:
-          mount_count: "addition{{ mount_count + 1 }}"
-        when: item.mount == "/var"
-        with_items:
-          - "{{ ansible_mounts }}"
-
-      # If the number in mount_count variable is > 0, then we found the mount. If not,
-      #  then report to the user that the given filesystem was not on a separate partition.
-      - name: 1.1.6 - Report to user
-        ansible.builtin.debug:
-          msg: "FAILED CONTROL: /var is not on a separate partition"
-        when: mount_count == 0
-        changed_when: true
-    # This whole block can be turned off by excluding the following tag(s)
-    tags:
-      - 1.1.6
-
-  # Determine if a filesystem is on a separate partition, if so, then
-  #  check to see if various filesystem options exist for the filesystem
-  - name: 1.1.7 - /var/tmp partition and mount options
-    block:
-      # Create a empty integer variable and set it as a fact on the managed
-      #  machine.
-      - name: 1.1.7 - Set/reset mount counter
-        ansible.builtin.set_fact:
-          mount_count: 0
-        tags:
-          - 1.1.7
-          - 1.1.8
-          - 1.1.9
-          - 1.1.10
-
-      # Examine the ansible_mounts variable which includes all of the system mounts
-      #  on machine. Search for the appropriate mount information. If it exists,
-      #  increment the integer variable by '1' and save the filesystems options to a
-      #  new variable called mount_options.
-      - name: 1.1.7 - Determine if /var/tmp is on a separate partition
-        ansible.builtin.set_fact:
-          mount_count: "addition{{ mount_count + 1 }}"
-          mount_options: "{{ item.options }}"
-        when: item.mount == "/var/tmp"
-        with_items:
-          - "{{ ansible_mounts }}"
-        tags:
-          - 1.1.7
-
-      # If the number in mount_count variable is > 0, then we found the mount. If not,
-      #  then report to the user that the given filesystem was not on a separate partition.
-      - name: 1.1.7 - Report to user if /var/tmp not on separate partition
-        ansible.builtin.debug:
-          msg: "FAILED CONTROL: /var/tmp is not on a separate partition. Skipping mount option checks"
-        when: mount_count == 0
-        changed_when: true
-        tags:
-          - 1.1.7
-
-      # Look through the mount_options variable for the given filesystem option. if it is
-      #  not found, or if the filesystem is not on a separate partition (therefore has no mount options)
-      #  let the user know.
-      - name: 1.1.8 - Report to user if /var/tmp does not have nodev set
-        ansible.builtin.debug:
-          msg: "FAILED CONTROL: /var/tmp/ does not have nodev set"
-        when: mount_options is defined and "nodev" not in mount_options and mount_count == 0
-        changed_when: true
-        tags:
-          - 1.1.8
-
-      # Look through the mount_options variable for the given filesystem option. if it is
-      #  not found, or if the filesystem is not on a separate partition (therefore has no mount options)
-      #  let the user know.
-      - name: 1.1.9 - Report to user if /var/tmp does not have nosuid set
-        ansible.builtin.debug:
-          msg: "FAILED CONTROL: /var/tmp/ does not have nosuid set"
-        when: mount_options is defined and "nodsuid" not in mount_options and mount_count == 0
-        changed_when: true
-        tags:
-          - 1.1.9
-
-      # Look through the mount_options variable for the given filesystem option. if it is
-      #  not found, or if the filesystem is not on a separate partition (therefore has no mount options)
-      #  let the user know.
-      - name: 1.1.10 - Report to user if /var/tmp does not have noexec set
-        ansible.builtin.debug:
-          msg: "FAILED CONTROL: /var/tmp/ does not have noexec set"
-        when: mount_options is defined and "noexec" not in mount_options and mount_count == 0
-        changed_when: true
-        tags:
-          - 1.1.10
-    # This whole block can be turned off by excluding the following tag(s)
-    tags:
-      - 1.1.7
-
-  # Determine if a filesystem is on a separate partition, if so, then
-  #  check to see if various filesystem options exist for the filesystem
-  - name: 1.1.11 - Report if /var/log is not on a separate partition
-    block:
-      # Create a empty integer variable and set it as a fact on the managed
-      #  machine.
-      - name: 1.1.11 - Set/reset mount counter
-        ansible.builtin.set_fact:
-          mount_count: 0
-
-      # Examine the ansible_mounts variable which includes all of the system mounts
-      #  on machine. Search for the appropriate mount information. If it exists,
-      #  increment the integer variable by '1' and save the filesystems options to a
-      #  new variable called mount_options.
-      - name: 1.1.11 - Determine if /var/log is on a separate partition
-        ansible.builtin.set_fact:
-          mount_count: "addition{{ mount_count + 1 }}"
-        when: item.mount == "/var/log"
-        with_items:
-          - "{{ ansible_mounts }}"
-
-      # If the number in mount_count variable is > 0, then we found the mount. If not,
-      #  then report to the user that the given filesystem was not on a separate partition.
-      - name: 1.1.11 - Report to user
-        ansible.builtin.debug:
-          msg: "FAILED CONTROL: /var/log is not on a separate partition"
-        when: mount_count == 0
-        changed_when: true
-    # This whole block can be turned off by excluding the following tag(s)
-    tags:
-      - 1.1.11
-
-  # Determine if a filesystem is on a separate partition, if so, then
-  #  check to see if various filesystem options exist for the filesystem
-  - name: 1.1.12 - Report if /var/log/audit is not on a separate partition
-    block:
-      # Create a empty integer variable and set it as a fact on the managed
-      #  machine.
-      - name: 1.1.12 - Set/reset mount counter
-        ansible.builtin.set_fact:
-          mount_count: 0
-
-      # Examine the ansible_mounts variable which includes all of the system mounts
-      #  on machine. Search for the appropriate mount information. If it exists,
-      #  increment the integer variable by '1' and save the filesystems options to a
-      #  new variable called mount_options.
-      - name: 1.1.12 - Determine if /var/log/audit is on a separate partition
-        ansible.builtin.set_fact:
-          mount_count: "addition{{ mount_count + 1 }}"
-        when: item.mount == "/var/log/audit"
-        with_items:
-          - "{{ ansible_mounts }}"
-
-      # If the number in mount_count variable is > 0, then we found the mount. If not,
-      #  then report to the user that the given filesystem was not on a separate partition.
-      - name: 1.1.12 - Report to user
-        ansible.builtin.debug:
-          msg: "FAILED CONTROL: /var/log/audit is not on a separate partition"
-        when: mount_count == 0
-        changed_when: true
-    # This whole block can be turned off by excluding the following tag(s)
-    tags:
-      - 1.1.12
-
-  # Determine if a filesystem is on a separate partition, if so, then
-  #  check to see if various filesystem options exist for the filesystem
-  - name: 1.1.13 - Report if /home is not on a separate partition
-    block:
-      # Create a empty integer variable and set it as a fact on the managed
-      #  machine.
-      - name: 1.1.13 - Set/reset mount counter
-        ansible.builtin.set_fact:
-          mount_count: 0
-
-      # Examine the ansible_mounts variable which includes all of the system mounts
-      #  on machine. Search for the appropriate mount information. If it exists,
-      #  increment the integer variable by '1' and save the filesystems options to a
-      #  new variable called mount_options.
-      - name: 1.1.13 - Determine if /home is on a separate partition
-        ansible.builtin.set_fact:
-          mount_count: "addition{{ mount_count + 1 }}"
-          mount_options: "{{ item.options }}"
-        when: item.mount == "/home"
-        with_items:
-          - "{{ ansible_mounts }}"
-
-      # If the number in mount_count variable is > 0, then we found the mount. If not,
-      #  then report to the user that the given filesystem was not on a separate partition.
-      - name: 1.1.13 - Report to user if /home is not on a separate partition
-        ansible.builtin.debug:
-          msg: "FAILED CONTROL: /home is not on a separate partition. Skipping mount option checks"
-        when: mount_count == 0
-        changed_when: true
-
-      # Look through the mount_options variable for the given filesystem option. if it is
-      #  not found, or if the filesystem is not on a separate partition (therefore has no mount options)
-      #  let the user know.
-      - name: Report to user if /home does not have nodev set
-        ansible.builtin.debug:
-          msg: "FAILED CONTROL: /home does not have nodev set"
-        when: mount_options is defined and "nodev" not in mount_options and mount_count == 0
-        changed_when: true
-    tags:
-    # This whole block can be turned off by excluding the following tag(s)
-      - 1.1.13
+# 1.1.3 Ensure /var configured
+# Ensure nosuid option set on /var partition
+# Ensure nodev option set on /var partition
+ - name: "1.1.3.2 Ensure nodev option set on /var partition\n
+          1.1.3.4 Ensure nosuid option set on /var partition"
+   block:
+     - name: Get file system
+       shell: findmnt -n /var | awk '{print $3}'
+       check_mode: no
+       register: varsystem
+       changed_when: false
+     - debug:
+         var:  varsystem.stdout
+     - name: Check /var config
+       mount:
+         path: /var
+         src: /dev/mapper/system-var
+         fstype: "{{ varsystem.stdout }}"
+         state: present
+         opts:  rw,nosuid,nodev,relatime,attr2,inode64,logbufs=8,logbsize=32k,noquota
+       register: var_conf
+     - name: Remount /var
+       mount:
+         path: /var
+         state: remounted
+       when: var_conf.changed
+   ignore_errors: yes
+   tags:
+     - 1.1.3.2
+     - 1.1.3.4
+     - var
+     - mount
+  # The /var/tmp directory is a world-writable directory used for temporary storage by all
+ # users and some applications.
+ - name: "1.1.4.2 Ensure nodev option set on /var/tmp partition\n
+          1.1.4.3 Ensure nosuid option set on /var/tmp partition\n
+          1.1.4.4 Ensure noexec option set on /var/tmp partition"
+   block:
+     - name: 1.1.4 Ensure nodev option set on /var/tmp partitions
+       shell: |
+         mount | grep "on /var" && true || true
+       register: vartemp
+       changed_when: false
+     - name: /var/tmp partitions
+       debug:
+         msg: "{{ vartemp }}"
+   tags:
+    - 1.1.4
+    - mount
+    - var
+# 1.1.5 Ensure /var/log configured
+# Ensure nosuid option set on /var/log partition
+# Ensure nodev option set on /var/log partition
+# Ensure noexec option set on /var/log partition
+ - name: "1.1.5.2 Ensure nodev option set on /var/log partition\n
+          1.1.5.3 Ensure nosuid option set on /var/log partition\n
+          1.1.5.4 Ensure noexec option set on /var/log partition"
+   block:
+     - name: Get file system
+       shell: findmnt -n /var/log | awk '{print $3}'
+       check_mode: no
+       register: varlogsystem
+       changed_when: false
+     - debug:
+         var:  varlogsystem.stdout
+     - name: Check /var/log config
+       mount:
+         path: /var/log
+         src: /dev/mapper/system-log
+         fstype: "{{ varlogsystem.stdout }}"
+         state: present
+         opts:  rw,nosuid,nodev,noexec,relatime,attr2,inode64,logbufs=8,logbsize=32k,noquota
+       register: varlog_conf
+     - name: Remount /var/log
+       mount:
+         path: /var/log
+         state: remounted
+       when: varlog_conf.changed
+   ignore_errors: yes
+   tags:
+     - 1.1.5
+     - var
+     - mount
+# 1.1.6 Ensure /var/log/audit configured
+# Ensure nosuid option set on /var/log/audit partition
+# Ensure nodev option set on /var/log/audit partition
+# Ensure noexec option set on /var/log/audit partition
+ - name: "1.1.6.2 Ensure nodev option set on /var/log/audit partition\n
+          1.1.6.3 Ensure nosuid option set on /var/log/audit partition\n
+          1.1.6.4 Ensure noexec option set on /var/log/audit partition"
+   block:
+     - name: Get file system
+       shell: findmnt -n /var/log/audit | awk '{print $3}'
+       check_mode: no
+       register: varauditsystem
+       changed_when: false
+     - debug:
+         var:  varauditsystem.stdout
+     - name: Check /var/log/audit config
+       mount:
+         path: /var/log/audit
+         src: /dev/mapper/system-audit
+         fstype: "{{ varauditsystem.stdout }}"
+         state: present
+         opts:  rw,nosuid,nodev,noexec,relatime,attr2,inode64,logbufs=8,logbsize=32k,noquota
+       register: varaudit_conf
+     - name: Remount /var/log/audit
+       mount:
+         path: /var/log/audit
+         state: remounted
+       when: varaudit_conf.changed
+   ignore_errors: yes
+   tags:
+     - 1.1.6
+     - var
+     - mount
+# 1.1.7 Ensure /home configured
+# Ensure nosuid option set on /home partition
+# Ensure nodev option set on /home partition
+ - name: "1.1.7.2 Ensure nodev option set on home partition\n
+          1.1.7.3 Ensure nosuid option set on home partition"
+   block:
+     - name: Get file system
+       shell: findmnt -n /home | awk '{print $3}'
+       check_mode: no
+       register: homesystem
+       changed_when: false
+     - debug:
+         var:  homesystem.stdout
+     - name: Check /home config
+       mount:
+         path: /home
+         src: /dev/mapper/system-home
+         fstype: "{{ homesystem.stdout }}"
+         state: present
+         opts: rw,nosuid,nodev,relatime,attr2,inode64,logbufs=8,logbsize=32k,usrquota,grpquota
+       register: home_conf
+     - name: Remount /home
+       mount:
+         path: /home
+         state: remounted
+       when: home_conf.changed
+   ignore_errors: yes
+   tags:
+     - 1.1.7
+     - var
+     - mount
 
   # /dev/shm does not exist in ansible_mounts so we have to check the
   #  mount command directly. This requires the use of the shell command which
   #  is not ideal.
   # Grep out /dev/shm and see if the given option is set.
-  - name: 1.1.15 - Report if /dev/shm does not have nodev set
-    block:
-      - name: Determine if /dev/shm has nodev set
-        shell: cat /proc/mounts | /usr/bin/grep /dev/shm | /usr/bin/grep -v nodev
-        register: devshm_nodev_out
-        failed_when: devshm_nodev_out == "2"
-        changed_when: false
-        check_mode: false
-
-  # Let the user know if we did not find the option set.
-      - name: 1.1.15 - Report to user
-        ansible.builtin.debug:
-          msg: "FAILED CONTROL: /dev/shm does not have nodev set"
-        when: devshm_nodev_out is defined and devshm_nodev_out.stdout
-        changed_when: true
+  - name: " Ensure /dev/shm is configured\n
+           1.1.8.1 Ensure nodev option set on /dev/shm partition\n
+           1.1.8.2 Ensure nosuid option set on /dev/shm partition\n
+           1.1.8.3 Ensure noexec option set on /dev/shm partition"
+    mount:
+      name: /dev/shm
+      src: tmpfs
+      state: mounted 
+      fstype: tmpfs
+      opts: rw,nosuid,nodev,noexec 
     tags:
-    # This whole block can be turned off by excluding the following tag(s)
-      - 1.1.15
-
-  # Grep out /dev/shm and see if the given option is set.
-  - name: 1.1.16 - Report if /dev/shm does not have nosuid set
-    block:
-      - name: Determine if /dev/shm has nosuid set
-        shell: cat /proc/mounts | /usr/bin/grep /dev/shm | /usr/bin/grep -v nosuid
-        register: devshm_nosuid_out
-        failed_when: devshm_nosuid_out == "2"
-        changed_when: false
-        check_mode: false
-
-  # Let the user know if we did not find the option set.
-      - name: 1.1.16 - Report to user
-        ansible.builtin.debug:
-          msg: "FAILED CONTROL: /dev/shm does not have nosuid set"
-        when: devshm_nosuid_out is defined and devshm_nosuid_out.stdout
-        changed_when: true
-    tags:
-    # This whole block can be turned off by excluding the following tag(s)
-      - 1.1.16
-
-  # Grep out /dev/shm and see if the given option is set.
-  - name: 1.1.17 - Report if /dev/shm does not have noexec set
-    block:
-      - name: 1.1.17 - Determine if /dev/shm has noexec set
-        shell: cat /proc/mounts | /usr/bin/grep /dev/shm | /usr/bin/grep -v noexec
-        register: devshm_noexec_out
-        failed_when: devshm_noexec_out == "2"
-        changed_when: false
-        check_mode: false
-
-  # Let the user know if we did not find the option set.
-      - name: 1.1.17 - Report to user
-        ansible.builtin.debug:
-          msg: "FAILED CONTROL: /dev/shm does not have noexec set"
-        when: devshm_noexec_out is defined and devshm_noexec_out.stdout
-        changed_when: true
-    tags:
-    # This whole block can be turned off by excluding the following tag(s)
-      - 1.1.17
-
-# Control 1.1.18, 1.1.19, 1.1.20 are for removable media
+      - 1.1.8.1
+      - 1.1.8.2
+      - 1.1.8.3
 
   # Find all local filesystem directories and set the sticky bit on world writable ones
 #  - name: 1.1.21 - Ensure sticky bit is set on world-writeable directories
@@ -397,14 +284,14 @@
   # Turn off and disable the autofs service using the service module.
   # We check to see if the package that autofs belongs to (convienently called autofs)
   #  exists in the ansible_facts.packages list we gathered early in the play
-  - name: 1.1.22 - disable automounting
+  - name: 1.1.9 - disable automounting
     ansible.builtin.service:
       name: autofs
       enabled: false
       state: stopped
     when: "'autofs' in ansible_facts.packages"
     tags:
-      - 1.1.22
+      - 1.1.9
 
   - name: 1.1.23 - Disable USB storage module
     ansible.builtin.lineinfile:
@@ -506,23 +393,23 @@
       # stat returns a lot of information. 'exists' is true if the file exists and 'isreg'
       #  is true if the file is a regular file. If either of these are not true, then
       #  run the initializatoin again.
-      - name: 1.3.1 - Initialize AIDE if it hasn't been already (/usr/sbin/aide)
-        command: /usr/sbin/aide --init
-        when: ( not aide_path.stat.exists or not aide_path.stat.isreg ) and ansible_distribution != "SLES"
-        register: aide
-        async: 1200 # 20 minutes until timeout
-        poll: 0 # run concurrently
-        tags:
-          - 1.3.1
+ #     - name: 1.3.1 - Initialize AIDE if it hasn't been already (/usr/sbin/aide)
+ #       command: /usr/sbin/aide --init
+ #       when: ( not aide_path.stat.exists or not aide_path.stat.isreg ) and ansible_distribution != "SLES"
+ #      register: aide
+ #       async: 1200 # 20 minutes until timeout
+ #       poll: 0 # run concurrently
+ #       tags:
+ #         - 1.3.1
 
-      - name: Wait for AIDE initialization to complete
-        ansible.builtin.async_status: jid={{ aide.ansible_job_id }}
-        register: aide_status
-        until: aide_status.finished
-        when: ( not aide_path.stat.exists or not aide_path.stat.isreg ) and ansible_distribution != "SLES"
-        retries: 300
-        tags:
-          - 1.3.1
+ #     - name: Wait for AIDE initialization to complete
+ #       ansible.builtin.async_status: jid={{ aide.ansible_job_id }}
+ #       register: aide_status
+ #       until: aide_status.finished
+ #       when: ( not aide_path.stat.exists or not aide_path.stat.isreg ) and ansible_distribution != "SLES"
+ #       retries: 300
+ #       tags:
+ #         - 1.3.1
 
       # AIDE creates the new database as a different name. Use the copy module with
       #  the remote_src argument to copy the file on the remote machine to another location
