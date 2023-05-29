@@ -59,7 +59,7 @@
           state: present
           owner: root
           group: root
-          mode: 0644
+          mode: 0640
           create: true
         with_items:
            - { From: '(?m)^\S+\s+install cramfs', To: 'install cramfs /bin/true'}
@@ -300,7 +300,7 @@
       create: true
       owner: root
       group: root
-      mode: 0644
+      mode: 0640
     tags:
       - 1.1.23
 
@@ -704,7 +704,7 @@
     ansible.builtin.set_fact:
       unneeded_packages: []
 
-    - name: 2.2.1 - Remove xinetd service
+  - name: 2.2.1 - Remove xinetd service
     ansible.builtin.set_fact:
       unneeded_packages: "{{ unneeded_packages + [ 'xinetd' ] }}"
     when: tftp_server is defined and not tftp_server
@@ -757,7 +757,7 @@
     tags:
       - 2.2.9
       - 2.3.6
- - name: 2.2.10 - Remove httpd; add to removal list
+  - name: 2.2.10 - Remove httpd; add to removal list
     ansible.builtin.set_fact:
       unneeded_packages: "{{ unneeded_packages + [ 'httpd' ] + [ 'nginx' ] }}"
     when: http_server is defined and not http_server
@@ -1170,7 +1170,7 @@
       path: "{{ item }}"
       owner: root
       group: root
-      mode: 0700
+      mode: 0600
     loop:
       - /etc/cron.hourly
       - /etc/cron.daily
@@ -1837,6 +1837,7 @@
           msg: "{{ nohomedir.stdout_lines }}"
         changed_when: true
         when: nohomedir.stdout
+    ignore_errors: yes
     tags:
       - 6.2.20
   - name: Add hardening file.
