@@ -1,7 +1,7 @@
 ---
 # Task file for CIS Controls
 # This file is commented to help view what Ansible Automation is doing
-#  and under what circumstances.
+#  and under what circumstances./
 
 # Some blocks below have tasks with tags and some without. Blocks of tasks that
 #  contain multiple controls have tasks with tags. Blocks that consist of a
@@ -13,8 +13,8 @@
 
   # Let the user know what version of the controls file is running
   # Use a variable so it prints out the correct version.
-#  - name: Print Header
-#    ansible.builtin.debug: msg= "CIS Controls for {{ ansible_distribution }} {{ ansible_distribution_major_version }}"
+  - name: Print Header
+    debug: msg="CIS Controls for {{ ansible_distribution }} {{ ansible_distribution_major_version }}"
 
   # Collect the packages installed on the system so we can check agains them later
   - name: Collect package list
@@ -27,13 +27,13 @@
   #  between machines and environments, so we pull it from the file it
   #  is supposed to exist in.
 
-  - name: Determine the Minimum UID for new, non-system, accounts
-    command: "/usr/bin/awk '/^s*UID_MIN/{print $2}' /etc/login.defs"
-    register: min_uid
-    changed_when: min_uid.rc == "2"
-    check_mode: false
-    tags:
-      - always
+#  - name: Determine the Minimum UID for new, non-system, accounts
+#    command: "/usr/bin/awk '/^s*UID_MIN/{print $2}' /etc/login.defs"
+#    register: min_uid
+#    changed_when: min_uid.rc == "2"
+#    check_mode: false
+#    tags:
+#      - always
 
   # Update the system with security packages using the system's package manager
   #  Only update the system if the 'update_system' variable is set to true
