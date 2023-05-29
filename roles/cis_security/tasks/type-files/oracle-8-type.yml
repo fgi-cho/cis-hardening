@@ -1383,17 +1383,9 @@
       - 5.3.3
 
 
-
-
-
-
-
-  # Control section 5.3, authselect, cannot be used with Red Hat IPA or Microsoft AD
-  # Skipping until can assure we know how to test against this.
-
-  - name: 5.4.1 - Configure PAM files and password requirements
+  - name: 5.5.1 - Configure PAM files and password requirements
     block:
-      - name: 5.4.1 - require at least one digit in passwords
+      - name: 5.5.1 - require at least one digit in passwords
         ansible.builtin.lineinfile:
           path: /etc/security/pwquality.conf
           line: dcredit = -1
@@ -1401,7 +1393,7 @@
           insertafter: "# dcredit = 0"
         when: password_req_digit
 
-      - name: 5.4.1 - require at least one uppercase letter in passwords
+      - name: 5.5.1 - require at least one uppercase letter in passwords
         ansible.builtin.lineinfile:
           path: /etc/security/pwquality.conf
           line: ucredit = -1
@@ -1409,7 +1401,7 @@
           insertafter: "# ucredit = 0"
         when: password_req_upper
 
-      - name: 5.4.1 - require at least one lowercase letter in passwords
+      - name: 5.5.1 - require at least one lowercase letter in passwords
         ansible.builtin.lineinfile:
           path: /etc/security/pwquality.conf
           line: lcredit = -1
@@ -1417,7 +1409,7 @@
           insertafter: "^# lcredit = 0"
         when: password_req_lower
 
-      - name: 5.4.1 - Require at least one special character in passwords
+      - name: 5.5.1 - Require at least one special character in passwords
         ansible.builtin.lineinfile:
           path: /etc/security/pwquality.conf
           line: ocredit = -1
@@ -1425,7 +1417,7 @@
           insertafter: "^# ocredit = 0"
         when: password_req_digit
 
-      - name: 5.4.1 - Require at least {{ password_min_length }} characters in passwords
+      - name: 5.5.1 - Require at least {{ password_min_length }} characters in passwords
         ansible.builtin.lineinfile:
           path: /etc/security/pwquality.conf
           line: minlen = {{ password_min_length }}
@@ -1433,82 +1425,48 @@
           insertafter: "^# minlen = 8"
         when: password_req_digit
     tags:
-      - 5.4.1
+      - 5.5.1
 
-  # Control 5.4.2, Ensure lockout for failed password attempts, requires file replacement
-  # skipping
 
-  # Control 5.4.3, Set password retention, requries file replacement
-  # skipping
-
-  # Control 5.4.4, Ensure password hashing algorithm is SHA-512, requires file replacement
-  # skipping
-
-  - name: 5.5.1.1 - Ensure password expiration is {{ password_expire_days }} days or less
-    ansible.builtin.lineinfile:
-      dest: /etc/login.defs
-      regexp: '^PASS_MAX_DAYS\s*((?!{{ password_expire_days }}).)*$'
-      line: "PASS_MAX_DAYS  {{ password_expire_days }}"
-      state: present
-    tags:
-      - 5.5.1.1
-
-  - name: 5.5.1.2 - Ensure password change days is set to {{ password_min_days }}
+ 
+  - name: 5.6.1.2 - Ensure password change days is set to {{ password_min_days }}
     ansible.builtin.lineinfile:
       dest: /etc/login.defs
       regexp: '^PASS_MIN_DAYS\s*((?!{{ password_min_days }}).)*$'
       line: "PASS_MIN_DAYS  {{ password_min_days }}"
       state: present
     tags:
-      - 5.5.1.2
+      - 5.6.1.2
 
-  - name: 5.5.1.3 - Ensure password warning days is set to {{ password_warning_days }}
+  - name: 5.6.1.3 - Ensure password warning days is set to {{ password_warning_days }}
     ansible.builtin.lineinfile:
       dest: /etc/login.defs
       regexp: '^PASS_WARN_AGE\s*((?!{{ password_warning_days }}).)*$'
       line: "PASS_WARN_AGE  {{ password_warning_days }}"
       state: present
     tags:
-      - 5.5.1.3
+      - 5.6.1.3
 
-  # We need to do this the hard way because the user module that calls /usr/sbin/useradd does not support setting inactive days
-  # The defaults perms are 0644 on the file, but after useradd is run against it, it changes to 0600, so we'll change it as well
-  - name: 5.5.1.4 - Disable accounts that are inactive for {{ password_inactive_lock_days }} days after password expiration
-    ansible.builtin.replace:
-      path: /etc/default/useradd
-      regexp: "^INACTIVE=((?!{{ password_inactive_lock_days }}).)*$"
-      replace: "INACTIVE={{ password_inactive_lock_days }}"
-      owner: root
-      group: root
-      mode: 0600
-    tags:
-      - 5.5.1.4
-
-  # 5.5.1.5, Ensure all users last password change date is in the past,
-  # is not easily automated. Will revisit later
-
-  # 5.5.2, Ensure system accounts are secured, is machine dependent.
-  # skipping
-
-  - name: 5.5.3 - Ensure default shell timeout is {{ shell_timeout }} seconds or less
-    ansible.builtin.blockinfile:
-      path: "{{ item }}"
-      block: "TMOUT={{ shell_timeout }}"
-      marker: "# {mark} Ansible Managed CIS Timeout"
+  - name: 5.6.3 - Ensure default shell timeout is {{ shell_timeout }} seconds or less
+    ansible.builtin.lineinfile:
+      dest: "{{ item }}"
+      regexp: '^readonly\s*((?!TMOUT=900 ; export TMOUT).)*$'
+      line: "readonly TMOUT={{ shell_timeout }} ; export TMOUT"
+#      marker: "# {mark} Ansible Managed CIS Timeout"
     loop:
-      - /etc/bashrc
+#      - /etc/bashrc
       - /etc/profile
     tags:
-      - 5.5.3
+      - 5.6.3
 
   # Control is actually setting to GID of 0 and the user module takes a group name, not a GID, so have to use usermod
-  - name: 5.5.4 - Ensure default group for root is GID 0
+  - name: 5.6.4 - Ensure default group for root is GID 0
     command: /usr/sbin/usermod -g 0 root
     changed_when: false
     tags:
-      - 5.5.4
+      - 5.6.4
 
-  - name: 5.5.5 - Ensure umask is set
+  - name: 5.6.5 - Ensure umask is set
     ansible.builtin.replace:
       path: "{{ item }}"
       replace: "     umask {{ default_umask }}"
@@ -1517,7 +1475,7 @@
       - /etc/bashrc
       - /etc/profile
     tags:
-      - 5.5.5
+      - 5.6.5
 
   # 5.5.6,  Ensure root login is restricted to system console
   # not easily automatable because of the various TTYs on a machine
@@ -1544,8 +1502,24 @@
 
   # Control 6.1.1 - Audit system file permissions, the report is time consuming and requires manual review
   # skipping
+  # Control 6.1.2,  Ensure sticky bit is set on all world-writable directories
+  # providing a list to the user here.
+  - name: 6.1.2 - Ensure sticky bit is set on all world-writable directories
+    block:
+      - name: 6.1.2 - Find any world writiable files directories
+        shell: "df --local -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev -type d \( -perm -0002 -a ! -perm -1000 \) 2>/dev/null"
+        register: ww_dirs
+        changed_when: false
+        check_mode: false
 
-  - name: 6.1.[2,4] - Ensure permissions on /etc/passwd /etc/group
+      - name: 6.1.2 - Print any world writable directories found
+        ansible.builtin.debug:
+          msg: "World writiable files found: {{ ww_dirs.stdout }}"
+        changed_when: true
+        when: ww_dirs.stdout
+    tags:
+      - 6.1.2
+  - name: 6.1.[3,9] - Ensure permissions on /etc/passwd /etc/group
     ansible.builtin.file:
       path: /etc/{{ item }}
       owner: root
@@ -1554,29 +1528,19 @@
     loop:
       - passwd
       - group
-    tags:
-      - 6.1.2
-      - 6.1.4
-
-  - name: 6.1.[3,5] - Ensure permissions on /etc/shadow /etc/gshadow
-    ansible.builtin.file:
-      path: /etc/{{ item }}
-      owner: root
-      group: root
-      mode: 0000
-    loop:
       - shadow
       - gshadow
     tags:
       - 6.1.3
-      - 6.1.5
+      - 6.1.4
 
-  - name: 6.1.[6-9] - Ensure permissions on /etc/passwd- /etc/[g]shadow- /etc/group-
+
+  - name: 6.1.[6-10] - Ensure permissions on /etc/passwd- /etc/[g]shadow- /etc/group-
     ansible.builtin.file:
       path: /etc/{{ item }}
       owner: root
       group: root
-      mode: 0000
+      mode: 0644
     with_items:
       - passwd-
       - shadow-
@@ -1588,68 +1552,59 @@
       - 6.1.8
       - 6.1.9
 
-  # Control 6.1.10, Ensure no world writable files exist, is system dependent so we are only
+  # Control 6.1.11, Ensure no world writable files exist, is system dependent so we are only
   # providing a list to the user here.
-  - name: 6.1.10 - Ensure no world writable files exist
+  - name: 6.1.11 - Ensure no world writable files exist
     block:
-      - name: 6.1.10 - Find any world writiable files
+      - name: 6.1.11 - Find any world writiable files
         shell: "/usr/bin/df --local -P | /usr/bin/awk {' if (NR!=1) print $6'} | /usr/bin/xargs -I '{}' find '{}' -xdev -type f -perm -0002"
         register: ww_files
         changed_when: false
         check_mode: false
 
-      - name: 6.1.10 - Print any world writable files found
+      - name: 6.1.11 - Print any world writable files found
         ansible.builtin.debug:
           msg: "World writiable files found: {{ ww_files.stdout }}"
         changed_when: true
         when: ww_files.stdout
     tags:
-      - 6.1.10
+      - 6.1.11
 
-  # Control 6.1.11, Ensure no unowned files exist, is system dependent so we are only
+  # Control 6.1.12, Ensure no unowned files exist, is system dependent so we are only
   # providing a list to the user here.
-  - name: 6.1.11 - Ensure no unowned files exist
+  - name: 6.1.12 - Ensure no unowned files exist
     block:
-      - name: 6.1.11 - Find any unowned files
+      - name: 6.1.12 - Find any unowned files
         shell: "/usr/bin/df --local -P | /usr/bin/awk {' if (NR!=1) print $6'} | /usr/bin/xargs -I '{}' find '{}' -xdev -nouser"
         register: uo_files
         changed_when: false
         check_mode: false
 
-      - name: 6.1.11 - Print any unowned files found
+      - name: 6.1.12 - Print any unowned files found
         ansible.builtin.debug:
           msg: "unowned files found: {{ uo_files.stdout }}"
         changed_when: true
         when: uo_files.stdout
     tags:
-      - 6.1.11
+      - 6.1.12
 
-  # Control 6.1.12, Enscure no ungrouped files exist, is system dependent so we are only
+  # Control 6.1.13, Enscure no ungrouped files exist, is system dependent so we are only
   # providing a list to the user here.
-  - name: 6.1.12 - Ensure no ungrouped files exist
+  - name: 6.1.13 - Ensure no ungrouped files exist
     block:
-      - name: 6.1.12 - Find any ungrouped files
+      - name: 6.1.13 - Find any ungrouped files
         shell: "/usr/bin/df --local -P | /usr/bin/awk {' if (NR!=1) print $6'} | /usr/bin/xargs -I '{}' find '{}' -xdev -nogroup"
         register: ug_files
         changed_when: false
         check_mode: false
 
-      - name: 6.1.12 - Print any ungrouped files found
+      - name: 6.1.13 - Print any ungrouped files found
         ansible.builtin.debug:
           msg: "ungrouped files found: {{ uo_files.stdout }}"
         changed_when: true
         when: ug_files.stdout
     tags:
-      - 6.1.12
-
-
-  # Control 6.1.13, Audit SUID executables, is a verification and is system dependent.
-  # Not implementing because it will always return some SUID files
-  # Manually review the control
-
-  # Control 6.1.14, Audit SGID executables, is a verification and is system dependent.
-  # Not implementing because it will always return some SUID files
-  # Manually review the control
+      - 6.1.13
 
   - name: 6.2.1 - Ensure password fields are not empty
     block:
@@ -1668,31 +1623,96 @@
         loop: "{{ empty_passwords.stdout_lines }}"
     tags:
       - 6.2.1
+  - name: 6.2.2 - Report on groups in /etc/passwd  with a GID not in /etc/group
+    block:
+      - name: 6.2.2 - Use script to pull the list of groups
+        script:
+          cmd: files/undefined_groups.sh
+        register: undefined_groups
+        changed_when: false
+        check_mode: false
 
-  - name: 6.2.[2,4-5] - Ensure no legacy "+" entries exist in password files
-    ansible.builtin.lineinfile:
-      regexp: '^\+:.*'
-      state: absent
-      path: "{{ item }}"
-    when: ypbind is defined and not ypbind
-    loop:
-      - /etc/passwd
-      - /etc/shadow
-      - /etc/group
+      - name: 6.2.2 - Report to user any unreferenced groups
+        ansible.builtin.debug:
+          msg: "{{ undefined_groups.stdout_lines }}"
+        changed_when: true
+        when: undefined_groups.stdout
     tags:
-      - 6.2.2
+      - 6.2.2  
+  - name: 6.2.3 - Report on duplicate UIDs in /etc/passwd
+    block:
+      - name: 6.2.3 - Use script to pull the list of duplicate UIDs
+        script:
+          cmd: files/duplicate_uids.sh
+        register: duplicate_uids
+        changed_when: false
+        check_mode: false
+
+      - name: 6.2.3 - Print report of duplicated UIDs to user
+        ansible.builtin.debug:
+          msg: "{{ duplicate_uids.stdout_lines }}"
+        changed_when: true
+        when: duplicate_uids.stdout
+    tags:
+      - 6.2.3
+
+  - name: 6.2.4 - Report on duplicate GIDs in /etc/group
+    block:
+      - name: 6.2.4 - Use script to pull the list of duplicate GIDs
+        script:
+          cmd: files/duplicate_guids.sh
+        register: duplicate_guids
+        changed_when: false
+        check_mode: false
+
+      - name: 6.2.4 - Print report of duplcate GIDs to user
+        ansible.builtin.debug:
+          msg: "{{ duplicate_guids.stdout_lines }}"
+        changed_when: true
+        when: duplicate_guids.stdout
+    tags:
       - 6.2.4
+  - name: 6.2.5 - Report on duplicate users in /etc/passwd
+    block:
+      - name: 6.2.5 - Use script to pull the list of users
+        script:
+          cmd: files/duplicate_users.sh
+        register: duplicate_users
+        changed_when: false
+        check_mode: false
+      - name: 6.2.5 - Print report of duplicate users to user
+        ansible.builtin.debug:
+           msg: "{{ duplicate_users.stdout_lines }}"
+        changed_when: true
+        when: duplicate_users.stdout
+    tags:
       - 6.2.5
 
-  - name: 6.2.3 - Ensure root PATH integrity
+  - name: 6.2.6 - Report on duplicate groups in /etc/group
     block:
-      - name: 6.2.3 - Run script on path variable
+      - name: 6.2.6 - Use script to pull the list of groups
+        script:
+          cmd: files/duplicate_groups.sh
+        register: duplicate_groups
+        changed_when: false
+        check_mode: false
+
+      - name: 6.2.6 - Print report of duplicate groups to user
+        ansible.builtin.debug:
+          msg: "{{ duplicate_groups.stdout_lines }}"
+        changed_when: true
+        when: duplicate_groups.stdout
+    tags:
+      - 6.2.6
+  - name: 6.2.7 - Ensure root PATH integrity
+    block:
+      - name: 6.2.7 - Run script on path variable
         script: files/path_check.sh
         changed_when: false
         register: path_check
         check_mode: false
 
-      - name: 6.2.3 - Print report to user
+      - name: 6.2.7 - Print report to user
         ansible.builtin.debug:
           msg:
             - "Note, Ansible runs this as SUDO with the ansible user's PATH variable. The script may not print issues"
@@ -1700,17 +1720,17 @@
             - " {{ path_check.stdout }}"
         when: path_check.stdout and not ansible_check_mode
     tags:
-      - 6.2.3
+      - 6.2.7
 
-  - name: 6.2.6 - Report on multiple accounts with UID of 0
+  - name: 6.2.8 - Report on multiple accounts with UID of 0
     block:
-      - name: 6.2.6 - find accounts with UID of 0
+      - name: 6.2.8 - find accounts with UID of 0
         shell: "/usr/bin/cat /etc/passwd | awk -F: '($3 == 0) { print $1 }'"
         register: rootuid
         changed_when: rootuid.rc == 2
         check_mode: false
 
-      - name: 6.2.6 - Report on mulitple accounts with UID of 0
+      - name: 6.2.8 - Report on mulitple accounts with UID of 0
         ansible.builtin.debug:
           msg:
             - "Accounts with UID zero in addition to root"
@@ -1718,128 +1738,46 @@
         changed_when: true
         when: rootuid.stdout != 'root'
     tags:
-      - 6.2.6
+      - 6.2.8
 
-  # Control 6.2.7 is environment dependent, skipping
-  # Control 6.2.8 is environment dependent, skipping
-  # Controls 6.2.[9-13,20] are recommended to be handled by monitoring software
-
-  - name: 6.2.14 - Report on groups in /etc/passwd  with a GID not in /etc/group
+  - name: 6.2.9 - Report on users that do not have a home directory
     block:
-      - name: 6.2.14 - Use script to pull the list of groups
-        script:
-          cmd: files/undefined_groups.sh
-        register: undefined_groups
-        changed_when: false
-        check_mode: false
-
-      - name: 6.2.14 - Report to user any unreferenced groups
-        ansible.builtin.debug:
-          msg: "{{ undefined_groups.stdout_lines }}"
-        changed_when: true
-        when: undefined_groups.stdout
-    tags:
-      - 6.2.14
-
-  - name: 6.2.15 - Report on duplicate UIDs in /etc/passwd
-    block:
-      - name: 6.2.15 - Use script to pull the list of duplicate UIDs
-        script:
-          cmd: files/duplicate_uids.sh
-        register: duplicate_uids
-        changed_when: false
-        check_mode: false
-
-      - name: 6.2.15 - Print report of duplicated UIDs to user
-        ansible.builtin.debug:
-          msg: "{{ duplicate_uids.stdout_lines }}"
-        changed_when: true
-        when: duplicate_uids.stdout
-    tags:
-      - 6.2.15
-
-  - name: 6.2.16 - Report on duplicate GIDs in /etc/group
-    block:
-      - name: 6.2.16 - Use script to pull the list of duplicate GIDs
-        script:
-          cmd: files/duplicate_guids.sh
-        register: duplicate_guids
-        changed_when: false
-        check_mode: false
-
-      - name: 6.2.16 - Print report of duplcate GIDs to user
-        ansible.builtin.debug:
-          msg: "{{ duplicate_guids.stdout_lines }}"
-        changed_when: true
-        when: duplicate_guids.stdout
-    tags:
-      - 6.2.16
-
-  - name: 6.2.17 - Report on duplicate users in /etc/passwd
-    block:
-      - name: 6.2.17 - Use script to pull the list of users
-        script:
-          cmd: files/duplicate_users.sh
-        register: duplicate_users
-        changed_when: false
-        check_mode: false
-
-      - name: 6.2.17 - Print report of duplicate users to user
-        ansible.builtin.debug:
-          msg: "{{ duplicate_users.stdout_lines }}"
-        changed_when: true
-        when: duplicate_users.stdout
-    tags:
-      - 6.2.17
-
-  - name: 6.2.18 - Report on duplicate groups in /etc/group
-    block:
-      - name: 6.2.18 - Use script to pull the list of groups
-        script:
-          cmd: files/duplicate_groups.sh
-        register: duplicate_groups
-        changed_when: false
-        check_mode: false
-
-      - name: 6.2.18 - Print report of duplicate groups to user
-        ansible.builtin.debug:
-          msg: "{{ duplicate_groups.stdout_lines }}"
-        changed_when: true
-        when: duplicate_groups.stdout
-    tags:
-      - 6.2.18
-
-  - name: 6.2.19 - Report on shadow group in /etc/group
-    block:
-      - name: 6.2.19 - Determine if the shadow group exists in /etc/group
-        command: /usr/bin/grep "^shadow:" /etc/group
-        register: shadow_out
-        changed_when: false
-        failed_when: shadow_out.rc == "2"
-        check_mode: false
-
-      - name: 6.2.19 - Print report of shadow group to user
-        ansible.builtin.debug:
-          msg: "Shadow group exists in /etc/group. Remove"
-        changed_when: true
-        when: shadow_out.stdout
-
-  - name: 6.2.20 - Report on users that do not have a home directory
-    block:
-      - name: 6.2.20 - Use script to find the users
+      - name: 6.2.9 - Use script to find the users
         script:
           cmd: files/non_existant_homedirs.sh
         register: nohomedir
         changed_when: false
 
-      - name: 6.2.20 - Print report of users that do not have a home directory
+      - name: 6.2.9 - Print report of users that do not have a home directory
         ansible.builtin.debug:
           msg: "{{ nohomedir.stdout_lines }}"
         changed_when: true
         when: nohomedir.stdout
     ignore_errors: yes
     tags:
-      - 6.2.20
+      - 6.2.9
+
+
+  # Control 6.2.7 is environment dependent, skipping
+  # Control 6.2.8 is environment dependent, skipping
+  # Controls 6.2.[9-13,20] are recommended to be handled by monitoring software
+
+  - name: 6.2.10 - Report on shadow group in /etc/group
+    block:
+      - name: 6.2.10 - Determine if the shadow group exists in /etc/group
+        command: /usr/bin/grep "^shadow:" /etc/group
+        register: shadow_out
+        changed_when: false
+        failed_when: shadow_out.rc == "2"
+        check_mode: false
+
+      - name: 6.2.10 - Print report of shadow group to user
+        ansible.builtin.debug:
+          msg: "Shadow group exists in /etc/group. Remove"
+        changed_when: true
+        when: shadow_out.stdout
+
+
   - name: Add hardening file.
     file:
       path: /etc/.hardening
