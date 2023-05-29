@@ -451,16 +451,16 @@
 
   # 1.6 Additional Process Hardening
 
-  - name: 1.6.1 - Ensure core dumps are restricted
-    block:
-      # The sysctl module will set variables in /etc/sysctl.conf and tell sysctl
-      #  to reload them immediately if 'reload' is set to 'yes'.
-      - name: 1.6.1 - Ensure core dumps are restricted
-        sysctl:
-          name: fs.suid_dumpable
-          value: "0"
-          state: present
-          reload: true
+#  - name: 1.6.1 - Ensure core dumps are restricted
+#    block:
+#      # The sysctl module will set variables in /etc/sysctl.conf and tell sysctl
+#      #  to reload them immediately if 'reload' is set to 'yes'.
+#      - name: 1.6.1 - Ensure core dumps are restricted
+#        sysctl:
+#          name: fs.suid_dumpable
+#          value: "0"
+#          state: present
+#          reload: true
 
  #     # The pam_limits module will configure the lines in the limits files.
  #     - name: 1.6.1 - Ensure core limits are set
@@ -470,20 +470,20 @@
  #         limit_type: hard
  #         limit_item: core
  #         value: "0"
-    tags:
-      - 1.6.1
+ #   tags:
+ #     - 1.6.1
 
-  - name: 1.6.2 - Ensure address space layout reandomization (ASLR) is enabled
+ # - name: 1.6.2 - Ensure address space layout reandomization (ASLR) is enabled
       # The sysctl module will set variables in /etc/sysctl.conf and tell sysctl
       #  to reload them immediately if 'reload' is set to 'yes'.
-    ansible.builtin.sysctl:
-      name: kernel.randomize_va_space
-      value: "2"
-      reload: true
-      state: present
-      sysctl_set: true
-    tags:
-      - 1.6.2
+ #   ansible.builtin.sysctl:
+ #     name: kernel.randomize_va_space
+ #     value: "2"
+ #     reload: true
+ #     state: present
+ #     sysctl_set: true
+ #   tags:
+ #     - 1.6.2
 
 
 
@@ -576,7 +576,7 @@
   # 1.8 Warning Banners
 
   # Use copy module to copy in the appropriate files based on variable and set permissions
-  - name: 1.8.1.1 - Install motd banners
+  - name: 1.7.1 - Install motd banners
     ansible.builtin.copy:
       src: "{{ motd_file }}"
       dest: /etc/motd
@@ -584,11 +584,11 @@
       group: root
       mode: 0644
     tags:
-      - 1.8.1.1
-      - 1.8.1.4
+      - 1.7.1
+      - 1.7.4
 
   # Use copy module to copy in the appropriate files based on variable and set permissions
-  - name: 1.8.1.2 - Install issue banners
+  - name: 1.7.2 - Install issue banners
     ansible.builtin.copy:
       src: "{{ issue_file }}"
       dest: /etc/issue
@@ -596,8 +596,8 @@
       group: root
       mode: 0644
     tags:
-      - 1.8.1.2
-      - 1.8.1.5
+      - 1.7.2
+      - 1.7.5
 
   # Use copy module to copy in the appropriate files based on variable and set permissions
   - name: 1.8.1.3 - Install issue.net banners
@@ -608,8 +608,8 @@
       group: root
       mode: 0644
     tags:
-      - 1.8.1.3
-      - 1.8.1.6
+      - 1.7.3
+      - 1.7.6
 
   # add a banner to the login screen if the graphical_interface variable is set to true
   - name: 1.8.2 Ensure GDM banner set up
@@ -660,29 +660,20 @@
       - 1.10.0
 
  ### Part 2, Services ###
-  # Remove old, unused, insecure services
-  - name: 2.1.1 - Remove xinetd service
-    ansible.builtin.dnf:
-      name: xinetd
-      state: absent
-    when: tftp_server is defined and not tftp_server
-
-    tags:
-      - 2.1.1
 
   # RHEL 8 does not distribute ntp any longer, so we are not using the time_server
   #  variable for RHEL8 controls
-  - name: 2.2.1.1 - Verify chrony is  installed
+  - name: 2.1.1 - Verify chrony is  installed
     ansible.builtin.dnf:
       name: "chrony"
       state: present
     tags:
-      - 2.2.1.1
+      - 2.1.1
 
   # Use the template module to deploy the config file for the time sync program
   #  The default file does not have any template variables, but it's there so
   #  they can be added in the future.
-  - name: 2.2.1.2 - Configure chrony
+  - name: 2.1.2 - Configure chrony
     ansible.builtin.template:
       src: "chrony.conf"
       dest: /etc/chrony.conf
@@ -691,9 +682,9 @@
       mode: 0644
     notify: restart chronyd
     tags:
-      - 2.2.1.2
+      - 2.1.2
 
-  - name: 2.2.1.3 - configure sysconfig time_server options
+  - name: 2.1.3 - configure sysconfig time_server options
     ansible.builtin.template:
       src: "{{ time_service }}d"
       dest: /etc/sysconfig/{{ time_service }}d
@@ -702,67 +693,9 @@
       mode: 0644
     notify: restart {{ time_service }}d
     tags:
-      - 2.2.1.3
+      - 2.1.3
+  # Remove old, unused, insecure services
 
-  - name: 2.2.2 - disable display manager if graphical desktop not needed
-    block:
-      # Find the current default run level. The systemctl module does not handle the
-      #  get-default routine, so we are looking at the target of the symlink at /etc/systemd/system/default.target
-      - name: 2.2.2 - get default runlevel
-        ansible.builtin.stat:
-          path: /etc/systemd/system/default.target
-        register: default_runlevel_out
-        tags:
-          - 2.2.2
-
-      # Use systemd module to stop the GDM service
-      - name: 2.2.2 - Disable the gdm display manager
-        ansible.builtin.systemd:
-          name: gdm
-          enabled: false
-          masked: true
-          state: stopped
-          daemon-reload: true
-        when: "'gdm' in ansible_facts.packages and not graphical_interface"
-        tags:
-          - 2.2.2
-
-      # Set the current run level. The systemctl module does not handle the
-      #  get-default routine, so we are looking at the target of the symlink at /etc/systemd/system/default.target
-      - name: 2.2.2 - Set current runlevel (non graphical)
-        command: /usr/bin/systemctl isolate multi-user.target
-        register: isolate_out
-        changed_when: isolate_out.changed
-        when: default_runlevel_out.stat.lnk_target is search("graphical.target") and not graphical_interface
-        tags:
-          - 2.2.2
-
-      - name: 2.2.2 - Set current runlevel (graphical)
-        command: /usr/bin/systemctl isolate graphical.target
-        register: isolate_out
-        changed_when: isolate_out.changed
-        when: default_runlevel_out.stat.lnk_target is search("multi-user.target") and graphical_interface
-        tags:
-          - 2.2.2
-
-      # Set the default run level. We are doing it the hard way since systemctl doesn't handle set-default
-      - name: 2.2.2 - Set default runlevel (non graphical)
-        ansible.builtin.file:
-          src: /lib/systemd/system/multi-user.target
-          dest: /etc/systemd/system/default.target
-          owner: root
-          group: root
-        when: not graphical_interface
-
-      - name: 2.2.2 - Set default runlevel (graphical)
-        ansible.builtin.file:
-          src: /lib/systemd/system/graphical.target
-          dest: /etc/systemd/system/default.target
-          owner: root
-          group: root
-        when: graphical_interface
-    tags:
-      - 2.2.2
 
   # This collection of tasks creates a empty list and save it as a fact.
   #  For every item that is encountered (without the tag being skipped),
@@ -771,64 +704,98 @@
     ansible.builtin.set_fact:
       unneeded_packages: []
 
-  - name: 2.2.20 - Remove rsync; add to removal list
+    - name: 2.2.1 - Remove xinetd service
     ansible.builtin.set_fact:
-      unneeded_packages: "{{ unneeded_packages + [ 'rsync' ] }}"
+      unneeded_packages: "{{ unneeded_packages + [ 'xinetd' ] }}"
+    when: tftp_server is defined and not tftp_server
     tags:
-      - 2.2.20
-
+      - 2.2.1
+  - name: 2.2.2 - Ensure xorg-x11-server-common is not installed
+    ansible.builtin.set_fact:
+      "{{ unneeded_packages + [ 'xorg-x11-server-common' ] }}"
+    tags:
+      - 2.2.2 
   - name: 2.2.3 - Remove avahi; add to removal list
     ansible.builtin.set_fact:
-      unneeded_packages: "{{ unneeded_packages + [ 'avahi' ] }}"
+      unneeded_packages: "{{ unneeded_packages + [ 'avahi' ] + [ 'avahi-autoipd' ] }}"
     tags:
       - 2.2.3
-
-  - name: 2.2.14 - Remove snmp; add to removal list
+  - name: 2.2.4 - Disable dhcpd server [controlled by host variable dhcp_server]; add to removal list
     ansible.builtin.set_fact:
-      unneeded_packages: "{{ unneeded_packages + [ 'net-snmp' ] + [ 'net-snmp-libs'] }}"
+      unneeded_packages: "{{ unneeded_packages + [ 'cups' ] }}"
+    when: dhcp_server is defined and not dhcp_server
     tags:
-      - 2.2.14
-
-  - name: 2.2.13 - Remove squid; add to removal list
+      - 2.2.4
+  - name: 2.2.5 - Disable dhcpd server [controlled by host variable dhcp_server]; add to removal list
     ansible.builtin.set_fact:
-      unneeded_packages: "{{ unneeded_packages + [ 'squid' ] }}"
+      unneeded_packages: "{{ unneeded_packages + [ 'dhcp-server' ] }}"
+    when: dhcp_server is defined and not dhcp_server
     tags:
-      - 2.2.13
-
-  - name: 2.2.12 - Remove samba; add to removal list
+      - 2.2.5
+  - name: 2.2.6 - Remove bind; add to removal list
     ansible.builtin.set_fact:
-      unneeded_packages: "{{ unneeded_packages + [ 'samba' ] }}"
-    when: smb_server is defined and not smb_server
+      unneeded_packages: "{{ unneeded_packages + [ 'bind' ] + [ 'unbound' ] }}"
+    when: dns_server is defined and not dns_server
     tags:
-      - 2.2.12
-
-  - name: 2.2.11 - Remove dovecot; add to removal list
+      - 2.2.6
+  - name: 2.2.7 - Remove ftp; add to removal list
     ansible.builtin.set_fact:
-      unneeded_packages: "{{ unneeded_packages + [ 'dovecot' ] + [ 'cyrus-imapd' ] }}"
-    when: email_server is defined and not email_server
+      unneeded_packages: "{{ unneeded_packages + [ 'ftp' ] }}"
+    when: ftp_server is defined and not ftp_server
     tags:
-      - 2.2.11
-
-  - name: 2.2.10 - Remove httpd; add to removal list
-    ansible.builtin.set_fact:
-      unneeded_packages: "{{ unneeded_packages + [ 'httpd' ] + [ 'httpd-tools' ] + [ 'mod_ssl' ] }}"
-    when: http_server is defined and not http_server
-    tags:
-      - 2.2.10
-
+      - 2.2.7
   - name: 2.2.8 - Remove vsftpd; add to removal list
     ansible.builtin.set_fact:
       unneeded_packages: "{{ unneeded_packages + [ 'vsftpd' ] }}"
     when: ftp_server is defined and not ftp_server
     tags:
       - 2.2.8
-
-  - name: 2.2.6 - Remove bind; add to removal list
+  - name: 2.2.9 - Remove tftp; add to removal list
     ansible.builtin.set_fact:
-      unneeded_packages: "{{ unneeded_packages + [ 'bind' ] + [ 'unbound' ] }}"
-    when: dns_server is defined and not dns_server
+      unneeded_packages: "{{ unneeded_packages + [ 'tftp-server' ] + [ 'tftp' ] }}"
+    when: ftp_server is defined and not ftp_server
+    tags:
+      - 2.2.9
+      - 2.3.6
+ - name: 2.2.10 - Remove httpd; add to removal list
+    ansible.builtin.set_fact:
+      unneeded_packages: "{{ unneeded_packages + [ 'httpd' ] + [ 'nginx' ] }}"
+    when: http_server is defined and not http_server
+    tags:
+      - 2.2.10
+  - name: 2.2.11 - Remove dovecot; add to removal list
+    ansible.builtin.set_fact:
+      unneeded_packages: "{{ unneeded_packages + [ 'dovecot' ] + [ 'cyrus-imapd' ] }}"
+    when: email_server is defined and not email_server
     tags:
       - 2.2.11
+  - name: 2.2.12 - Remove samba; add to removal list
+    ansible.builtin.set_fact:
+      unneeded_packages: "{{ unneeded_packages + [ 'samba' ] }}"
+    when: smb_server is defined and not smb_server
+    tags:
+      - 2.2.12
+  - name: 2.2.13 - Remove squid; add to removal list
+    ansible.builtin.set_fact:
+      unneeded_packages: "{{ unneeded_packages + [ 'squid' ] }}"
+    tags:
+      - 2.2.13
+  - name: 2.2.14 - Remove snmp; add to removal list
+    ansible.builtin.set_fact:
+      unneeded_packages: "{{ unneeded_packages + [ 'net-snmp' ] }}"
+    tags:
+      - 2.2.14
+  - name: 2.2.15 - Remove ypserv; add to removal list
+    ansible.builtin.set_fact:
+      unneeded_packages: "{{ unneeded_packages + [ 'ypserv' ] }}"
+    tags:
+      - 2.2.15
+  - name: 2.2.16 - Remove telnet; add to removal list
+    ansible.builtin.set_fact:
+      unneeded_packages: "{{ unneeded_packages + [ 'telnet' ] }}"
+    tags:
+      - 2.3.4
+      - 2.2.16
 
   - name: 2.2.18 - Remove nfs server; add to removal list
     ansible.builtin.set_fact:
@@ -836,49 +803,39 @@
     when: nfs_server is defined and not nfs_server
     tags:
       - 2.2.18
-
   - name: 2.2.19 - Remove rpcbind; add to removal list
     ansible.builtin.set_fact:
       unneeded_packages: "{{ unneeded_packages + [ 'rpcbind' ] }}"
     tags:
       - 2.2.19
-
-  # control 2.2.14 skipped. RHEL uses LDAP implemented in SSSD by default
-
-  - name: 2.2.15 - Disable dhcpd server [controlled by host variable dhcp_server]; add to removal list
+  - name: 2.2.20 - Remove rsync; add to removal list
     ansible.builtin.set_fact:
-      unneeded_packages: "{{ unneeded_packages + [ 'dhcp' ] }}"
-    when: dhcp_server is defined and not dhcp_server
+      unneeded_packages: "{{ unneeded_packages + [ 'rsync' ] }}"
     tags:
-      - 2.2.5
-
-  - name: 2.2.15 - Remove ypserv; add to removal list
-    ansible.builtin.set_fact:
-      unneeded_packages: "{{ unneeded_packages + [ 'ypserv' ] }}"
-    tags:
-      - 2.2.15
+      - 2.2.20
 
   - name: 2.3.1 - Remove ypbind; add to removal list
     ansible.builtin.set_fact:
       unneeded_packages: "{{ unneeded_packages + [ 'ypbind' ] }}"
-    when: not ypbind
     tags:
       - 2.3.1
-
-  - name: 2.3.4 - Remove telnet; add to removal list
+  - name: 2.3.2 - Remove rsh; add to removal list
     ansible.builtin.set_fact:
-      unneeded_packages: "{{ unneeded_packages + [ 'telnet' ] }}"
+      unneeded_packages: "{{ unneeded_packages + [ 'rsh' ] }}"
     tags:
-      - 2.3.4
-      - 2.2.16
-
+      - 2.3.2
+  - name: 2.3.3 - Ensure talk client is not installed
+    ansible.builtin.set_fact:
+      unneeded_packages: "{{ unneeded_packages + [ 'talk' ] }}"
+    tags:
+      - 2.3.3
   - name: 2.3.5 - Remove openldap-clients; add to removal list
     ansible.builtin.set_fact:
       unneeded_packages: "{{ unneeded_packages + [ 'openldap-clients' ] }}"
     tags:
       - 2.3.5
-
-  - name: 2.3.3 - list of packages to remove
+  
+  - name: 2.[2-3] - list of packages to remove
     ansible.builtin.debug:
       var: unneeded_packages
 
@@ -891,18 +848,7 @@
 
   # Cups should be remove per control 2.2.16, but it may not be able to due to
   #  dependencies, so disable the service instead
-  - name: 2.2.4 - Disable cups as we my not be able to uninstall it
-    ansible.builtin.service:
-      name: "{{ item }}"
-      enabled: false
-      state: stopped
-    when: "'cups' in ansible_facts.packages"
-    loop:
-      - cups.service
-      - cups.socket
-      - cups-browsed.service
-    tags:
-      - 2.2.4
+
 
   # Use the stat module to determine if the mail server config file exists.
   #  If it does and we are to be a mail server, then modify it per the control.
@@ -1012,39 +958,6 @@
     tags:
       - 3.2.0
 
-  - name: 3.3 - Disable uncommon network protocols
-    block:
-      # This collection of tasks creates a empty list and save it as a fact.
-      #  For every item that is encountered (without the tag being skipped),
-      #  add a string to the list.
-      - name: 3.3.0 - Create empty list of uncommon network protocols to disable
-        ansible.builtin.set_fact:
-          uncommon_network: []
-
-      - name: 3.3.1 - Add dccp to list of uncommon network protocols to disable
-        ansible.builtin.set_fact:
-          uncommon_network: "{{ uncommon_network + [ 'dccp' ] }}"
-        tags:
-          - 3.3.1
-
-      - name: 3.3.2 - Add sctp to list of uncommon network protocols to disable
-        ansible.builtin.set_fact:
-          uncommon_network: "{{ uncommon_network + [ 'sctp' ] }}"
-        tags:
-          - 3.3.2
-
-      - name: 3.3.3 - Add rds to list of uncommon network protocols to disable
-        ansible.builtin.set_fact:
-          uncommon_network: "{{ uncommon_network + [ 'rds' ] }}"
-        tags:
-          - 3.3.3
-
-      - name: 3.3.4 - Add tipc to list of uncommon network protocols to disable
-        ansible.builtin.set_fact:
-          uncommon_network: "{{ uncommon_network + [ 'tipc' ] }}"
-        tags:
-          - 3.3.4
-
   # With the list complete, use it with the system's package manager
   #  to remove packages from the system that are not needed.
       - name: 3.5.0 - Process uncommon network list
@@ -1088,7 +1001,7 @@
         masked: true
       when: "'nftables' in ansible_facts.packages"
 
-    - name: 3.4.2.4 - Set default zone
+    - name: 3.4.1.5 - Set default zone
       ansible.builtin.lineinfile:
           path: "/etc/firewalld/firewalld.conf"
           regexp: '^DefaultZone\s*((?!{{ firewalld_default_zone }}).)*$'
@@ -1110,50 +1023,6 @@
       - 3.4.1
       - 3.4.2
 
-  # Control 3.4.3 Configure nftables, skipping
-
-  - name: 3.4.4.1 - Install iptables
-    block:
-    - name: 3.4.4.1 - Install iptables
-      ansible.builtin.dnf:
-        name:
-          - "iptables"
-          - "iptables-services"
-        state: present
-      notify: start iptables
-      tags:
-        - 3.4.4.1
-
-    - name: 3.4.4.1 - Disable firewalld
-      ansible.builtin.service:
-        name: firewalld
-        state: stopped
-        enabled: false
-        ignore_errors: true
-      tags:
-        - 3.4.4.1
-
-    - name: Notify user to configure firewall
-      ansible.builtin.debug:
-        msg:
-          - "Ensure default firewall policy (3.4.4.1.[1-4]) must be handled locally"
-      tags:
-        - 3.4.4.1
-
-    when: enable_firewall is defined and enable_firewall == "iptables"
-    tags:
-      - 3.4.4
-
-
-  - name: 3.4.4.2 - Configure IPv6 iptables
-    ansible.builtin.debug:
-      msg: "3.4.4.2, Configure IPv6 ip6tables skipping due to low use"
-    when: ipv6_disable and enable_firewall == "firewalld"
-    tags:
-      - 3.4.4.2
-
-  # Control 3.5 Ensure wireless interfaces are disabled is interface dependent
-  # skipping
 
   - name: 3.6 - Disable IPv6
       # We check here because we don't know what position the ipv6.disable is in
@@ -1183,274 +1052,7 @@
       3.6.0
 
   # Section 4 - Logging and Auditing
-
-  - name: 4.1 Install and configure system auditing
-    block:
-      - name: 4.1.1 - Install Audit
-        ansible.builtin.dnf:
-          name:
-            - audit
-            - audit-libs
-          state: present
-        tags:
-          - 4.1.1.1
-
-      - name: 4.1.1.2 - Enable auditd service
-        ansible.builtin.service:
-          name: auditd
-          enabled: true
-          state: started
-        tags:
-          - 4.1.1.2
-
-      - name: 4.1.1.3 - Ensure auditing for processes that start prior to auditd
-      # We check here because we don't know what position the audit=1 is in
-      # order to simply do the replace, so we are instead looking for the match in the file first.
-      # If it doesn't exist, then we can just insert it
-        ansible.builtin.lineinfile:
-          path: /etc/default/grub
-          regexp: '^\s*GRUB_CMDLINE_LINUX.*audit=1'
-          state: absent
-        check_mode: true
-        changed_when: false
-        register: audit_exist
-        failed_when: false
-        tags:
-          - 4.1.1.3
-
-      # use the replace module to add it to grub bootloader and then notify
-      #  grub to rebuild
-      - name: 4.1.1.3 - enable audit service in grub
-        ansible.builtin.replace:
-          path: /etc/default/grub
-          regexp: '^GRUB_CMDLINE_LINUX="'
-          replace: 'GRUB_CMDLINE_LINUX="audit=1 '
-        notify: rebuild grub
-        when: not audit_exist.found
-        tags:
-          - 4.1.1.3
-
-      - name: 4.1.1.4 - Ensure audit_backlog_limit is sufficient, check if limit exists
-        ansible.builtin.lineinfile:
-          path: /etc/default/grub
-          regexp: '^\s*GRUB_CMDLINE_LINUX.*audit_backlog_limit'
-          state: absent
-        check_mode: true
-        changed_when: false
-        register: audit_backlog_exist
-        failed_when: false
-        tags:
-          - 4.1.1.4
-
-      - name: 4.1.1.4 - Ensure audit_backlog_limit is sufficient, add audit_backlog_limit to grub
-        ansible.builtin.replace:
-          dest: /etc/default/grub
-          regexp: '^\s*GRUB_CMDLINE_LINUX="'
-          replace: 'GRUB_CMDLINE_LINUX="audit_backlog_limit={{ audit_backlog_limit }} '
-        notify: rebuild grub
-        when: not audit_backlog_exist.found
-        tags:
-          - 4.1.1.4
-
-      - name: 4.1.1.4 - Ensure audit_backlog_limit is sufficient, update limit if it already exists (check)
-        ansible.builtin.lineinfile:
-          dest: /etc/default/grub
-          regexp: '^\s*GRUB_CMDLINE_LINUX=.*{{ audit_backlog_limit }}'
-          state: absent
-        check_mode: true
-        changed_when: false
-        register: our_limit
-        when: audit_backlog_exist.found
-        tags:
-          - 4.1.1.4
-
-      - name: 4.1.1.4 - Ensure audit_backlog_limit is sufficient, update limit if it already exists (fix)
-        ansible.builtin.replace:
-          dest: /etc/default/grub
-          regexp: 'audit_backlog_limit=[\S]*'
-          replace: 'audit_backlog_limit={{ audit_backlog_limit }}'
-        notify: rebuild grub
-        when: audit_backlog_exist.found and not our_limit.found
-        tags:
-          - 4.1.1.4
-
-      # The replace module here is looking through file and make replacements of partial lines
-
-      - name: 4.1.2.[1-2] - Configure audit log storage size
-        ansible.builtin.replace:
-          path: /etc/audit/auditd.conf
-          regexp: "{{ item.find }}"
-          replace: "{{ item.replace }}"
-        loop:
-          - {find: '^max_log_file\s+=\s+[^{{ log_file_size }}]', replace: 'max_log_file = {{ log_file_size }}'} # 4.1.2.1
-          - {find: '^max_log_file_action\s+=\s+((?!keep_logs).)*$', replace: 'max_log_file_action = keep_logs'} # 4.1.2.2
-          - {find: '^space_left_action\s+=\s+((?!email).)*$', replace: 'space_left_action = email'} # 4.1.2.2
-          - {find: '^action_mail_acct\s+=\s+((?!root).)*$', replace: 'action_mail_acct = root'} # 4.1.2.2
-          - {find: '^admin_space_left_action\s+=\s+((?!suspend).)*$', replace: 'admin_space_left_action = suspend'} # 4.1.2.2
-        notify: restart auditd
-        tags:
-          - 4.1.2.1
-          - 4.1.2.2
-          - 4.1.2.3
-
-      # For the next several checks, each one is in their own file, so we are using
-      #  the copy module to place each file independently and then motifying
-      #  a restart of auditd if anything changes.
-      - name: 4.1.4 - Ensure system logins are collected
-        ansible.builtin.template:
-          dest: /etc/audit/rules.d/login.rules
-          src: audit_rules/login.rules
-          owner: root
-          group: root
-          mode: 0600
-        notify: restart auditd
-        tags:
-          4.1.4
-
-      - name: 4.1.5 - Ensure session initiation information is collected
-        ansible.builtin.template:
-          dest: /etc/audit/rules.d/sessions.rules
-          src: audit_rules/sessions.rules
-          owner: root
-          group: root
-          mode: 0600
-        notify: restart auditd
-        tags:
-          4.1.5
-
-      - name: 4.1.6 Ensure to collect events that modify date/time
-        ansible.builtin.template:
-          dest: /etc/audit/rules.d/datetime.rules
-          src: audit_rules/datetime.rules
-          owner: root
-          group: root
-          mode: 0600
-        notify: restart auditd
-        tags:
-          - 4.1.6
-
-      - name: 4.1.7 - Ensure modifications to Mandatory Access Controls are collected
-        ansible.builtin.template:
-          dest: /etc/audit/rules.d/MAC-policy.rules
-          src: audit_rules/MAC-policy.rules
-          owner: root
-          group: root
-          mode: 0600
-        notify: restart auditd
-        tags:
-          4.1.7
-
-      - name: 4.1.8 - Ensure modifications to network environment are collected
-        ansible.builtin.template:
-          dest: /etc/audit/rules.d/network.rules
-          src: audit_rules/network.rules
-          owner: root
-          group: root
-          mode: 0600
-        notify: restart auditd
-        tags:
-          4.1.8
-
-      # This is the first control that we use the min_uid variable that we determined earlier
-      - name: 4.1.9 - Ensure modifications to discretionary access controls are collected
-        ansible.builtin.template:
-          dest: /etc/audit/rules.d/dac.rules
-          src: audit_rules/dac.rules
-          owner: root
-          group: root
-          mode: 0600
-        notify: restart auditd
-        tags:
-          4.1.9
-
-      - name: 4.1.10 - Ensure unsuccessful unauthorized file access attempts are collected
-        ansible.builtin.template:
-          dest: /etc/audit/rules.d/bad-file-access.rules
-          src: audit_rules/bad-file-access.rules
-          owner: root
-          group: root
-          mode: 0600
-        notify: restart auditd
-        tags:
-          4.1.10
-
-      - name: 4.1.11 - Ensure events that modify user/group information are collected
-        ansible.builtin.template:
-          dest: /etc/audit/rules.d/user-group-info.rules
-          src: audit_rules/user-group-info.rules
-          owner: root
-          group: root
-          mode: 0600
-        notify: restart auditd
-        tags:
-          4.1.11
-
-      - name: 4.1.12 - Ensure successful file system mounts are collected
-        ansible.builtin.template:
-          dest: /etc/audit/rules.d/file-system-mounts.rules
-          src: audit_rules/file-system-mounts.rules
-          owner: root
-          group: root
-          mode: 0600
-        notify: restart auditd
-        tags:
-          4.1.12
-
-      # Control 4.1.13 - Ensure use of privileged commands is collected, is machine dependent
-      # skipping
-
-      - name: 4.1.14 - Ensure file deletion events by users are collected
-        ansible.builtin.template:
-          dest: /etc/audit/rules.d/delete.rules
-          src: audit_rules/delete.rules
-          owner: root
-          group: root
-          mode: 0600
-        notify: restart auditd
-        tags:
-          4.1.14
-
-      - name: 4.1.15 - Ensure kernel module loading and unloading is collected
-        ansible.builtin.template:
-          dest: /etc/audit/rules.d/modules.rules
-          src: audit_rules/modules.rules
-          owner: root
-          group: root
-          mode: 0600
-        notify: restart auditd
-        tags:
-          4.1.15
-
-      - name: 4.1.16 - Ensure sysadmin actions (sudolog) are collected
-        ansible.builtin.template:
-          dest: /etc/audit/rules.d/sudolog.rules
-          src: audit_rules/sudolog.rules
-          owner: root
-          group: root
-          mode: 0600
-        notify: restart auditd
-        tags:
-          - 4.1.16
-          - 4.1.3
-
-      - name: 4.1.17 - Ensure audit configuration is immutable
-        ansible.builtin.copy:
-          dest: /etc/audit/rules.d/99-finalize.rules
-          content: |
-            -e 2
-          owner: root
-          group: root
-          mode: 0600
-        notify: restart auditd
-        tags:
-          4.1.17
-    when: enable_audit is defined and enable_audit
-
-  
-
-
-
-  # Section 4, Logging
+ # Section 4, Logging
   - name: 4.2.1.1 - Ensure rsyslog is installed
     ansible.builtin.dnf:
       name: rsyslog
@@ -1465,7 +1067,7 @@
     tags:
       - 4.2.1.2
 
-  - name: 4.2.1.4 - Ensure rsyslog default file permissions are configured
+  - name: 4.2.1.3 - Ensure rsyslog default file permissions are configured
     ansible.builtin.lineinfile:
       path: /etc/rsyslog.conf
       regexp: '^\$FileCreateMode\s+0640'
@@ -1476,42 +1078,57 @@
       mode: 0644
       state: present
     tags:
-      - 4.2.1.4
+      - 4.2.1.3
 
-  - name: 4.2.1.7 - Ensure journald writes to peristent disk
-    replace:
-      dest: /etc/rsyslog.conf
-      regexp: '^#module.*load="imtcp".*'
-      replace: 'module(load="imtcp")'
+  # Control 4.2.1.5 - Ensure rsyslog is configured to send logs to a remote log host is machine dependent
+  # skipping
+
+  - name: 4.2.2 - Configure journald
+    block:
+      - name: Find any rsyslog files where all logs are being forwarded to a loghost
+        shell: /usr/bin/grep -l -s "^*.*[^I][^I]*@" /etc/rsyslog.conf /etc/rsyslog.d/*.conf
+        register: rsyslog_forward_out
+        changed_when: false
+        failed_when: rsyslog_forward_out.rc == "2"
+        check_mode: false
+
+      - name: 4.2.2.1 - Forward journald logs to rsyslog IF rsyslog is sending logs to a log host
+        ansible.builtin.lineinfile:
+          dest: /etc/systemd/journald.conf
+          regexp: "^ForwardToSyslog=((?!yes).)*$"
+          line: "ForwardToSyslog=yes"
+          insertafter: "#ForwardToSyslog=no"
+        when: rsyslog_forward_out.stdout
     tags:
-      - 4.2.1.7
+      - 4.2.2.1
 
-  - name: 4.2.1.7 - Ensure journald writes to peristent disk
-    replace:
-      dest: /etc/rsyslog.conf
-      regexp: '^#input.*type="imtcp" port="514".*'
-      replace: 'input(type="imtcp" port="514")'
-    tags:
-      - 4.2.1.7
-
-
-  - name: 4.2.2.3 - Ensure journald is configured to compress large log files
+  - name: 4.2.2.2 - Ensure journald compresses large files
     ansible.builtin.lineinfile:
       dest: /etc/systemd/journald.conf
       regexp: "^Compress=((?!yes).)*$"
       line: "Compress=yes"
       insertafter: "^#Compress="
     tags:
-      - 4.2.2.3
+      - 4.2.2.2
 
-  - name: 4.2.2.4 - Ensure journald writes to peristent disk
+  - name: 4.2.2.3 - Ensure journald writes to peristent disk
     ansible.builtin.lineinfile:
       dest: /etc/systemd/journald.conf
       regexp: "^Storage=((?!persistent).)*$"
       line: "Storage=persistent"
       insertafter: "^#Storage="
     tags:
-      - 4.2.2.4
+      - 4.2.2.3
+
+  # Control 4.2.3, Ensure permissions on log files are configured, is machine dependant
+  # skipping
+  - name: "4.2.3 Ensure permissions on all logfiles are configured"
+    shell: find /var/log/ -type f -perm /g+wx,o+rwx -exec chmod g-wx,o-rwx "{}" +
+    changed_when: false    
+    ignore_errors: yes
+    tags:
+      - 4.2.3
+  # 4.3 - Ensure logrotate is configured skipped as machine and environment dependent
 
 
   # This control is early in order to create the files. This will
@@ -1633,18 +1250,54 @@
         when: ssh_log_level == "INFO" or ssh_log_level == "WARN"
         tags:
           - 5.2.5
-
-      # Using replace with a replace argument of "" removes the selected
-      #  text.
-      - name: 5.2.6 - Disable X11 forwarding
+      - name: 5.2.6 - Ensure SSH is configured to use PAM
         ansible.builtin.lineinfile:
-          path: /etc/ssh/sshd_config
-          state: absent
-          regexp: '^X11Forwarding\s*yes'
+          path: "/etc/ssh/sshd_config"
+          line: "UsePAM yes"
+          regexp: '^UsePAM\s+[yes|no]'
         notify: restart sshd
         tags:
           - 5.2.6
-
+      - name: 5.2.8 - Ensure HostbasedAuthentication is disabled
+        ansible.builtin.lineinfile:
+          path: /etc/ssh/sshd_config
+          line: "HostbasedAuthentication no"
+          regexp: '^HostbasedAuthentication\s*[^n]'
+        notify: restart sshd
+        tags:
+          - 5.2.8
+      - name: 5.2.9 - Ensure SSH PermitEmptyPasswords is disabled
+        ansible.builtin.lineinfile:
+          path: /etc/ssh/sshd_config
+          state: absent
+          regexp: '^PermitEmptyPasswords\s*[^n]'
+        notify: restart sshd
+        tags:
+          - 5.2.9
+      - name: 5.2.10 - Ensure PermitUserEnvironment is disabled
+        ansible.builtin.lineinfile:
+          path: /etc/ssh/sshd_config
+          state: absent
+          regexp: '^PermitUserEnvironment\s*[^n]'
+        notify: restart sshd
+        tags:
+          - 5.2.10
+      - name: 5.2.11 - Ensure IgnoreRhosts is set
+        ansible.builtin.lineinfile:
+          path: /etc/ssh/sshd_config
+          line: "IgnoreRhosts yes"
+          regexp: '^IgnoreRhosts\s*[^y]'
+        notify: restart sshd
+        tags:
+          - 5.2.11
+      - name: 5.2.15 - Ensure SSH Banner is configured
+        ansible.builtin.lineinfile:
+          path: "/etc/ssh/sshd_config"
+          line: "Banner /etc/{{ ssh_login_banner }}"
+          regexp: "^Banner /etc/{{ ssh_login_banner }}"
+        notify: restart sshd
+        tags:
+          - 5.2.15
       - name: 5.2.16 - Ensure SSH MaxAuthTires is set to {{ ssh_max_auth_tries }} or less
         ansible.builtin.lineinfile:
           path: /etc/ssh/sshd_config
@@ -1654,53 +1307,32 @@
         notify: restart sshd
         tags:
           - 5.2.16
-
-      - name: 5.2.11 - Ensure IgnoreRhosts is set
+      - name: 5.2.17 - Limit max unauthenticated startups
         ansible.builtin.lineinfile:
-          path: /etc/ssh/sshd_config
-          line: "IgnoreRhosts yes"
-          regexp: '^IgnoreRhosts\s*[^y]'
+          path: "/etc/ssh/sshd_config"
+          line: "maxstartups 10:30:60"
+          regexp: '^maxstartups\s+10:30:60'
         notify: restart sshd
         tags:
-          - 5.2.11
-
-      - name: 5.2.8 - Ensure HostbasedAuthentication is disabled
+          - 5.2.17
+      - name: 5.2.18 - Limit max sessions
         ansible.builtin.lineinfile:
-          path: /etc/ssh/sshd_config
-          line: "HostbasedAuthentication no"
-          regexp: '^HostbasedAuthentication\s*[^n]'
+          path: "/etc/ssh/sshd_config"
+          line: "maxsessions {{ ssh_max_sessions }}"
+          regexp: '^maxsessions\s+[{{ ssh_max_sessions }}]'
         notify: restart sshd
         tags:
-          - 5.2.8
-
-      - name: 5.2.10 Ensure PermitRootLogin is disbled
+          - 5.2.18
+      - name: 5.2.19 - Ensure SSH LoginGraceTime is set to {{ ssh_grace_time }} or less
         ansible.builtin.lineinfile:
           path: /etc/ssh/sshd_config
-          line: "PermitRootLogin no"
-          regexp: '^PermitRootLogin\s*[^n]'
+          line: "LoginGraceTime {{ ssh_grace_time }}"
+          regexp: "^LoginGraceTime {{ ssh_grace_time }}"
+          insertafter: "^#LoginGraceTime"
         notify: restart sshd
         tags:
-          - 5.2.10
-
-      - name: 5.2.9 - Ensure SSH PermitEmptyPasswords is disabled
-        ansible.builtin.lineinfile:
-          path: /etc/ssh/sshd_config
-          state: absent
-          regexp: '^PermitEmptyPasswords\s*[^n]'
-        notify: restart sshd
-        tags:
-          - 5.2.9
-
-      - name: 5.2.10 - Ensure PermitUserEnvironment is disabled
-        ansible.builtin.lineinfile:
-          path: /etc/ssh/sshd_config
-          state: absent
-          regexp: '^PermitUserEnvironment\s*[^n]'
-        notify: restart sshd
-        tags:
-          - 5.2.10
-
-      - name: 5.2.13 - Ensure SSH Idle Timeout is configured ClientAliveInterval
+          - 5.2.19   
+      - name: 5.2.20 - Ensure SSH Idle Timeout is configured ClientAliveInterval
         ansible.builtin.lineinfile:
           path: /etc/ssh/sshd_config
           line: "ClientAliveInterval {{ ssh_alive_interval }}"
@@ -1708,7 +1340,7 @@
           insertafter: "^#ClientAliveInterval"
         notify: restart sshd
         tags:
-          - 5.2.13
+          - 5.2.20
 
       - name: 5.2.20 - Ensure SSH Idle Timeout is configured ClientAliveCountMax
         ansible.builtin.lineinfile:
@@ -1719,74 +1351,6 @@
         notify: restart sshd
         tags:
           - 5.2.20
-
-      - name: 5.2.19 - Ensure SSH LoginGraceTime is set to {{ ssh_grace_time }} or less
-        ansible.builtin.lineinfile:
-          path: /etc/ssh/sshd_config
-          line: "LoginGraceTime {{ ssh_grace_time }}"
-          regexp: "^LoginGraceTime {{ ssh_grace_time }}"
-          insertafter: "^#LoginGraceTime"
-        notify: restart sshd
-        tags:
-          - 5.2.19
-
-      - name: 5.2.15 - Ensure SSH Banner is configured
-        ansible.builtin.lineinfile:
-          path: "/etc/ssh/sshd_config"
-          line: "Banner /etc/{{ ssh_login_banner }}"
-          regexp: "^Banner /etc/{{ ssh_login_banner }}"
-        notify: restart sshd
-        tags:
-          - 5.2.15
-
-      - name: 5.2.6 - Ensure SSH is configured to use PAM
-        ansible.builtin.lineinfile:
-          path: "/etc/ssh/sshd_config"
-          line: "UsePAM yes"
-          regexp: '^UsePAM\s+[yes|no]'
-        notify: restart sshd
-        tags:
-          - 5.2.6
-
-      - name: 5.2.17 - Disable TCP Forwarding
-        ansible.builtin.lineinfile:
-          path: "/etc/ssh/sshd_config"
-          line: "AllowTcpForwarding no"
-          regexp: '^AllowTcpForwarding\s+(yes|no)'
-          insertafter: "^#AllowTcpForwarding"
-        notify: restart sshd
-        tags:
-          - 5.2.17
-
-      - name: 5.2.17 - Limit max unauthenticated startups
-        ansible.builtin.lineinfile:
-          path: "/etc/ssh/sshd_config"
-          line: "maxstartups 10:30:60"
-          regexp: '^maxstartups\s+10:30:60'
-        notify: restart sshd
-        tags:
-          - 5.2.17
-
-      - name: 5.2.18 - Limit max sessions
-        ansible.builtin.lineinfile:
-          path: "/etc/ssh/sshd_config"
-          line: "maxsessions {{ ssh_max_sessions }}"
-          regexp: '^maxsessions\s+[{{ ssh_max_sessions }}]'
-        notify: restart sshd
-        tags:
-          - 5.2.18
-
-      - name: 5.2.20 - Ensure system crypto policy isn't overriden in SSH
-        ansible.builtin.lineinfile:
-          path: "/etc/ssh/sshd_config"
-          state: absent
-          regexp: '^\s*(CRYPTO_POLICY\s*=.*)$'
-        notify: restart sshd
-        tags:
-          - 5.2.20
-    tags:
-      - 5.2.0
-
 
   # use the system package module to ensure sudo is installed
   - name: 5.3.1 - Ensure sudo is installed
@@ -1808,7 +1372,7 @@
       - 5.3.2
 
   # Make sure the sudoers file includes the requirement to log to a file
-  - name: 1.3.3 - Ensure sudo log file exists
+  - name: 5.3.3 - Ensure sudo log file exists
     ansible.builtin.lineinfile:
       path: /etc/sudoers
       regexp: '^Defaults\s*logfile="{{ sudo_log }}"'
@@ -1817,6 +1381,10 @@
       validate: /usr/sbin/visudo -cf %s
     tags:
       - 5.3.3
+
+
+
+
 
 
 
