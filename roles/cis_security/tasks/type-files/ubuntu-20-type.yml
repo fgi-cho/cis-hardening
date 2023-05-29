@@ -574,6 +574,7 @@
       apt:
         name: systemd-coredump
         state: present
+      ignore_errors: yes
     - name: 1.5.4 Ensure core dumps are restricted | coredump.conf
       lineinfile:
         dest: /etc/systemd/coredump.conf
