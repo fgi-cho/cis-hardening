@@ -239,9 +239,9 @@
         mount:
           path: /home
           src: /dev/mapper/system-home
-          fstype: "{{ homesystem.stdout }}"
+          fstype:  "{{ homesystem.stdout }}"
           state: present
-          opts: rw,nosuid,nodev,relatime,attr2,inode64,logbufs=8,logbsize=32k,usrquota,grpquota
+          opts: defaults,rw,nosuid,nodev,usrquota,grpquota,relatime
         register: home_conf
       - name: Remount /home
         mount:
@@ -859,12 +859,11 @@
           path: /etc/postfix/main.cf
         register: postfix_out
         changed_when: false
-
       - name: 2.2.17 - If the file exists and not a mail server, then set loopback only
-        ansible.builtin.replace:
+        ansible.builtin.lineinfile:
           dest: /etc/postfix/main.cf
-          regexp: "^inet_interfaces = ((?!localhost).)*$"
-          replace: "inet_interfaces = loopback-only"
+          regexp: "^inet_interfaces"
+          line: "inet_interfaces = loopback-only"
         when: postfix_out.stat.exists and not email_server
         notify: restart postfix
     tags:
@@ -1133,6 +1132,15 @@
 
   # This control is early in order to create the files. This will
   # make sure they are available when cron starts
+  - name: Remove /etc/cron.deny
+    file:
+      path: "{{ item }}"
+      state: absent
+    with_items:
+      - /etc/cron.deny
+      - /etc/at.deny
+    tags:
+      - 5.1.8
   - name: Create the cron/at allow files (5.1.8)
     ansible.builtin.copy:
       dest: "{{ item }}"
@@ -1310,16 +1318,16 @@
       - name: 5.2.17 - Limit max unauthenticated startups
         ansible.builtin.lineinfile:
           path: "/etc/ssh/sshd_config"
-          line: "maxstartups 10:30:60"
-          regexp: '^maxstartups\s+10:30:60'
+          line: "MaxStartups 10:30:60"
+          regexp: '^MaxStartups\s+'
         notify: restart sshd
         tags:
           - 5.2.17
       - name: 5.2.18 - Limit max sessions
         ansible.builtin.lineinfile:
           path: "/etc/ssh/sshd_config"
-          line: "maxsessions {{ ssh_max_sessions }}"
-          regexp: '^maxsessions\s+[{{ ssh_max_sessions }}]'
+          line: "MaxSessions {{ ssh_max_sessions }}"
+          regexp: '^MaxSessions\s+'
         notify: restart sshd
         tags:
           - 5.2.18
@@ -1327,7 +1335,7 @@
         ansible.builtin.lineinfile:
           path: /etc/ssh/sshd_config
           line: "LoginGraceTime {{ ssh_grace_time }}"
-          regexp: "^LoginGraceTime {{ ssh_grace_time }}"
+          regexp: "^LoginGraceTime"
           insertafter: "^#LoginGraceTime"
         notify: restart sshd
         tags:
@@ -1336,7 +1344,7 @@
         ansible.builtin.lineinfile:
           path: /etc/ssh/sshd_config
           line: "ClientAliveInterval {{ ssh_alive_interval }}"
-          regexp: "^ClientAliveInterval {{ ssh_alive_interval }}"
+          regexp: "^ClientAliveInterval"
           insertafter: "^#ClientAliveInterval"
         notify: restart sshd
         tags:
@@ -1346,8 +1354,8 @@
         ansible.builtin.lineinfile:
           path: /etc/ssh/sshd_config
           line: "ClientAliveCountMax {{ ssh_alive_count_max }}"
-          regexp: "^ClientAliveCountMax {{ ssh_alive_count_max }}"
-          insertafter: "^#ClientAliveCountMax"
+          regexp: "^ClientAliveCountMax"
+          insertafter: "^#ClientAliveInterval"
         notify: restart sshd
         tags:
           - 5.2.20
@@ -1426,9 +1434,22 @@
         when: password_req_digit
     tags:
       - 5.5.1
-
-
- 
+  - name: 5.5.2 - Ensure lockout for failed password attempts is configured 
+    block:
+      - name: add deny
+        ansible.builtin.lineinfile:
+          dest: /etc/security/faillock.conf
+          line: "deny = 5"
+          regexp: "^deny"
+          state: present
+      - name: 5.5.2 add unlock_time
+        ansible.builtin.lineinfile:
+          dest: /etc/security/faillock.conf
+          line: "unlock_time = 900"
+          regexp: "^unlock_time"
+          state: present
+    tags:
+      - 5.5.2
   - name: 5.6.1.2 - Ensure password change days is set to {{ password_min_days }}
     ansible.builtin.lineinfile:
       dest: /etc/login.defs
@@ -1446,7 +1467,25 @@
       state: present
     tags:
       - 5.6.1.3
-
+  - name: 5.6.1.5 Ensure all users last password change date is in the past
+    block:
+      - name: 5.6.1.5 Ensure all users last password change date is in the past | get list
+        shell: |
+          awk -F: '{print $1}' /etc/shadow | while read -r user
+          do
+            if [[ $(date --date="$(chage --list "$user" | grep '^Last password change' | cut -d: -f2)" +%s) > $(date +%s) ]];then
+              echo "$user"
+            fi
+          done
+        register: output_5_6_1_5
+        changed_when: false
+      - name: 5.6.1.5 Ensure all users last password change date is in the past | save list
+        copy:
+          dest: "{{ outputfiles }}/5.6.1.5"
+          content: "{{ output_5_6_1_5.stdout_lines }}"
+    ignore_errors: yes
+    tags:
+    - 5.6.1.5
   - name: 5.6.3 - Ensure default shell timeout is {{ shell_timeout }} seconds or less
     ansible.builtin.lineinfile:
       dest: "{{ item }}"
@@ -1517,6 +1556,8 @@
           msg: "World writiable files found: {{ ww_dirs.stdout }}"
         changed_when: true
         when: ww_dirs.stdout
+      - name: 6.1.2 Remove any world writiable files directories
+        shell: df --local -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev -type d \( -perm -0002 -a ! -perm -1000 \) 2>/dev/null | xargs -I '{}' chmod a+t '{}' 
     ignore_errors: yes
     tags:
       - 6.1.2
@@ -1525,10 +1566,10 @@
       path: /etc/{{ item }}
       owner: root
       group: root
-      mode: 0644
+      mode: 0000
     loop:
-      - passwd
-      - group
+      - gshadow-
+      - shadow-
       - shadow
       - gshadow
     tags:
@@ -1543,10 +1584,10 @@
       group: root
       mode: 0644
     with_items:
+      - passwd
       - passwd-
-      - shadow-
+      - group
       - group-
-      - gshadow-
     tags:
       - 6.1.6
       - 6.1.7
@@ -1762,6 +1803,33 @@
   # Control 6.2.7 is environment dependent, skipping
   # Control 6.2.8 is environment dependent, skipping
   # Controls 6.2.[9-13,20] are recommended to be handled by monitoring software
+# 6.2.9 Ensure all users' home directories exist
+  - name: 6.2.9 Ensure all users' home directories exist
+    block:
+      - name: 6.2.9 Ensure all users' home directories exist | list
+        shell: |
+          grep -E -v '^(halt|sync|shutdown)' /etc/passwd | awk -F: '($7 != "'"$(which nologin)"'" && $7 != "/bin/false") { print $1 " " $6 }' | while
+          read -r user dir
+          do
+              if [ ! -d "$dir" ]; then
+                  echo "${user}"
+              fi
+          done
+        register: output_6_2_9
+        changed_when: false
+      - name: 6.2.9 Ensure all users' home directories exist | save
+        copy:
+          dest: "{{ outputfiles }}/6.2.9"
+          content: "{{ output_6_2_9.stdout_lines }}"
+      - name: 6.2.9 Ensure all users' home directories exist | fix
+        user:
+          name: "{{ item }}"
+          create_home: yes
+        with_items: "{{ output_6_2_9.stdout_lines }}"
+        when: "{{ output_6_2_9.stdout_lines|length > 0 }}"
+    ignore_errors: yes
+    tags:
+      - 6.2.9
 
   - name: 6.2.10 - Report on shadow group in /etc/group
     block:
