@@ -1470,12 +1470,26 @@
       - 5.5.3
   - name: 5.5.4 - Verify password hashing algorithm is sha512
     block:
-      - name: 5.5.4 Ensure password reuse is limited | update file according to CIS
+      - name: 5.5.3/5.5.4 PAM checks
+        ansible.builtin.lineinfile:
+          dest: /etc/pam.d/password-auth
+          regexp: '^password\s+sufficient.*(pam_pwhistory\.so|pam_unix\.so)(.*)$'
+          line: "password    sufficient    pam_unix.so yescrypt shadow nullok use_authtok remember=5 sha512"
+          insertafter: '^password\s+requisite'
+          state: present
+      - name: 5.5.4 Ensure password reuse is limited | update /etc/pam.d/system-auth 
         replace:
           dest: /etc/pam.d/system-auth
           replace: "password    sufficient    pam_unix.so yescrypt shadow nullok use_authtok remember=5 sha512"
           regexp: '^password\s+sufficient.*(pam_pwhistory\.so|pam_unix\.so)(.*)$'
           after: '^password\s+requisite'
+      - name: 5.5.4 Ensure password reuse is limited | update /etc/pam.d/password-auth
+        replace:
+          dest: /etc/pam.d/password-auth
+          replace: "password    sufficient    pam_unix.so yescrypt shadow nullok use_authtok remember=5 sha512"
+          regexp: '^password\s+sufficient.*(pam_pwhistory\.so|pam_unix\.so)'
+          after: '^password\s+requisite'
+
       - name: 5.5.4 Setting password hashing algorithm is sha512 / libuser.conf
         replace:
           dest: /etc/libuser.conf
