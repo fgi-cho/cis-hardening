@@ -759,7 +759,7 @@
       - 2.3.6
   - name: 2.2.10 - Remove httpd; add to removal list
     ansible.builtin.set_fact:
-      unneeded_packages: "{{ unneeded_packages + [ 'httpd' ] + [ 'nginx' ] }}"
+      unneeded_packages: "{{ unneeded_packages + [ 'httpd' ] }}"
     when: http_server is defined and not http_server
     tags:
       - 2.2.10
