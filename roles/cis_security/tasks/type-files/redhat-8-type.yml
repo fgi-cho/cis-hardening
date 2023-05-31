@@ -1537,26 +1537,21 @@
         when: password_req_digit
     tags:
       - 5.4.1
-  - name: 5.4.3 - Ensure lockout for failed password attempts is configured
-    block:
-      - name: Verify that the remembered password history is 5 or more
-        shell: grep -P '^\h*password\h+(requisite|sufficient)\h+(pam_pwhistory\.so|pam_unix\.so)\h+([^#\n\r]+\h+)?remember=([5-9]|[1-9][0-9]+)\h*(\h+.*)?$' /etc/pam.d/system-auth
-        register: pam_hist
-        ignore_errors: yes
-      - name: Set remembered password history is 5 or more
-        lineinfile:
-          dest: /etc/pam.d/system-auth
-          regexp: '^password\s+sufficient.*(pam_pwhistory\.so|pam_unix\.so)'
-          state: absent
-        when: pam_hist.stdout == ""
-      - name: 5.5.3 Ensure password reuse is limited | update file according to CIS
-        lineinfile:
-          dest: /etc/pam.d/system-auth
-          line: "password    sufficient    pam_unix.so yescrypt shadow nullok use_authtok remember=5 sha512"
-          insertafter: '^password\s+?requisite.*'
-          state: present
-          firstmatch: true
-        when: pam_hist.stdout == ""
+  - name: 5.4.3 PAM checks
+    ansible.builtin.lineinfile:
+      dest: /etc/pam.d/system-auth
+      regexp: '^password\s+sufficient.*(pam_pwhistory\.so|pam_unix\.so)(.*)$'
+      line: "password    sufficient    pam_unix.so yescrypt shadow nullok use_authtok remember=5 sha512"
+      insertafter: '^password\s+requisite'
+      state: present
+    tags:
+      - 5.4.3
+  - name: 5.4.3 Ensure password reuse is limited | update file according to CIS
+    replace:
+      dest: /etc/pam.d/system-auth
+      replace: "password    sufficient    pam_unix.so yescrypt shadow nullok use_authtok remember=5 sha512"
+      regexp: '^password\s+sufficient.*(pam_pwhistory\.so|pam_unix\.so)(.*)$'
+      after: '^password\s+requisite'
     tags:
       - 5.4.3
 
