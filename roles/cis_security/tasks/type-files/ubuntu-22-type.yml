@@ -31,7 +31,7 @@
   block:
     - name: 1.1.1.1 Ensure mounting of cramfs filesystems is disabled
       lineinfile:
-        dest: /etc/modprobe.d/CIS.conf
+        dest: /etc/modprobe.d/cramfs.conf
         regexp: '{{item.From}}'
         line:  '{{item.To}}'
         state: present
@@ -40,8 +40,8 @@
         mode: 0644
         create: true
       with_items:
-         - { From: '^(#)?install cramfs', To: 'install cramfs /bin/true'}
-         -  { From: '^(#)?blacklist cramfs', To: 'blacklist cramfs'}
+         - { From: '(?m)^\S+\s+install cramfs', To: 'install cramfs /bin/true'}
+         -  { From: '(?m)^\S+\s+blacklist cramfs', To: 'blacklist cramfs'}
     - name: 1.1.1.1 Ensure mounting of cramfs filesystems is disabled | modprobe
       modprobe:
         name: cramfs
@@ -355,14 +355,14 @@
   block:
     - name: 1.1.10 Disable USB Storage | modprobe
       lineinfile:
-        dest: /etc/modprobe.d/CIS.conf
+        dest: /etc/modprobe.d/usb-storage.conf
         regexp: '{{item.From}}'
         line:  '{{item.To}}'
         state: present
         create: true
       with_items:
-         - { From: '^(#)?install usb-storage', To: 'install usb-storage /bin/true'}
-         -  { From: '^(#)?blacklist usb-storage', To: 'blacklist usb-storage'}
+         - { From: '(?m)^\S+\s+install usb-storage', To: 'install usb-storage /bin/true'}
+         -  { From: '(?m)^\S+\s+blacklist usb-storage', To: 'blacklist usb-storage'}
 #        regexp: "^(#)?install usb-storage(\\s|$)\nblacklist usb-storage"
 #        line: "install usb-storage /bin/true\nblacklist usb-storage"
 #        state: present
@@ -562,6 +562,7 @@
       apt:
         name: systemd-coredump
         state: present
+      ignore_errors: yes
     - name: 1.5.4 Ensure core dumps are restricted | coredump.conf
       lineinfile:
         dest: /etc/systemd/coredump.conf

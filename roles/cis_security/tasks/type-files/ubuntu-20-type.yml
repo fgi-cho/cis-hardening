@@ -27,159 +27,36 @@
 # Removing support for unneeded filesystem types reduces the local attack surface of the
 # server. If this filesystem type is not needed, disable it.
 
-- name: 1.1.1.1 Ensure mounting of cramfs filesystems is disabled
+- name: 1.1.1.[1..7] Ensure mounting of unused filesystems is disabled
   block:
-    - name: 1.1.1.1 Ensure mounting of cramfs filesystems is disabled
+    - name: 1.1.1.[1..7] Ensure mounting of unused filesystems is disabled
       lineinfile:
-        dest: /etc/modprobe.d/CIS.conf
-        regexp: "^(#)?install cramfs(\\s|$)"
-        line: "install cramfs /bin/true"
+        dest: "/etc/modprobe.d/{{ item }}.conf"
+        regexp: '(?m)^\S+\s+install {{ item }}'
+        line:  "install {{ item }} /bin/true"
         state: present
         owner: root
         group: root
         mode: 0644
-        create: true
-    - name: 1.1.1.1 Ensure mounting of cramfs filesystems is disabled | modprobe
-      modprobe:
-        name: cramfs
-        state: absent
-  when: disable_cramfs
-  tags:
-    - section1
-    - level_1_server
-    - level_1_workstation
-    - 1.1.1.1
-    - filesystems
-    - cramfs
-    - modprobe
-# 1.1.1.2 Ensure mounting of freevxfs filesystems is disabled
-# The freevxfs filesystem type is a free version of the Veritas type filesystem. This is the
-# primary filesystem type for HP-UX operating systems.
-- name: 1.1.1.2 Ensure mounting of freevxfs filesystems is disabled
-  block:
-    - name: 1.1.1.2 Ensure mounting of freevxfs filesystems is disabled
+        create: true 
+      loop: "{{ unused_fs }}"
+    - name: Ensure that unused filesystems are in blacklist
       lineinfile:
-        dest: /etc/modprobe.d/CIS.conf
-        regexp: "^(#)?install freevxfs"
-        line: "install freevxfs /bin/true"
+        dest: "/etc/modprobe.d/{{ item }}.conf"
+        regexp: '(?m)^\S+\s+blacklist {{ item }}'
+        line:  "blacklist {{ item }}"
         state: present
-        create: true
-    - name: 1.1.1.2 Ensure mounting of freevxfs filesystems is disabled | modprobe
+      loop: "{{ unused_fs }}"
+    - name: 1.1.1.[1..7] Ensure mounting of cramfs filesystems is disabled | modprobe
       modprobe:
-        name: freevxfs
+        name: "{{ item }}"
         state: absent
-  when: disable_freevxfs
+      loop: "{{ unused_fs}}"
   tags:
-    - section1
-    - level_1_server
-    - level_1_workstation
-    - "1.1.1.2"
-    - filesystems
-    - freevxfs
-    - modprobe
-# 1.1.1.3 Ensure mounting of jffs2 filesystems is disabled
-# The jffs2 (journaling flash filesystem 2) filesystem type is a log-structured filesystem used
-# in flash memory devices.
-- name: 1.1.1.3 Ensure mounting of jffs2 filesystems is disabled
-  block:
-    - name: 1.1.1.3 Ensure mounting of jffs2 filesystems is disabled
-      lineinfile:
-        dest: /etc/modprobe.d/CIS.conf
-        regexp: "^(#)?install jffs2(\\s|$)"
-        line: "install jffs2 /bin/true"
-        state: present
-        create: true
-    - name: 1.1.1.3 Ensure mounting of jffs2 filesystems is disabled
-      modprobe:
-        name: jffs2
-        state: absent
-  when: disable_jffs2
-  tags:
-    - section1
-    - level_1_server
-    - level_1_workstation
-    - 1.1.1.3
-    - filesystems
-    - jffs2
-    - modprobe
-# 1.1.1.4 Ensure mounting of hfs filesystems is disabled
-# The hfs filesystem type is a hierarchical filesystem that allows you to mount Mac OS
-# filesystems.
-- name: 1.1.1.4 Ensure mounting of hfs filesystems is disabled
-  block:
-    - name: 1.1.1.4 Ensure mounting of hfs filesystems is disabled
-      lineinfile:
-        dest: /etc/modprobe.d/CIS.conf
-        regexp: "^(#)?install hfs(\\s|$)"
-        line: "install hfs /bin/true"
-        state: present
-        create: true
-    - name: 1.1.1.4 Ensure mounting of hfs filesystems is disabled | modprobe
-      modprobe:
-        name: hfs
-        state: absent
-  when: disable_hfs
-  tags:
-    - section1
-    - level_1_server
-    - level_1_workstation
-    - 1.1.1.4
     - filesystems
     - modprobe
-    - hfs
-# 1.1.1.5 Ensure mounting of hfsplus filesystems is disabled
-# The hfsplus filesystem type is a hierarchical filesystem designed to replace hfs that allows
-# you to mount Mac OS filesystems.
-- name: 1.1.1.5 Ensure mounting of hfsplus filesystems is disabled
-  block:
-    - name: 1.1.1.5 Ensure mounting of hfsplus filesystems is disabled
-      lineinfile:
-        dest: /etc/modprobe.d/CIS.conf
-        regexp: "^(#)?install hfsplus(\\s|$)"
-        line: "install hfsplus /bin/true"
-        state: present
-        create: true
-    - name: 1.1.1.5 Ensure mounting of hfsplus filesystems is disabled | modprobe
-      modprobe:
-        name: hfsplus
-        state: absent
-  when: disable_hfsplus
-  tags:
     - section1
-    - level_1_server
-    - level_1_workstation
-    - 1.1.1.5
-    - filesystems
-    - hfsplus
-    - modprobe
 
-# 1.1.1.7 Ensure mounting of udf filesystems is disabled
-# The udf filesystem type is the universal disk format used to implement ISO/IEC 13346 and
-# ECMA-167 specifications. This is an open vendor filesystem type for data storage on a
-# broad range of media. This filesystem type is necessary to support writing DVDs and newer
-# optical disc formats.
-- name: 1.1.1.7 Ensure mounting of udf filesystems is disabled
-  block:
-    - name: 1.1.1.7 Ensure mounting of udf filesystems is disabled
-      lineinfile:
-        dest: /etc/modprobe.d/CIS.conf
-        regexp: "^(#)?install udf(\\s|$)"
-        line: "install udf /bin/true"
-        state: present
-        create: true
-    - name: 1.1.1.7 Ensure mounting of udf filesystems is disabled | modprobe
-      modprobe:
-        name: udf
-        state: absent
-  when: disable_udf
-  tags:
-    - section1
-    - level_1_server    
-    - level_1_workstation
-    - 1.1.1.7
-    - filesystems
-    - udf
-    - modprobe
 
 # 1.1.2 Ensure /tmp is configured
 # The /tmp directory is a world-writable directory used for temporary storage by all users
@@ -388,11 +265,14 @@
   block:
     - name: 1.1.24 Disable USB Storage | modprobe
       lineinfile:
-        dest: /etc/modprobe.d/CIS.conf
-        regexp: "^(#)?install usb-storage(\\s|$)"
-        line: "install usb-storage /bin/true"
+        dest: /etc/modprobe.d/usb-storage.conf
+        regexp: '{{item.From}}'
+        line:  '{{item.To}}'
         state: present
         create: true
+      with_items:
+         - { From: '(?m)^\S+\s+install usb-storage', To: 'install usb-storage /bin/true'}
+         -  { From: '^(#)?blacklist usb-storage', To: 'blacklist usb-storage'} 
     - name: 1.1.24 Disable USB Storage
       modprobe:
         name: usb-storage
@@ -921,6 +801,7 @@
     state: absent
     purge: yes
   when: remove_XWindowSystem
+  ignore_errors: yes
   tags:
     - section2
     - level_1_server
@@ -2422,29 +2303,28 @@
     - level_1_workstation
     - 5.3.XX
 
-# 5.4 Configure PAM
-
 # 5.4.3 Ensure password reuse is limited
 # Locking out user IDs after n unsuccessful consecutive login attempts mitigates brute force password attacks against your systems.
-
-#- name: 5.4.3.1 Ensure password reuse is limited | delete possible duplicate lines
-#  lineinfile:
-#    dest: /etc/pam.d/common-password
-#    regexp: '^password.*pam_pwhistory\.so.*remember.*'
-#    state: absent
-#  tags:
-#    - section5
-#    - level_1_server
-#    - level_1_workstation
-#    - 5.4.3
+- name: 5.4.3.1 Ensure password reuse is limited | delete possible duplicate lines
+  lineinfile:
+    dest: /etc/pam.d/common-password
+    regexp: '^password.*pam_pwhistory\.so.*remember.*'
+    state: absent
+  changed_when: false
+  tags:
+    - section5
+    - level_1_server
+    - level_1_workstation
+    - 5.4.3
 
 - name: 5.4.3.2 Ensure password reuse is limited | update file according to CIS
   lineinfile:
     dest: /etc/pam.d/common-password
-    line: "password       required                        pam_pwhistory.so remember=5"
+    line: "password       required                       pam_pwhistory.so remember=5"
     insertafter: '^password\s+?requisite.*'
     state: present
     firstmatch: true
+  changed_when: false
   tags:
     - section5
     - level_1_server
@@ -2457,14 +2337,14 @@
   lineinfile:
     dest: /etc/pam.d/common-password
     regexp: '^password\s+\[success(.*)(md5|blowfish|bigcrypt|sha256|sha512)(.*)$'
-#    line: 'password       [success\1sha512 \3'
-    line: "password       [success=1 default=ignore]      pam_unix.so obscure use_authtok try_first_pass sha512"
+    line: 'password [success\1 sha512 \3'
     backrefs: true
   tags:
     - section5
     - level_1_server
     - level_1_workstation
     - 5.4.4
+
 # 5.5 User Accounts and Environment
 # 5.5.1 Set Shadow Password Suite Parameters
 # # # The window of opportunity for an attacker to leverage compromised credentials or successfully compromise credentials via an online brute force attack is limited by the age of the password. Therefore, reducing the maximum age of a password also reduces an attacker's window of opportunity.
@@ -2794,11 +2674,11 @@
       copy:
         dest: "{{ outputfiles }}/6.1.10"
         content: "{{ output_6_1_10.stdout_lines }}"
-    - name: 6.1.10 Ensure no world writable files exist | fix permission
-      file:
-        path: "{{ item }}"
-        mode: "o-w"
-      with_items: "{{ output_6_1_10.stdout_lines }}"
+#    - name: 6.1.10 Ensure no world writable files exist | fix permission
+#      file:
+#        path: "{{ item }}"
+#        mode: "o-w"
+#      with_items: "{{ output_6_1_10.stdout_lines }}"
   ignore_errors: yes
   tags:
     - section6

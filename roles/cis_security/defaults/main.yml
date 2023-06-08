@@ -39,8 +39,8 @@ dhcp_server: false              # Linux: DHCP Server
 dns_server: false               # Linux: DNS Server
 email_server: false             # Linux: Mail Server, If set to true, and the packages exist, it will set mail relay to local only
 ftp_server: false               # Linux: FTP SErver
-http_server: false              # Linux: HTTP Server (will remove dependent packages as well)
-nfs_server: false               # Linux: NFS Server
+http_server: true             # Linux: HTTP Server (will remove dependent packages as well)
+nfs_server: true               # Linux: NFS Server
 proxy_server: false             # Linux: Squid proxy server
 smb_server: false               # Linux: Samba Server
 tftp_server: false              # Linux: TFTPd Server. Option for RHEL7 only
@@ -83,7 +83,7 @@ password_req_digit: true          # Linux
 password_req_upper: true          # Linux
 password_req_lower: true          # Linux
 password_req_special: true        # Linux
-password_min_days: 7              # Common: Windows has this control listed as 1 day
+password_min_days: 0              # Common: Windows has this control listed as 1 day
 password_expire_days: 365         # Common: Windows has this control listed as 24 days
 password_warning_days: 7          # Common: Windows has this control listed as 'between 5 and 14 days'
 password_inactive_lock_days: 30   # Linux
@@ -182,6 +182,15 @@ au_update_time: "3"               # Windows. Configure what time automatic updat
 
 
 # Defaults file for Auto-CIS-Ubuntu-Linux-20.04-LTS-Remediation
+# List of unused filesystems
+
+unused_fs:
+  - cramfs
+  - freevxfs
+  - freevxfs
+  - hfs
+  - hfsplus
+  - udf
 
 # Section 1 settings
 disable_cramfs: yes
@@ -326,10 +335,12 @@ ssh_root_login_ips: None
 ## 5.4.1.1 Ensure password expiration is 365 days or less
 pass_expire_in_days: 300
 pass_warn_age: 7
-pass_min_days: 7
+pass_min_days: 0 
 ## 5.4.1.1 Ensure password expiration is 365 days or less
 list_of_os_users:
   - root
+  - sshaccess
+  - pam_rpcdisc
 ## 5.4.1.4 Ensure inactive password lock is 30 days or less
 ##Note: A value of -1 would disable this setting
 account_inactive: 30
