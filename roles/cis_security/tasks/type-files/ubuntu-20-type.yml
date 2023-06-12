@@ -47,6 +47,7 @@
         line:  "blacklist {{ item }}"
         state: present
       loop: "{{ unused_fs }}"
+      ignore_errors: yes
     - name: 1.1.1.[1..7] Ensure mounting of cramfs filesystems is disabled | modprobe
       modprobe:
         name: "{{ item }}"
@@ -874,11 +875,21 @@
 # in the UNIX environment. It provides the ability for systems to mount file systems of other
 # servers through the network.
 - name: 2.1.7 Ensure NFS is not installed
-  apt:
-    name: nfs-kernel-server
-    state: absent
-    purge: yes
-  when: remove_NFS
+  block:
+    - name: Check is NFS is operational
+      systemd:
+        name: nfs.service
+      register: nfs_service
+      ignore_errors: yes
+    - name: NFS service status
+      debug:
+        var: smbd_service.status.ActiveState
+    - name: 2.1.7 Ensure NFS is not installed
+      apt:
+        name: nfs-kernel-server
+        state: absent
+        purge: yes
+      when: remove_NFS and nfs_service.status.ActiveState == "inactive"
   tags:
     - section2
     - level_1_server
@@ -918,11 +929,21 @@
 # Note: Several httpd servers exist and can use other service names. apache2 and nginx are
 # example services that provide an HTTP server. These and other services should also be audited
 - name: 2.1.10 Ensure HTTP server is not installed
-  apt:
-    name: ["{{ web_server_name }}"]
-    state: absent
-    purge: yes
-  when: remove_HTTPserver
+  block:
+    - name: Check is HTTP server is operational
+      systemd:
+        name: apache2.service
+      register: https_service
+      ignore_errors: yes
+    - name: Http server status
+      debug:
+        var: https_service.status.ActiveState
+    - name: Ensure HTTP server is not installed
+      apt:
+        name: ["{{ web_server_name }}"]
+        state: absent
+        purge: yes
+      when: remove_HTTPserver and https_service.status.ActiveState == "inactive"
   tags:
     - section2
     - level_1_server
@@ -1210,12 +1231,21 @@
 # Setting the flags to 0 ensures that a system with multiple interfaces (for example, a hard proxy), will never be able to forward packets, and therefore, never serve as a router.
 - name: 3.2.2 Ensure IP forwarding is disabled"
   block:
+    - name: Check for runing docker
+      systemd:
+        name: docker.service
+      register: docker_service
+      ignore_errors: yes
+    - name: Docker service status
+      debug:
+        var: docker_service.status.ActiveState    
     - name: 3.2.2 Ensure IP forwarding is disabled | ipv4"
       sysctl:
         name: net.ipv4.ip_forward
         value: "0"
         state: present
         reload: true
+      when: docker_service.status.ActiveState == "inactive"
     - name: 3.2.2 Ensure IP forwarding is disabled | ipv6"
       sysctl:
         name: net.ipv6.conf.all.forwarding

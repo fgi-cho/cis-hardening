@@ -1336,12 +1336,21 @@
 # Setting the flags to 0 ensures that a system with multiple interfaces (for example, a hard proxy), will never be able to forward packets, and therefore, never serve as a router.
 - name: 3.2.2 Ensure IP forwarding is disabled"
   block:
+    - name: Check for runing docker
+      systemd:
+        name: docker.service
+      register: docker_service
+      ignore_errors: yes
+    - name: Docker service status
+      debug:
+        var: docker_service.status.ActiveState
     - name: 3.2.2 Ensure IP forwarding is disabled | ipv4"
       sysctl:
         name: net.ipv4.ip_forward
         value: "0"
         state: present
         reload: true
+      when: docker_service.status.ActiveState == "inactive"
     - name: 3.2.2 Ensure IP forwarding is disabled | ipv6"
       sysctl:
         name: net.ipv6.conf.all.forwarding

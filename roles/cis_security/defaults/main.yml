@@ -39,7 +39,7 @@ dhcp_server: false              # Linux: DHCP Server
 dns_server: false               # Linux: DNS Server
 email_server: false             # Linux: Mail Server, If set to true, and the packages exist, it will set mail relay to local only
 ftp_server: false               # Linux: FTP SErver
-http_server: true             # Linux: HTTP Server (will remove dependent packages as well)
+http_server: true              # Linux: HTTP Server (will remove dependent paekages as well)
 nfs_server: true               # Linux: NFS Server
 proxy_server: false             # Linux: Squid proxy server
 smb_server: false               # Linux: Samba Server
@@ -252,7 +252,7 @@ chronyservers:
 chrony_keys: /etc/chrony/chrony.keys
 chrony_log_dir: /var/log/chrony
 
-web_server_name: nginx
+web_server_name: apache2
 remove_HTTPserver: no
 remove_xinetd: yes
 remove_openbsd_inetd: yes
