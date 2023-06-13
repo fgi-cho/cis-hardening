@@ -874,9 +874,17 @@
   # The sysctl module will configure certain sysctl parameters. They are
   #  collected into a loop here to speed the implementation
   # Once complete, notify the system to flush the network routes
-  - name: 3.1 - Set networking parameters for host only communications
+  - name: 3.1.1 - Set networking parameters for host only communications
     block:
-      - name: 3.1 - Set ipv4 networking parameters (OFF)
+      - name: Check for runing docker
+        systemd:
+          name: docker.service
+        register: docker_service
+        ignore_errors: yes
+      - name: Docker service status
+        debug:
+          var: docker_service.status.ActiveState
+      - name: 3.1.1 - Set ipv4 networking parameters (OFF)
         ansible.builtin.sysctl:
           name: "{{ item }}"
           value: "0"
@@ -885,10 +893,7 @@
           sysctl_set: true
         loop:
           - net.ipv4.conf.all.forwarding # (3.1.1)
-          - net.ipv4.conf.all.send_redirects # (3.1.2)
-          - net.ipv4.conf.default.send_redirects # (3.1.2)
-        notify: flush network routes
-
+        when: docker_service.status.ActiveState == "inactive"
       - name: 3.1 - Set ipv6 networking parameters (OFF)
         ansible.builtin.sysctl:
           name: "{{ item }}"
@@ -901,8 +906,20 @@
         when: not ipv6_disable
         notify: flush network routes
     tags:
-      - 3.1.0
-
+      - 3.1.1
+  - name: 3.1.2 - Set ipv4 networking parameters (OFF)
+      ansible.builtin.sysctl:
+        name: "{{ item }}"
+        value: "0"
+        reload: true
+        state: present
+        sysctl_set: true
+      loop:
+        - net.ipv4.conf.all.send_redirects # (3.1.2)
+        - net.ipv4.conf.default.send_redirects # (3.1.2)
+      notify: flush network routes
+    tags:
+      -3.1.2
   - name: 3.2 - Set networking parameters for host as router communications
     block:
       - name: 3.2 - Set ipv4 network parameters (OFF)
