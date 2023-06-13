@@ -894,7 +894,7 @@
         loop:
           - net.ipv4.conf.all.forwarding # (3.1.1)
         when: docker_service.status.ActiveState == "inactive"
-      - name: 3.1 - Set ipv6 networking parameters (OFF)
+      - name: 3.1.1 - Set ipv6 networking parameters (OFF)
         ansible.builtin.sysctl:
           name: "{{ item }}"
           value: "0"
@@ -908,18 +908,18 @@
     tags:
       - 3.1.1
   - name: 3.1.2 - Set ipv4 networking parameters (OFF)
-      ansible.builtin.sysctl:
-        name: "{{ item }}"
-        value: "0"
-        reload: true
-        state: present
-        sysctl_set: true
-      loop:
-        - net.ipv4.conf.all.send_redirects # (3.1.2)
-        - net.ipv4.conf.default.send_redirects # (3.1.2)
-      notify: flush network routes
+    ansible.builtin.sysctl:
+      name: "{{ item }}"
+      value: "0"
+      reload: true
+      state: present
+      sysctl_set: true
+    loop:
+      - net.ipv4.conf.all.send_redirects # (3.1.2)
+      - net.ipv4.conf.default.send_redirects # (3.1.2)
+    notify: flush network routes
     tags:
-      -3.1.2
+      - 3.1.2
   - name: 3.2 - Set networking parameters for host as router communications
     block:
       - name: 3.2 - Set ipv4 network parameters (OFF)
