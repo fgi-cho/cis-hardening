@@ -999,17 +999,37 @@
 # The Network File System (NFS) is one of the first and most widely distributed file systems
 # in the UNIX environment. It provides the ability for systems to mount file systems of other
 # servers through the network.
-- name: 2.2.6 Ensure NFS is not installed
-  apt:
-    name: nfs-kernel-server
-    state: absent
-    purge: yes
-  when: remove_NFS
+- name: 2.[2-3].6 Ensure NFS is not installed
+  block:
+    - name: 2.[2-3].6 Check for nfs in /etc/fstab
+      shell: grep nfs /etc/fstab
+      register: nfs_mp
+      ignore_errors: yes
+    - name: 2.[2-3].6 Check for nfs shares
+      shell: nfsstat -m
+      register: nfs_shares
+      ignore_errors: yes
+    - name: 2.[2-3].6 Fstab result
+      debug:
+        var: nfs_mp.stdout
+    - name: 2.[2-3].6 Nfs shares found
+      debug:
+        var: nfs_shares.stdout
+    - name: 2.[2-3].6 Ensure NFS is not installed
+      apt:
+        name: "{{ item }}"
+        state: absent
+        purge: yes
+      with_items:
+        - nfs-kernel-server
+        - rpcbind
+      when: nfs_mp.stdout | length == 0 and nfs_shares.stdout | length == 0
   tags:
     - section2
     - level_1_server
     - level_1_workstation
     - 2.2.6
+    - 2.3.6
 # 2.2.7 Ensure DNS Server is not installed
 # The Domain Name System (DNS) is a hierarchical naming system that maps names to IP
 # addresses for computers, services and other resources connected to a network.
@@ -1272,18 +1292,6 @@
     - level_1_server
     - level_1_workstation
     - 2.3.5
-# 2.3.6 Ensure RPC Server is not installed
-- name: 2.3.6 Ensure RPC Server is not installed
-  apt:
-    name: rpcbind
-    state: absent
-    purge: yes
-  when: remove_RPC
-  tags:
-    - section2
-    - level_1_server
-    - level_1_workstation
-    - 2.3.6
 # 3 Network Configuration
 # 3.1 Disable unused network protocols and devices
 # 3.1.2 Ensure wireless interfaces are disabled

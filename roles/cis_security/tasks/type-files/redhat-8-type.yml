@@ -933,20 +933,30 @@
     when: dns_server is defined and not dns_server
     tags:
       - 2.2.11
-
-  - name: 2.2.12 - Remove nfs server; add to removal list
-    ansible.builtin.set_fact:
-      unneeded_packages: "{{ unneeded_packages + [ 'nfs-utils' ] }}"
-    when: nfs_server is defined and not nfs_server
+  - name: 2.2.[12-13]- Remove nfs server; add to removal list
+    block:
+      - name: 2.2.[12-13] Check for nfs in /etc/fstab
+        shell: grep nfs /etc/fstab
+        register: nfs_mp
+        ignore_errors: yes
+      - name: 2.2.[12-13] Check for nfs shares
+        shell: nfsstat -m
+        register: nfs_shares
+        ignore_errors: yes
+      - name: 2.2.[12-13] Fstab result
+        debug:
+          var: nfs_mp.stdout
+      - name: 2.2.[12-13] Nfs shares found
+        debug:
+          var: nfs_shares.stdout
+      - name: 2.2.[12-13] - Remove nfs server; add to removal list
+        ansible.builtin.set_fact:
+          unneeded_packages: "{{ unneeded_packages + [ 'nfs-utils' ] + [ 'rpcbind' ] }}"
+        when: nfs_mp.stdout | length == 0 and nfs_shares.stdout | length == 0
     tags:
       - 2.2.12
-
-  - name: 2.2.13 - Remove rpcbind; add to removal list
-    ansible.builtin.set_fact:
-      unneeded_packages: "{{ unneeded_packages + [ 'rpcbind' ] }}"
-    tags:
       - 2.2.13
-
+      - section2
   # control 2.2.14 skipped. RHEL uses LDAP implemented in SSSD by default
 
   - name: 2.2.15 - Disable dhcpd server [controlled by host variable dhcp_server]; add to removal list

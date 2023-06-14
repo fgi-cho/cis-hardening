@@ -876,20 +876,34 @@
 # servers through the network.
 - name: 2.1.7 Ensure NFS is not installed
   block:
-    - name: Check is NFS is operational
-      systemd:
-        name: nfs.service
-      register: nfs_service
-      ignore_errors: yes
-    - name: NFS service status
-      debug:
-        var: smbd_service.status.ActiveState
-    - name: 2.1.7 Ensure NFS is not installed
-      apt:
-        name: nfs-kernel-server
-        state: absent
-        purge: yes
-      when: remove_NFS and nfs_service.status.ActiveState == "inactive"
+  - name: 2.2.7 Check for nfs in /etc/fstab
+    shell: grep nfs /etc/fstab
+    register: nfs_mp
+    ignore_errors: yes
+  - name: 2.2.7 Check for nfs shares
+    shell: nfsstat -m
+    register: nfs_shares
+    ignore_errors: yes
+  - name: 2.2.7 Fstab result
+    debug:
+      var: nfs_mp.stdout
+  - name: 2.2.7 Nfs shares found
+    debug:
+      var: nfs_shares.stdout
+#  - name: Check is NFS is operational
+#    systemd:
+#      name: nfs.service
+#    register: nfs_service
+#    ignore_errors: yes
+#  - name: NFS service status
+#    debug:
+#      var: nfs_service.status.ActiveState
+  - name: 2.1.7 Ensure NFS is not installed
+    apt:
+      name: nfs-kernel-server
+      state: absent
+      purge: yes
+    when: nfs_mp.stdout | length == 0 and nfs_shares.stdout | length == 0
   tags:
     - section2
     - level_1_server
