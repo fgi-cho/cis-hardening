@@ -1178,7 +1178,7 @@
   - name: 3.4.4.2 - Configure IPv6 iptables
     ansible.builtin.debug:
       msg: "3.4.4.2, Configure IPv6 ip6tables skipping due to low use"
-    when: ipv6_disable and enable_firewall == "firewalld"
+    when: ipv6_disable and firewall == "firewalld"
     tags:
       - 3.4.4.2
 

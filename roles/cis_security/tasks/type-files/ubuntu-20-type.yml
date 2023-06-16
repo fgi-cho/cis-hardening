@@ -544,6 +544,13 @@
 # has to be defined in the variable "custom_motd_file_path".
 # 1.7.4 Ensure permissions on /etc/motd are configured
 - block:
+  - name: Check for custom MOTD
+    stat:
+      path: /etc/motd
+    register: motd_status
+#  - name: motd detected
+#    debug:
+#      msg: '{{ motd_status.stat.size }}'
   - name: "1.7.1 Ensure message of the day is configured properly\n
           1.7.4 Ensure permissions on /etc/motd are configured"
     template:
@@ -552,6 +559,7 @@
       owner: root
       group: root
       mode: "0644"
+    when:  motd_status.stat.size < 50
   - name: "1.7.1 Ensure message of the day is configured properly\n
            1.7.4 Ensure permissions on /etc/motd are configured  | Show templates used"
     debug:
@@ -573,6 +581,13 @@
 # has to be defined in the variable "custom_issue_file_path".
 # 1.7.5 Ensure permissions on /etc/issue are configured
 - block:
+  - name: Check for custom Issue file
+    stat:
+      path: /etc/issue
+    register: issue_status
+#  - name: Issue detected
+#    debug:
+#      msg: '{{ issue_status.stat.size }}'
   - name: "1.7.2 Ensure local login warning banner is configured properly\n
            1.7.5 Ensure permissions on /etc/issue are configured"
     template:
@@ -581,6 +596,7 @@
       owner: root
       group: root
       mode: "0644"
+    when:  issue_status.stat.size < 50
   - name: "1.7.2 Ensure local login warning banner is configured properly\n
            1.7.5 Ensure permissions on /etc/issue are configured  | Show templates used"
     debug:
@@ -757,6 +773,7 @@
         enabled: yes
       when: chrony_conf.changed
   when: chronyEnable
+  ignore_errors: yes
   tags:
     - section2
     - level_1_server
@@ -2349,45 +2366,58 @@
 
 # 5.4.3 Ensure password reuse is limited
 # Locking out user IDs after n unsuccessful consecutive login attempts mitigates brute force password attacks against your systems.
-- name: 5.4.3.1 Ensure password reuse is limited | delete possible duplicate lines
-  lineinfile:
-    dest: /etc/pam.d/common-password
-    regexp: '^password.*pam_pwhistory\.so.*remember.*'
-    state: absent
-  changed_when: false
-  tags:
-    - section5
-    - level_1_server
-    - level_1_workstation
-    - 5.4.3
+#- name: 5.4.3.1 Ensure password reuse is limited | delete possible duplicate lines
+#  lineinfile:
+#    dest: /etc/pam.d/common-password
+#    regexp: '^password.*pam_pwhistory\.so.*remember.*'
+#    state: absent
+#  changed_when: false
+#  tags:
+#    - section5
+#    - level_1_server
+#    - level_1_workstation
+#    - 5.4.3
 
-- name: 5.4.3.2 Ensure password reuse is limited | update file according to CIS
-  lineinfile:
-    dest: /etc/pam.d/common-password
-    line: "password       required                       pam_pwhistory.so remember=5"
-    insertafter: '^password\s+?requisite.*'
-    state: present
-    firstmatch: true
-  changed_when: false
-  tags:
-    - section5
-    - level_1_server
-    - level_1_workstation
-    - 5.4.3
+#- name: 5.4.3.2 Ensure password reuse is limited | update file according to CIS
+#  lineinfile:
+#    dest: /etc/pam.d/common-password
+#    line: "password       required                       pam_pwhistory.so remember=5"
+#    insertafter: '^password\s+?requisite.*'
+#    state: present
+#    firstmatch: true
+#  changed_when: false
+#  tags:
+#    - section5
+#    - level_1_server
+#    - level_1_workstation
+#    - 5.4.3
 
 # 5.4.4 Ensure password hashing algorithm is SHA-512
 # The SHA-512 algorithm provides much stronger hashing than MD5, thus providing additional protection to the system by increasing the level of effort for an attacker to successfully determine passwords.
-- name: 5.4.4 Ensure password hashing algorithm is SHA-512
-  lineinfile:
-    dest: /etc/pam.d/common-password
-    regexp: '^password\s+\[success(.*)(md5|blowfish|bigcrypt|sha256|sha512)(.*)$'
-    line: 'password [success\1 sha512 \3'
-    backrefs: true
+#- name: 5.4.4 Ensure password hashing algorithm is SHA-512
+#  lineinfile:
+#    dest: /etc/pam.d/common-password
+#    regexp: '^password\s+\[success(.*)(md5|blowfish|bigcrypt|sha256|sha512)(.*)$'
+#    line: 'password [success=1 default=ignore]     pam_unix.so obscure sha512'
+#    backrefs: true
+#  tags:
+#    - section5
+#    - level_1_server
+#    - level_1_workstation
+#    - 5.4.4
+- name: "5.4 Ensure access to the su command is restricted  | create pam-d-su"
+  template:
+    src: files/templates/etc/common-pass.j2
+    dest: "/etc/pam.d/common-password"
+    owner: root
+    group: root
+    mode: 0644
   tags:
     - section5
     - level_1_server
     - level_1_workstation
     - 5.4.4
+
 
 # 5.5 User Accounts and Environment
 # 5.5.1 Set Shadow Password Suite Parameters
@@ -2582,13 +2612,13 @@
 # Restricting the use of su , and using sudo in its place, provides system administrators better control of the escalation of user privileges to execute privileged commands. The sudo utility also provides a better logging and audit mechanism, as it can log each command executed via sudo , whereas su can only record that a user executed the su program.
 - name: 5.7 Ensure access to the su command is restricted
   block:
-    - name: 5.7 Ensure access to the su command is restricted  | create su-group-access
-      template:
-        src: files/templates/etc/su-group-access.j2
-        dest: "/etc/security/su-group-access"
-        owner: root
-        group: root
-        mode: 0644
+#    - name: 5.7 Ensure access to the su command is restricted  | create su-group-access
+#      template:
+#        src: files/templates/etc/su-group-access.j2
+#        dest: "/etc/security/su-group-access"
+#        owner: root
+#        group: root
+#        mode: 0644
     - name: 5.7 Ensure access to the su command is restricted  | create pam-d-su
       template:
         src: files/templates/etc/pam-d-su.j2

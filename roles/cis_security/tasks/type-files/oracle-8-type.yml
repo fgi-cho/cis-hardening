@@ -1068,7 +1068,7 @@
           - "3.4.2.7 - Ensure default firewalld policy must be handled locally"
       tags:
         - 3.4.2
-    when: enable_firewall is defined and enable_firewall == "firewalld"
+    when: firewall is defined and firewall == "firewalld"
     tags:
       - 3.4.1
       - 3.4.2

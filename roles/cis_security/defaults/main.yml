@@ -58,7 +58,7 @@ log_file_size: 8                # Linux: log file size. RHEL default is 8MB, con
 # network security settings
 tcpwrappers: false              # Linux: Configure tcpwrappers controls. RHEL 7 control only
 tcpwrappers_pkg: "tcp_wrappers" # Linux: Name of tcp wrappers package in repository
-enable_firewall: firewalld      # Linux: supported values are firewalld or iptables
+firewall: firewalld      # Linux: supported values are firewalld or iptables
 firewalld_default_zone: public  # Linux: default firwall zone
 motd_file: "banner"             # Linux: File location by default in 'files' directory
 issue_file: "issue"             # Linux: File location by default in 'files' directory
@@ -74,7 +74,7 @@ ssh_kex_list: "curve25519-sha256,curve25519-sha256@libssh.org,ecdh-sha2-nistp256
 ssh_alive_interval: 300         # Linux: Control is 5 minutes
 ssh_alive_count_max: 0          # Linux: Control is 0 count
 ssh_grace_time: 30             # Linux: Control is for 60 seconds or less
-ssh_max_sessions: 4             # Linux: Control is 4 sessions from a single host
+#ssh_max_sessions: 4             # Linux: Control is 4 sessions from a single host
 ssh_login_banner: issue     # Linux: a file with no path will exist in the role's files directory, an absolute path will exist on the control host
 
 # Password and account settings, all settings below match controls

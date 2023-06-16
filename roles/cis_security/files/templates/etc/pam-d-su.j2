@@ -20,7 +20,7 @@ auth           required        pam_wheel.so use_uid
 
 # Uncomment this if you want members of a specific group to not
 # be allowed to use su at all.
-auth           required        pam_wheel.so use_uid deny group=nosu
+#auth           required        pam_wheel.so use_uid deny group=nosu
 
 # Uncomment and edit /etc/security/time.conf if you need to set
 # time restrainst on su usage.
@@ -57,5 +57,4 @@ session    required   pam_limits.so
 @include common-auth
 @include common-account
 @include common-session
-
 
