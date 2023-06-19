@@ -3216,7 +3216,7 @@
       changed_when: false
     - name: 6.2.16 Ensure no duplicate group names exist | save output
       copy:
-        dest: "{{ outputfiles }}/2.6.16"
+        dest: "{{ outputfiles }}/6.2.16"
         content: "{{ output_6_2_16 }}"
       changed_when: false
   ignore_errors: yes

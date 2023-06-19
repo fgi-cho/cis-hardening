@@ -191,6 +191,7 @@ unused_fs:
   - hfs
   - hfsplus
   - udf
+  - jffs2
 
 # Section 1 settings
 disable_cramfs: yes
