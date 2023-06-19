@@ -366,7 +366,7 @@ adminGroup: root
 # Section 6 settings
 withoutOwnerFileDirOwner: root
 withoutGroupFilesDirGroup: root
-outputfiles: /root/ #Output dir of some command
+outputfiles: /root/hardening #Output dir of some command
 disable_autofs: true
 disable_usb: true
 install_apparmor: true

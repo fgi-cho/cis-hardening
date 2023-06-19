@@ -2635,7 +2635,12 @@
 # 6 System Maintenanc
 # 6.1 System File Permission
 # 6.1.1 Audit system file permissions
-
+- name: Creates Hardening directory
+  file:
+    path: /root/hardening
+    state: directory
+  tags:
+    - dir
 # 6.1.2 Ensure permissions on /etc/passwd are configured
 - name: 6.1.2 Ensure permissions on /etc/passwd are configured
   file:
