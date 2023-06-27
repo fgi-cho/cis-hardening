@@ -1063,17 +1063,29 @@
 # HTTP or web servers provide the ability to host web site content.
 # Note: Several httpd servers exist and can use other service names. apache2 and nginx are
 # example services that provide an HTTP server. These and other services should also be audited
-- name: 2.2.9 Ensure HTTP server is not installed
-  apt:
-    name: ["{{ web_server_name }}"]
-    state: absent
-    purge: yes
-  when: remove_HTTPserver
+
+- name: 2.1.9 Ensure HTTP server is not installed
+  block:
+    - name: Check is HTTP server is operational
+      systemd:
+        name: apache2.service
+      register: https_service
+      ignore_errors: yes
+    - name: Http server status
+      debug:
+        var: https_service.status.ActiveState
+    - name: Ensure HTTP server is not installed
+      apt:
+        name: ["{{ web_server_name }}"]
+        state: absent
+        purge: yes
+      when: remove_HTTPserver and https_service.status.ActiveState == "inactive"
   tags:
     - section2
     - level_1_server
     - level_1_workstation
-    - 2.2.9
+    - 2.1.9
+
 # 2.2.10 Ensure IMAP and POP3 server are not installed
 # dovecot-imapd and dovecot-pop3d are an open source IMAP and POP3 server for Linux
 # based systems.
@@ -1787,6 +1799,10 @@
          4.1.4.2 Ensure only authorized users own audit log files\n
          4.1.4.3 Ensure only authorized groups are assigned ownership of audit log files"
   block:
+    - name: Install Auditd
+      apt:
+        name: auditd
+        state: present 
     - name: Locate log files  
       shell:  stat -Lc "%n" "$(dirname $(awk -F"=" '/^\s*log_file\s*=\s*/ {print $2}' /etc/audit/auditd.conf | xargs))"/*
       register: audit_log_owner

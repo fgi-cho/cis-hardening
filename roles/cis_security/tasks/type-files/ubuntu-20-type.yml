@@ -569,6 +569,7 @@
     - motd:
       - "{{ custom_motd_file_path }}"
       - "files/templates/motd.j2"
+  ignore_errors: yes
   tags:
     - section1
     - level_1_server
@@ -1186,6 +1187,7 @@
     state: absent
     purge: yes
 #  when: remove_telnetclient
+  ignore_errors: yes
   tags:
     - section2
     - level_1_server
@@ -1202,6 +1204,7 @@
     state: absent
     purge: yes
   when: remove_LDAPclient
+  ignore_errors: yes
   tags:
     - section2
     - level_1_server
