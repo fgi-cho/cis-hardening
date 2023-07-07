@@ -915,9 +915,19 @@
       - 2.2.8
 
   - name: 2.2.9 - Remove httpd; add to removal list
-    ansible.builtin.set_fact:
-      unneeded_packages: "{{ unneeded_packages + [ 'httpd' ] + [ 'httpd-tools' ] + [ 'mod_ssl' ] }}"
-    when: http_server is defined and not http_server
+    block:
+      - name: 2.2.9 Check is Httpd is operational
+        systemd:
+          name: httpd.service
+        register: httpd_service
+        ignore_errors: yes
+#      - name: show value
+#        debug:
+#          var:  httpd_service.status.ActiveState
+      - name: Add Httpd to removal list 
+        ansible.builtin.set_fact:
+          unneeded_packages: "{{ unneeded_packages + [ 'httpd' ] + [ 'httpd-tools' ] + [ 'mod_ssl' ] }}"
+        when: http_server is defined and not http_server and httpd_service.status.ActiveState == "inactive"
     tags:
       - 2.2.9
 
