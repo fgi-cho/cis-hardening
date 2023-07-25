@@ -43,7 +43,7 @@
   ansible.builtin.service:
     name: postfix
     state: restarted
-
+  ignore_errors: yes
 - name: start firewalld
   ansible.builtin.service:
     name: firewalld
