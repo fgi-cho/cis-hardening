@@ -1,0 +1,1233 @@
+Script started on 2023-07-28 15:31:59+02:00
+[0;35m[DEPRECATION WARNING]: "include" is deprecated, use include_tasks/import_tasks instead. See https://docs.ansible.com/ansible-[0m
+[0;35mcore/2.14/user_guide/playbooks_reuse_includes.html for details. This feature will be removed in version 2.16. Deprecation warnings can be disabled by setting [0m
+[0;35mdeprecation_warnings=False in ansible.cfg.[0m
+
+PLAY [all] *******************************************************************************************************************************************************
+
+TASK [Gathering Facts] *******************************************************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : include] ************************************************************************************************************************************
+[0;35m[DEPRECATION WARNING]: "include" is deprecated, use include_tasks/import_tasks/import_playbook instead. This feature will be removed in version 2.16. Deprecation[0m
+[0;35m warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.[0m
+[0;36mincluded: /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/tasks/CIS-RedHat-8.yml for dcax-hcshin01[0m
+
+TASK [cis_security : include] ************************************************************************************************************************************
+[0;36mincluded: /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/tasks/type-files/redhat-8-type.yml for dcax-hcshin01[0m
+
+TASK [cis_security : Print Header] *******************************************************************************************************************************
+[0;32mok: [dcax-hcshin01] => {[0m
+[0;32m    "msg": "CIS Controls for RedHat 8"[0m
+[0;32m}[0m
+
+TASK [cis_security : Collect package list] ***********************************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.1.1.1 Ensure mounting of cramfs filesystems is disabled] **********************************************************************************
+[0;31m--- before: /etc/modprobe.d/cramfs.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/modprobe.d/cramfs.conf (content)[0m
+[0;32m[0m[0;36m@@ -0,0 +1 @@[0m
+[0;36m[0m[0;32m+install cramfs /bin/true[0m
+[0;32m[0m
+[0;33mchanged: [dcax-hcshin01] => (item={'From': '(?m)^\\S+\\s+install cramfs', 'To': 'install cramfs /bin/true'})[0m
+[0;31m--- before: /etc/modprobe.d/cramfs.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/modprobe.d/cramfs.conf (content)[0m
+[0;32m[0m[0;36m@@ -1 +1,2 @@[0m
+[0;36m[0m install cramfs /bin/true
+[0;32m+blacklist cramfs[0m
+[0;32m[0m
+[0;33mchanged: [dcax-hcshin01] => (item={'From': '(?m)^\\S+\\s+blacklist cramfs', 'To': 'blacklist cramfs'})[0m
+
+TASK [cis_security : 1.1.1.1 Ensure mounting of cramfs filesystems is disabled | modprobe] ***********************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.1.1.3 Ensure mounting of squashfs filesystems is disabled] ********************************************************************************
+[0;31m--- before: /etc/modprobe.d/squashfs.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/modprobe.d/squashfs.conf (content)[0m
+[0;32m[0m[0;36m@@ -0,0 +1 @@[0m
+[0;36m[0m[0;32m+install squashfs /bin/true[0m
+[0;32m[0m
+[0;33mchanged: [dcax-hcshin01] => (item={'From': '(?m)^\\S+\\s+install squashfs', 'To': 'install squashfs /bin/true'})[0m
+[0;31m--- before: /etc/modprobe.d/squashfs.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/modprobe.d/squashfs.conf (content)[0m
+[0;32m[0m[0;36m@@ -1 +1,2 @@[0m
+[0;36m[0m install squashfs /bin/true
+[0;32m+blacklist squashfs[0m
+[0;32m[0m
+[0;33mchanged: [dcax-hcshin01] => (item={'From': '(?m)^\\S+\\s+blacklist squashfs', 'To': 'blacklist squashfs'})[0m
+
+TASK [cis_security : 1.1.1.3 Ensure mounting of cramfs filesystems is disabled | modprobe] ***********************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.1.1.4 Ensure mounting of udf filesystems is disabled] *************************************************************************************
+[0;31m--- before: /etc/modprobe.d/udf.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/modprobe.d/udf.conf (content)[0m
+[0;32m[0m[0;36m@@ -0,0 +1 @@[0m
+[0;36m[0m[0;32m+install udf /bin/true[0m
+[0;32m[0m
+[0;33mchanged: [dcax-hcshin01] => (item={'From': '(?m)^\\S+\\s+install udf', 'To': 'install udf /bin/true'})[0m
+[0;31m--- before: /etc/modprobe.d/udf.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/modprobe.d/udf.conf (content)[0m
+[0;32m[0m[0;36m@@ -1 +1,2 @@[0m
+[0;36m[0m install udf /bin/true
+[0;32m+blacklist udf[0m
+[0;32m[0m
+[0;33mchanged: [dcax-hcshin01] => (item={'From': '(?m)^\\S+\\s+blacklist udf', 'To': 'blacklist udf'})[0m
+
+TASK [cis_security : 1.1.1.4 Ensure mounting of udf filesystems is disabled | modprobe] **************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : Ensure the local-fs directory is created] ***************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,11 +1,4 @@[0m
+[0;36m[0m {
+     "path": "/etc/systemd/system/local-fs.target.wants",
+[0;31m-    "path_content": {[0m
+[0;31m[0m[0;31m-        "directories": [],[0m
+[0;31m[0m[0;31m-        "files": [[0m
+[0;31m[0m[0;31m-            "/etc/systemd/system/local-fs.target.wants/ostree-remount.service",[0m
+[0;31m[0m[0;31m-            "/etc/systemd/system/local-fs.target.wants/readonly-root.service"[0m
+[0;31m[0m[0;31m-        ][0m
+[0;31m[0m[0;31m-    },[0m
+[0;31m[0m[0;31m-    "state": "directory"[0m
+[0;31m[0m[0;32m+    "state": "absent"[0m
+[0;32m[0m }
+
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.1.[2-5] - Configure config file for tmpfs] ************************************************************************************************
+[0;31m--- before: /etc/systemd/system/local-fs.target.wants/tmp.mount (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/systemd/system/local-fs.target.wants/tmp.mount (content)[0m
+[0;32m[0m[0;36m@@ -0,0 +1,7 @@[0m
+[0;36m[0m[0;32m+# BEGIN ANSIBLE MANAGED BLOCK[0m
+[0;32m[0m[0;32m+[Mount][0m
+[0;32m[0m[0;32m+What=tmpfs[0m
+[0;32m[0m[0;32m+Where=/tmp[0m
+[0;32m[0m[0;32m+Type=tmpfs[0m
+[0;32m[0m[0;32m+Options=mode=1777,strictatime,noexec,nodev,nosuid[0m
+[0;32m[0m[0;32m+# END ANSIBLE MANAGED BLOCK[0m
+[0;32m[0m
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.1.8 - Report to user if /var/tmp does not have nodev set] *********************************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.1.9 - Report to user if /var/tmp does not have nosuid set] ********************************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.1.10 - Report to user if /var/tmp does not have noexec set] *******************************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security :  Ensure /dev/shm is configured
+ 1.1.15 Ensure nodev option set on /dev/shm partition
+ 1.1.16 Ensure nosuid option set on /dev/shm partition
+ 1.1.17 Ensure noexec option set on /dev/shm partition] ***
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : Determine if /dev/shm has nodev set] ********************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.1.15 - Report to user] ********************************************************************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : Determine if /dev/shm has nosuid set] *******************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.1.16 - Report to user] ********************************************************************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.1.17 - Determine if /dev/shm has noexec set] **********************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.1.17 - Report to user] ********************************************************************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.1.21 - Ensure sticky bit is set on world-writeable directories] ***************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.1.23 Ensure mounting of usb-storage is disabled] ******************************************************************************************
+[0;31m--- before: /etc/modprobe.d/usb-storage.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/modprobe.d/usb-storage.conf (content)[0m
+[0;32m[0m[0;36m@@ -0,0 +1 @@[0m
+[0;36m[0m[0;32m+install usb-storage /bin/true[0m
+[0;32m[0m
+[0;33mchanged: [dcax-hcshin01] => (item={'From': '(?m)^\\S+\\s+install usb-storage', 'To': 'install usb-storage /bin/true'})[0m
+[0;31m--- before: /etc/modprobe.d/usb-storage.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/modprobe.d/usb-storage.conf (content)[0m
+[0;32m[0m[0;36m@@ -1 +1,2 @@[0m
+[0;36m[0m install usb-storage /bin/true
+[0;32m+blacklist usb-storage[0m
+[0;32m[0m
+[0;33mchanged: [dcax-hcshin01] => (item={'From': '(?m)^\\S+\\s+blacklist usb-storage', 'To': 'blacklist usb-storage'})[0m
+
+TASK [cis_security : 1.1.23 Ensure mounting of usb-storage is disabled | modprobe] *******************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.2.4 - set master yum.conf gpgcheck to '1'] ************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.2.4 - set master dnf.conf gpgcheck to '1'] ************************************************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.2.4 - find all repo files in /etc/yum.repos.d/] *******************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.2.4 - Set all repos gpgchecks to '1'] *****************************************************************************************************
+[0;32mok: [dcax-hcshin01] => (item={'path': '/etc/yum.repos.d/epel-modular.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 1680, 'inode': 202513824, 'dev': 64768, 'nlink': 1, 'atime': 1690535723.5901034, 'mtime': 1681737779.0, 'ctime': 1690275317.3749015, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})[0m
+[0;32mok: [dcax-hcshin01] => (item={'path': '/etc/yum.repos.d/epel-testing-modular.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 1779, 'inode': 202513825, 'dev': 64768, 'nlink': 1, 'atime': 1690535723.5911033, 'mtime': 1681737779.0, 'ctime': 1690275317.3759015, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})[0m
+[0;32mok: [dcax-hcshin01] => (item={'path': '/etc/yum.repos.d/epel-testing.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 1431, 'inode': 202513826, 'dev': 64768, 'nlink': 1, 'atime': 1690535723.5911033, 'mtime': 1681737779.0, 'ctime': 1690275317.3759015, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})[0m
+[0;32mok: [dcax-hcshin01] => (item={'path': '/etc/yum.repos.d/epel.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 1332, 'inode': 202513827, 'dev': 64768, 'nlink': 1, 'atime': 1690535723.5891032, 'mtime': 1681737779.0, 'ctime': 1690275317.3759015, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})[0m
+[0;32mok: [dcax-hcshin01] => (item={'path': '/etc/yum.repos.d/redhat.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 7474, 'inode': 202513831, 'dev': 64768, 'nlink': 1, 'atime': 1690547579.9663215, 'mtime': 1690547579.4653177, 'ctime': 1690547579.4653177, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})[0m
+
+TASK [cis_security : 1.3.1 - Ensure sudo is installed] ***********************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.3.2 - Ensure sudo commands use pty] *******************************************************************************************************
+[0;31m--- before: /etc/sudoers (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/sudoers (content)[0m
+[0;32m[0m[0;36m@@ -48,6 +48,7 @@[0m
+[0;36m[0m # Cmnd_Alias DRIVERS = /sbin/modprobe
+ 
+ # Defaults specification
+[0;32m+Defaults use_pty[0m
+[0;32m[0m 
+ #
+ # Refuse to run if unable to disable echo on the tty.
+
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.3.3 - Ensure sudo log file exists] ********************************************************************************************************
+[0;31m--- before: /etc/sudoers (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/sudoers (content)[0m
+[0;32m[0m[0;36m@@ -48,6 +48,7 @@[0m
+[0;36m[0m # Cmnd_Alias DRIVERS = /sbin/modprobe
+ 
+ # Defaults specification
+[0;32m+Defaults logfile="/var/log/sudoers"[0m
+[0;32m[0m Defaults use_pty
+ 
+ #
+
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.4.1 Ensure aide is installed] *************************************************************************************************************
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.4.1 - Determine if AIDE has already been initialized] *************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.4.1 - Set up database file location] ******************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.4.1 - Set up database_out file location] **************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.4.1 - enable gzip compression for database] ***********************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.4.1 - Move the newly created database into place] *****************************************************************************************
+[0;31mfatal: [dcax-hcshin01]: FAILED! => {"changed": false, "msg": "Source /var/lib/aide/aide.db.new.gz not found"}[0m
+[0;36m...ignoring[0m
+
+TASK [cis_security : 1.5.0 - Check if the EFI directory exists] **************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.5.1 - set variable for grub.cfg in EFI location] ******************************************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.5.0 - Check if the LILO path exists] ******************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.5.1 - set variable for grub.cfg in LILO location] *****************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.5.1 - Set permissions on grub.cfg] ********************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0644",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/boot/grub2/grub.cfg"
+ }
+
+[0;33mchanged: [dcax-hcshin01] => (item=/boot/grub2/grub.cfg)[0m
+[0;32mok: [dcax-hcshin01] => (item=/boot/grub2/grubenv)[0m
+
+TASK [cis_security : 1.5.3 - Check if root has a password] *******************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.5.3 - Set root password] ******************************************************************************************************************
+[0;35m[DEPRECATION WARNING]: Encryption using the Python crypt module is deprecated. The Python crypt module is deprecated and will be removed from Python 3.13. [0m
+[0;35mInstall the passlib library for continued encryption functionality. This feature will be removed in version 2.17. Deprecation warnings can be disabled by setting[0m
+[0;35m deprecation_warnings=False in ansible.cfg.[0m
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.5.3 - Set single user to use use a secure shell] ******************************************************************************************
+[0;32mok: [dcax-hcshin01] => (item=rescue.service)[0m
+[0;32mok: [dcax-hcshin01] => (item=emergency.service)[0m
+
+TASK [cis_security : 1.5.3 - If no root password is set up, notify the user and do not set password or single user mode] *****************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.6.1 - Ensure core dumps are restricted] ***************************************************************************************************
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.6.2 - Ensure address space layout reandomization (ASLR) is enabled] ***********************************************************************
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.8.1.1 - Ensure message of the day is configured properly] *********************************************************************************
+[0;31m--- before: /etc/motd[0m
+[0;31m[0m[0;32m+++ after: /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/files/banner[0m
+[0;32m[0m[0;36m@@ -0,0 +1,6 @@[0m
+[0;36m[0m[0;32m+-----------------------------------------------------------------------------[0m
+[0;32m[0m[0;32m+WARNING: This is a private system.  Do not attempt to login unless you are an[0m
+[0;32m[0m[0;32m+authorized user.  Any authorized or unauthorized access and use may be moni-[0m
+[0;32m[0m[0;32m+tored and can result in criminal or civil prosecution under applicable law.[0m
+[0;32m[0m[0;32m+-----------------------------------------------------------------------------[0m
+[0;32m[0m[0;32m+[0m
+[0;32m[0m
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.8.1.2 - Install issue banners] ************************************************************************************************************
+[0;31m--- before: /etc/issue[0m
+[0;31m[0m[0;32m+++ after: /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/files/issue[0m
+[0;32m[0m[0;36m@@ -1,3 +1,6 @@[0m
+[0;36m[0m[0;31m-\S[0m
+[0;31m[0m[0;31m-Kernel \r on an \m[0m
+[0;31m[0m[0;32m+-----------------------------------------------------------------------------[0m
+[0;32m[0m[0;32m+WARNING: This is a private system.  Do not attempt to login unless you are an[0m
+[0;32m[0m[0;32m+authorized user.  Any authorized or unauthorized access and use may be moni-[0m
+[0;32m[0m[0;32m+tored and can result in criminal or civil prosecution under applicable law.[0m
+[0;32m[0m[0;32m+-----------------------------------------------------------------------------[0m
+[0;32m[0m 
+
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.8.1.3 - Install issue.net banners] ********************************************************************************************************
+[0;31m--- before: /etc/issue.net[0m
+[0;31m[0m[0;32m+++ after: /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/files/issue[0m
+[0;32m[0m[0;36m@@ -1,2 +1,6 @@[0m
+[0;36m[0m[0;31m-\S[0m
+[0;31m[0m[0;31m-Kernel \r on an \m[0m
+[0;31m[0m[0;32m+-----------------------------------------------------------------------------[0m
+[0;32m[0m[0;32m+WARNING: This is a private system.  Do not attempt to login unless you are an[0m
+[0;32m[0m[0;32m+authorized user.  Any authorized or unauthorized access and use may be moni-[0m
+[0;32m[0m[0;32m+tored and can result in criminal or civil prosecution under applicable law.[0m
+[0;32m[0m[0;32m+-----------------------------------------------------------------------------[0m
+[0;32m[0m[0;32m+[0m
+[0;32m[0m
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.8.2 Ensure GDM banner set up] *************************************************************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.10.0 - Display error if crypto variable violates policy] **********************************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.10.0 - Set crypto-policy to DEFAULT] ******************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.10.0 - Check to see if FIPS mode is already set up if crypto_policy == "FIPS"] ************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 1.10.0 - Enabling FIPS mode if crypt_policy set to FIPS] ************************************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.1.1 - Remove xinetd service] **************************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.1.1 - Verify chrony is  installed] ******************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.1.2 - Configure chrony] *****************************************************************************************************************
+[0;31m--- before: /etc/chrony.conf[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-2235966p3an_y1s/tmphzkwwri7/chrony.conf[0m
+[0;32m[0m[0;36m@@ -1,6 +1,7 @@[0m
+[0;36m[0m # Use public servers from the pool.ntp.org project.
+ # Please consider joining the pool (http://www.pool.ntp.org/join.html).
+[0;31m-pool 2.rhel.pool.ntp.org iburst[0m
+[0;31m[0m[0;32m+server uxtime1.gfk.de iburst[0m
+[0;32m[0m[0;32m+server uxtime2.gfk.de iburst[0m
+[0;32m[0m 
+ # Record the rate at which the system clock gains/losses time.
+ driftfile /var/lib/chrony/drift
+
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.2 - get default runlevel] ***************************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.2 - Disable the gdm display manager] ****************************************************************************************************
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.2 - Set current runlevel (non graphical)] ***********************************************************************************************
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.2 - Set current runlevel (graphical)] ***************************************************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.2 - Set default runlevel (non graphical)] ***********************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+     "path": "/etc/systemd/system/default.target",
+[0;31m-    "src": "/lib/systemd/system/graphical.target"[0m
+[0;31m[0m[0;32m+    "src": "/usr/lib/systemd/system/multi-user.target"[0m
+[0;32m[0m }
+
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.2 - Set default runlevel (graphical)] ***************************************************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : create empty list for unneeded packages] ****************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.3 - Remove rsync; add to removal list] **************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.4 - Remove avahi; add to removal list] **************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.5 - Remove snmp; add to removal list] ***************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.6 - Remove squid; add to removal list] **************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.7 Check is Samba is operational] ********************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.7 Check for log files] ******************************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.7 Cheking for Samba logs] ***************************************************************************************************************
+[0;32mok: [dcax-hcshin01] => {[0m
+[0;32m    "smbd_logs.matched": "0"[0m
+[0;32m}[0m
+
+TASK [cis_security : 2.2.7 Cheking for Samba service] ************************************************************************************************************
+[0;32mok: [dcax-hcshin01] => {[0m
+[0;32m    "smbd_service.status.ActiveState": "inactive"[0m
+[0;32m}[0m
+
+TASK [cis_security : 2.2.7 - Remove samba; add to removal list] **************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.8 - Remove dovecot; add to removal list] ************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.9 Check is Httpd is operational] ********************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : Add Httpd to removal list] ******************************************************************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.10 - Remove vsftpd; add to removal list] ************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.11 - Remove bind; add to removal list] **************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.[12-13] Check for nfs in /etc/fstab] ****************************************************************************************************
+[0;31mfatal: [dcax-hcshin01]: FAILED! => {"changed": true, "cmd": "grep nfs /etc/fstab", "delta": "0:00:00.005267", "end": "2023-07-28 09:36:04.562618", "msg": "non-zero return code", "rc": 1, "start": "2023-07-28 09:36:04.557351", "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}[0m
+[0;36m...ignoring[0m
+
+TASK [cis_security : 2.2.[12-13] Check for nfs shares] ***********************************************************************************************************
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.[12-13] Fstab result] *******************************************************************************************************************
+[0;32mok: [dcax-hcshin01] => {[0m
+[0;32m    "nfs_mp.stdout": ""[0m
+[0;32m}[0m
+
+TASK [cis_security : 2.2.[12-13] Nfs shares found] ***************************************************************************************************************
+[0;32mok: [dcax-hcshin01] => {[0m
+[0;32m    "nfs_shares.stdout": ""[0m
+[0;32m}[0m
+
+TASK [cis_security : 2.2.[12-13] - Remove nfs server; add to removal list] ***************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.15 - Disable dhcpd server [controlled by host variable dhcp_server]; add to removal list] ***********************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.17 - Remove ypserv; add to removal list] ************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.3.1 - Remove ypbind; add to removal list] *************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.3.2 - Remove telnet; add to removal list] *************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.3.3 - Remove openldap-clients; add to removal list] ***************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.3.3 - list of packages to remove] *********************************************************************************************************
+[0;32mok: [dcax-hcshin01] => {[0m
+[0;32m    "unneeded_packages": [[0m
+[0;32m        "rsync",[0m
+[0;32m        "avahi",[0m
+[0;32m        "net-snmp",[0m
+[0;32m        "net-snmp-libs",[0m
+[0;32m        "squid",[0m
+[0;32m        "samba",[0m
+[0;32m        "dovecot",[0m
+[0;32m        "vsftpd",[0m
+[0;32m        "bind",[0m
+[0;32m        "unbound",[0m
+[0;32m        "nfs-utils",[0m
+[0;32m        "rpcbind",[0m
+[0;32m        "dhcp",[0m
+[0;32m        "ypserv",[0m
+[0;32m        "ypbind",[0m
+[0;32m        "telnet",[0m
+[0;32m        "openldap-clients"[0m
+[0;32m    ][0m
+[0;32m}[0m
+
+TASK [cis_security : Process removal list] ***********************************************************************************************************************
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.16 - Disable cups as we my not be able to uninstall it] *********************************************************************************
+[0;33mchanged: [dcax-hcshin01] => (item=cups.service)[0m
+[0;32mok: [dcax-hcshin01] => (item=cups.socket)[0m
+[0;32mok: [dcax-hcshin01] => (item=cups-browsed.service)[0m
+
+TASK [cis_security : 2.2.18 - Find if we have a mail agent config file] ******************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 2.2.18 - If the file exists and not a mail server, then set loopback only] ******************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : Check for runing docker] ********************************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : Docker service status] **********************************************************************************************************************
+[0;32mok: [dcax-hcshin01] => {[0m
+[0;32m    "docker_service.status.ActiveState": "inactive"[0m
+[0;32m}[0m
+
+TASK [cis_security : 3.1.1 - Set ipv4 networking parameters (OFF)] ***********************************************************************************************
+[0;33mchanged: [dcax-hcshin01] => (item=net.ipv4.conf.all.forwarding)[0m
+
+TASK [cis_security : 3.1.1 - Set ipv6 networking parameters (OFF)] ***********************************************************************************************
+[0;36mskipping: [dcax-hcshin01] => (item=net.ipv6.conf.all.forwarding) [0m
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 3.1.2 - Set ipv4 networking parameters (OFF)] ***********************************************************************************************
+[0;33mchanged: [dcax-hcshin01] => (item=net.ipv4.conf.all.send_redirects)[0m
+[0;33mchanged: [dcax-hcshin01] => (item=net.ipv4.conf.default.send_redirects)[0m
+
+TASK [cis_security : 3.2 - Set ipv4 network parameters (OFF)] ****************************************************************************************************
+[0;33mchanged: [dcax-hcshin01] => (item=net.ipv4.conf.all.accept_source_route)[0m
+[0;33mchanged: [dcax-hcshin01] => (item=net.ipv4.conf.default.accept_source_route)[0m
+[0;33mchanged: [dcax-hcshin01] => (item=net.ipv4.conf.all.accept_redirects)[0m
+[0;33mchanged: [dcax-hcshin01] => (item=net.ipv4.conf.default.accept_redirects)[0m
+[0;33mchanged: [dcax-hcshin01] => (item=net.ipv4.conf.all.secure_redirects)[0m
+[0;33mchanged: [dcax-hcshin01] => (item=net.ipv4.conf.default.secure_redirects)[0m
+
+TASK [cis_security : 3.2.[4-8] - Set ipv4 networking parameters (ON)] ********************************************************************************************
+[0;33mchanged: [dcax-hcshin01] => (item=net.ipv4.conf.all.log_martians)[0m
+[0;33mchanged: [dcax-hcshin01] => (item=net.ipv4.conf.default.log_martians)[0m
+[0;33mchanged: [dcax-hcshin01] => (item=net.ipv4.icmp_echo_ignore_broadcasts)[0m
+[0;33mchanged: [dcax-hcshin01] => (item=net.ipv4.icmp_ignore_bogus_error_responses)[0m
+[0;33mchanged: [dcax-hcshin01] => (item=net.ipv4.conf.all.rp_filter)[0m
+[0;33mchanged: [dcax-hcshin01] => (item=net.ipv4.conf.default.rp_filter)[0m
+[0;33mchanged: [dcax-hcshin01] => (item=net.ipv4.tcp_syncookies)[0m
+
+TASK [cis_security : 3.2 - Set ipv6 networking parameters (OFF)] *************************************************************************************************
+[0;36mskipping: [dcax-hcshin01] => (item=net.ipv6.conf.all.accept_source_route) [0m
+[0;36mskipping: [dcax-hcshin01] => (item=net.ipv6.conf.default.accept_source_route) [0m
+[0;36mskipping: [dcax-hcshin01] => (item=net.ipv6.conf.all.accept_redirects) [0m
+[0;36mskipping: [dcax-hcshin01] => (item=net.ipv6.conf.default.accept_redirects) [0m
+[0;36mskipping: [dcax-hcshin01] => (item=net.ipv6.conf.all.accept_ra) [0m
+[0;36mskipping: [dcax-hcshin01] => (item=net.ipv6.conf.default.accept_ra) [0m
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 3.4.1.1 - Install firewalld] ****************************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 3.4.2.3 - Disable netfilters service] *******************************************************************************************************
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 3.4.2.4 - Set default zone] *****************************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 3.4.4.2 - Configure IPv6 iptables] **********************************************************************************************************
+[0;32mok: [dcax-hcshin01] => {[0m
+[0;32m    "msg": "3.4.4.2, Configure IPv6 ip6tables skipping due to low use"[0m
+[0;32m}[0m
+
+TASK [cis_security : 4.2.1.1 - Ensure rsyslog is installed] ******************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 4.2.1.2 - Enable Rsyslog] *******************************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 4.2.1.3 - Ensure rsyslog default file permissions are configured] ***************************************************************************
+[0;31m--- before: /etc/rsyslog.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/rsyslog.conf (content)[0m
+[0;32m[0m[0;36m@@ -77,3 +77,4 @@[0m
+[0;36m[0m # Remote Logging (we use TCP for reliable delivery)
+ # remote_host is: name/ip, e.g. 192.168.0.1, port optional e.g. 10514
+ #Target="remote_host" Port="XXX" Protocol="tcp")
+[0;32m+$FileCreateMode 0640[0m
+[0;32m[0m
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : Find any rsyslog files where all logs are being forwarded to a loghost] *********************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 4.2.2.1 - Forward journald logs to rsyslog IF rsyslog is sending logs to a log host] ********************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 4.2.2.2 - Ensure journald compresses large files] *******************************************************************************************
+[0;31m--- before: /etc/systemd/journald.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/systemd/journald.conf (content)[0m
+[0;32m[0m[0;36m@@ -14,6 +14,7 @@[0m
+[0;36m[0m [Journal]
+ #Storage=auto
+ #Compress=yes
+[0;32m+Compress=yes[0m
+[0;32m[0m #Seal=yes
+ #SplitMode=uid
+ #SyncIntervalSec=5m
+
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 4.2.2.3 - Ensure journald writes to peristent disk] *****************************************************************************************
+[0;31m--- before: /etc/systemd/journald.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/systemd/journald.conf (content)[0m
+[0;32m[0m[0;36m@@ -13,6 +13,7 @@[0m
+[0;36m[0m 
+ [Journal]
+ #Storage=auto
+[0;32m+Storage=persistent[0m
+[0;32m[0m #Compress=yes
+ Compress=yes
+ #Seal=yes
+
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 4.2.3 Ensure permissions on all logfiles are configured] ************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : Create the cron/at allow files (5.1.8)] *****************************************************************************************************
+[0;33mchanged: [dcax-hcshin01] => (item=/etc/cron.allow)[0m
+[0;33mchanged: [dcax-hcshin01] => (item=/etc/at.allow)[0m
+
+TASK [cis_security : 5.1.1 - Ensure cron is enabled] *************************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.1.2 - Ensure permissions on /etc/crontab] *************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0644",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/crontab"
+ }
+
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.1.[3-7] - Ensure permissions on crontab directories] **************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0755",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/cron.hourly"
+ }
+
+[0;33mchanged: [dcax-hcshin01] => (item=/etc/cron.hourly)[0m
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0755",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/cron.daily"
+ }
+
+[0;33mchanged: [dcax-hcshin01] => (item=/etc/cron.daily)[0m
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0755",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/cron.weekly"
+ }
+
+[0;33mchanged: [dcax-hcshin01] => (item=/etc/cron.weekly)[0m
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0755",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/cron.monthly"
+ }
+
+[0;33mchanged: [dcax-hcshin01] => (item=/etc/cron.monthly)[0m
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0755",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/cron.d"
+ }
+
+[0;33mchanged: [dcax-hcshin01] => (item=/etc/cron.d)[0m
+
+TASK [cis_security : 5.2.1 - Set permissions on SSH file] ********************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.2.3 - Find all ssh private host keys] *****************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.2.3 - Set permissions on all ssh private host keys (Red Hat set the group to ssh_keys and mode to 640)] ***********************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0640",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/ssh/ssh_host_rsa_key"
+ }
+
+[0;33mchanged: [dcax-hcshin01] => (item={'path': '/etc/ssh/ssh_host_rsa_key', 'mode': '0640', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 999, 'size': 1675, 'inode': 7875, 'dev': 64768, 'nlink': 1, 'atime': 1690547498.2216775, 'mtime': 1499718761.207263, 'ctime': 1499718761.238263, 'gr_name': 'ssh_keys', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': False, 'xoth': False, 'isuid': False, 'isgid': False})[0m
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0640",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/ssh/ssh_host_ecdsa_key"
+ }
+
+[0;33mchanged: [dcax-hcshin01] => (item={'path': '/etc/ssh/ssh_host_ecdsa_key', 'mode': '0640', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 999, 'size': 227, 'inode': 7877, 'dev': 64768, 'nlink': 1, 'atime': 1690547498.2226775, 'mtime': 1499718761.255263, 'ctime': 1499718761.256263, 'gr_name': 'ssh_keys', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': False, 'xoth': False, 'isuid': False, 'isgid': False})[0m
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0640",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/ssh/ssh_host_ed25519_key"
+ }
+
+[0;33mchanged: [dcax-hcshin01] => (item={'path': '/etc/ssh/ssh_host_ed25519_key', 'mode': '0640', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 999, 'size': 387, 'inode': 7879, 'dev': 64768, 'nlink': 1, 'atime': 1690547498.2226775, 'mtime': 1499718761.271263, 'ctime': 1499718761.273263, 'gr_name': 'ssh_keys', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': False, 'xoth': False, 'isuid': False, 'isgid': False})[0m
+
+TASK [cis_security : 5.2.4 - Find all ssh public host keys] ******************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.2.4 - Set permissions on all ssh public host keys] ****************************************************************************************
+[0;32mok: [dcax-hcshin01] => (item={'path': '/etc/ssh/ssh_host_rsa_key.pub', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 382, 'inode': 7876, 'dev': 64768, 'nlink': 1, 'atime': 1690547498.2226775, 'mtime': 1499718761.208263, 'ctime': 1499718761.239263, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})[0m
+[0;32mok: [dcax-hcshin01] => (item={'path': '/etc/ssh/ssh_host_ecdsa_key.pub', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 162, 'inode': 7878, 'dev': 64768, 'nlink': 1, 'atime': 1690547498.2226775, 'mtime': 1499718761.255263, 'ctime': 1499718761.257263, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})[0m
+[0;32mok: [dcax-hcshin01] => (item={'path': '/etc/ssh/ssh_host_ed25519_key.pub', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 82, 'inode': 7880, 'dev': 64768, 'nlink': 1, 'atime': 1690547498.2226775, 'mtime': 1499718761.271263, 'ctime': 1499718761.273263, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})[0m
+
+TASK [cis_security : 5.2.5 - Set LogLevel to INFO or more verbose, but not debug] ********************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.2.7 - Ensure SSH MaxAuthTires is set to 2 or less] ****************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -39,6 +39,7 @@[0m
+[0;36m[0m PermitRootLogin prohibit-password
+ #StrictModes yes
+ #MaxAuthTries 6
+[0;32m+MaxAuthTries 2[0m
+[0;32m[0m #MaxSessions 10
+ 
+ #PubkeyAuthentication yes
+
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.2.8 - Ensure IgnoreRhosts is set] *********************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -139,3 +139,4 @@[0m
+[0;36m[0m #	AllowTcpForwarding no
+ #	PermitTTY no
+ #	ForceCommand cvs server
+[0;32m+IgnoreRhosts yes[0m
+[0;32m[0m
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.2.9 - Ensure HostbasedAuthentication is disabled] *****************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -140,3 +140,4 @@[0m
+[0;36m[0m #	PermitTTY no
+ #	ForceCommand cvs server
+ IgnoreRhosts yes
+[0;32m+HostbasedAuthentication no[0m
+[0;32m[0m
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.2.11 - Ensure SSH PermitEmptyPasswords is disabled] ***************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -141,3 +141,4 @@[0m
+[0;36m[0m #	ForceCommand cvs server
+ IgnoreRhosts yes
+ HostbasedAuthentication no
+[0;32m+PermitEmptyPasswords no[0m
+[0;32m[0m
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.2.12 - Ensure PermitUserEnvironment is disabled] ******************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -142,3 +142,4 @@[0m
+[0;36m[0m IgnoreRhosts yes
+ HostbasedAuthentication no
+ PermitEmptyPasswords no
+[0;32m+PermitUserEnvironment no[0m
+[0;32m[0m
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.2.13 - Ensure SSH Idle Timeout is configured ClientAliveInterval] *************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -112,6 +112,7 @@[0m
+[0;36m[0m #PermitUserEnvironment no
+ #Compression delayed
+ #ClientAliveInterval 0
+[0;32m+ClientAliveInterval 300[0m
+[0;32m[0m #ClientAliveCountMax 3
+ #ShowPatchLevel no
+ #UseDNS yes
+
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.2.13 - Ensure SSH Idle Timeout is configured ClientAliveCountMax] *************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -114,6 +114,7 @@[0m
+[0;36m[0m #ClientAliveInterval 0
+ ClientAliveInterval 300
+ #ClientAliveCountMax 3
+[0;32m+ClientAliveCountMax 0[0m
+[0;32m[0m #ShowPatchLevel no
+ #UseDNS yes
+ #PidFile /var/run/sshd.pid
+
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.2.14 - Ensure SSH LoginGraceTime is set to 30 or less] ************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -35,6 +35,7 @@[0m
+[0;36m[0m # Authentication:
+ 
+ #LoginGraceTime 2m
+[0;32m+LoginGraceTime 30[0m
+[0;32m[0m #PermitRootLogin yes
+ PermitRootLogin prohibit-password
+ #StrictModes yes
+
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.2.15 - Ensure SSH Banner is configured] ***************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -146,3 +146,4 @@[0m
+[0;36m[0m HostbasedAuthentication no
+ PermitEmptyPasswords no
+ PermitUserEnvironment no
+[0;32m+Banner /etc/issue[0m
+[0;32m[0m
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.2.16 - Ensure SSH is configured to use PAM] ***********************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.2.17 - Disable TCP Forwarding] ************************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -100,6 +100,7 @@[0m
+[0;36m[0m 
+ #AllowAgentForwarding yes
+ #AllowTcpForwarding yes
+[0;32m+AllowTcpForwarding no[0m
+[0;32m[0m #GatewayPorts no
+ X11Forwarding yes
+ #X11DisplayOffset 10
+
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.2.18 - Limit max unauthenticated startups] ************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -148,3 +148,4 @@[0m
+[0;36m[0m PermitEmptyPasswords no
+ PermitUserEnvironment no
+ Banner /etc/issue
+[0;32m+MaxStartups 10:30:60[0m
+[0;32m[0m
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.2.19 - Limit max sessions] ****************************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -149,3 +149,4 @@[0m
+[0;36m[0m PermitUserEnvironment no
+ Banner /etc/issue
+ MaxStartups 10:30:60
+[0;32m+MaxSessions 4[0m
+[0;32m[0m
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.4.1 - require at least one digit in passwords] ********************************************************************************************
+[0;31m--- before: /etc/security/pwquality.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/security/pwquality.conf (content)[0m
+[0;32m[0m[0;36m@@ -13,6 +13,7 @@[0m
+[0;36m[0m # The maximum credit for having digits in the new password. If less than 0
+ # it is the minimum number of digits in the new password.
+ # dcredit = 0
+[0;32m+dcredit = -1[0m
+[0;32m[0m #
+ # The maximum credit for having uppercase characters in the new password.
+ # If less than 0 it is the minimum number of uppercase characters in the new
+
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.4.1 - require at least one uppercase letter in passwords] *********************************************************************************
+[0;31m--- before: /etc/security/pwquality.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/security/pwquality.conf (content)[0m
+[0;32m[0m[0;36m@@ -19,6 +19,7 @@[0m
+[0;36m[0m # If less than 0 it is the minimum number of uppercase characters in the new
+ # password.
+ # ucredit = 0
+[0;32m+ucredit = -1[0m
+[0;32m[0m #
+ # The maximum credit for having lowercase characters in the new password.
+ # If less than 0 it is the minimum number of lowercase characters in the new
+
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.4.1 - require at least one lowercase letter in passwords] *********************************************************************************
+[0;31m--- before: /etc/security/pwquality.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/security/pwquality.conf (content)[0m
+[0;32m[0m[0;36m@@ -25,6 +25,7 @@[0m
+[0;36m[0m # If less than 0 it is the minimum number of lowercase characters in the new
+ # password.
+ # lcredit = 0
+[0;32m+lcredit = -1[0m
+[0;32m[0m #
+ # The maximum credit for having other characters in the new password.
+ # If less than 0 it is the minimum number of other characters in the new
+
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.4.1 - Require at least one special character in passwords] ********************************************************************************
+[0;31m--- before: /etc/security/pwquality.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/security/pwquality.conf (content)[0m
+[0;32m[0m[0;36m@@ -31,6 +31,7 @@[0m
+[0;36m[0m # If less than 0 it is the minimum number of other characters in the new
+ # password.
+ # ocredit = 0
+[0;32m+ocredit = -1[0m
+[0;32m[0m #
+ # The minimum number of required classes of characters for the new
+ # password (digits, uppercase, lowercase, others).
+
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.4.1 - Require at least 14 characters in passwords] ****************************************************************************************
+[0;31m--- before: /etc/security/pwquality.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/security/pwquality.conf (content)[0m
+[0;32m[0m[0;36m@@ -9,6 +9,7 @@[0m
+[0;36m[0m # credits are not disabled which is the default). (See pam_cracklib manual.)
+ # Cannot be set to lower value than 6.
+ # minlen = 8
+[0;32m+minlen = 14[0m
+[0;32m[0m #
+ # The maximum credit for having digits in the new password. If less than 0
+ # it is the minimum number of digits in the new password.
+
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.4.3 PAM checks] ***************************************************************************************************************************
+[0;31m--- before: /etc/pam.d/system-auth (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/pam.d/system-auth (content)[0m
+[0;32m[0m[0;36m@@ -13,7 +13,7 @@[0m
+[0;36m[0m account     required      pam_permit.so
+ 
+ password    requisite     pam_pwquality.so try_first_pass local_users_only retry=3 authtok_type=
+[0;31m-password    sufficient    pam_unix.so sha512 shadow nullok try_first_pass use_authtok[0m
+[0;31m[0m[0;32m+password    sufficient    pam_unix.so yescrypt shadow nullok use_authtok remember=5 sha512[0m
+[0;32m[0m password    required      pam_deny.so
+ 
+ session     optional      pam_keyinit.so revoke
+
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.4.3 Ensure password reuse is limited | update file according to CIS] **********************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.5.1.2 - Ensure password change days is set to 0] ******************************************************************************************
+[0;31m--- before: /etc/login.defs (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/login.defs (content)[0m
+[0;32m[0m[0;36m@@ -80,3 +80,4 @@[0m
+[0;36m[0m # Use SHA512 to encrypt password.
+ ENCRYPT_METHOD SHA512
+ 
+[0;32m+PASS_MIN_DAYS  0[0m
+[0;32m[0m
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.5.1.3 - Ensure password warning days is set to 7] *****************************************************************************************
+[0;31m--- before: /etc/login.defs (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/login.defs (content)[0m
+[0;32m[0m[0;36m@@ -81,3 +81,4 @@[0m
+[0;36m[0m ENCRYPT_METHOD SHA512
+ 
+ PASS_MIN_DAYS  0
+[0;32m+PASS_WARN_AGE  7[0m
+[0;32m[0m
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.5.3 - Ensure default shell timeout is 900 seconds or less] ********************************************************************************
+[0;31m--- before: /etc/profile (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/profile (content)[0m
+[0;32m[0m[0;36m@@ -83,3 +83,4 @@[0m
+[0;36m[0m                 . /etc/bashrc
+        fi
+ fi
+[0;32m+readonly TMOUT=900 ; export TMOUT[0m
+[0;32m[0m
+[0;33mchanged: [dcax-hcshin01] => (item=/etc/profile)[0m
+
+TASK [cis_security : 5.5.4 - Ensure default group for root is GID 0] *********************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.5.5 - Ensure umask is set] ****************************************************************************************************************
+[0;31m--- before: /etc/bashrc[0m
+[0;31m[0m[0;32m+++ after: /etc/bashrc[0m
+[0;32m[0m[0;36m@@ -72,7 +72,7 @@[0m
+[0;36m[0m     if [ $UID -gt 199 ] && [ "`/usr/bin/id -gn`" = "`/usr/bin/id -un`" ]; then
+        umask 002
+     else
+[0;31m-       umask 022[0m
+[0;31m[0m[0;32m+     umask 027[0m
+[0;32m[0m     fi
+ 
+     SHELL=/bin/bash
+
+[0;33mchanged: [dcax-hcshin01] => (item=/etc/bashrc)[0m
+[0;31m--- before: /etc/profile[0m
+[0;31m[0m[0;32m+++ after: /etc/profile[0m
+[0;32m[0m[0;36m@@ -59,7 +59,7 @@[0m
+[0;36m[0m if [ $UID -gt 199 ] && [ "`/usr/bin/id -gn`" = "`/usr/bin/id -un`" ]; then
+     umask 002
+ else
+[0;31m-    umask 022[0m
+[0;31m[0m[0;32m+     umask 027[0m
+[0;32m[0m fi
+ 
+ for i in /etc/profile.d/*.sh /etc/profile.d/sh.local ; do
+
+[0;33mchanged: [dcax-hcshin01] => (item=/etc/profile)[0m
+
+TASK [cis_security : 5.7 - Configure PAM to only allow su from wheel group] **************************************************************************************
+[0;31m--- before: /etc/pam.d/su[0m
+[0;31m[0m[0;32m+++ after: /etc/pam.d/su[0m
+[0;32m[0m[0;36m@@ -4,7 +4,7 @@[0m
+[0;36m[0m # Uncomment the following line to implicitly trust users in the "wheel" group.
+ #auth		sufficient	pam_wheel.so trust use_uid
+ # Uncomment the following line to require a user to be in the "wheel" group.
+[0;31m-#auth		required	pam_wheel.so use_uid[0m
+[0;31m[0m[0;32m+auth         required        pam_wheel.so use_uid[0m
+[0;32m[0m auth		substack	system-auth
+ auth		include		postlogin
+ account		sufficient	pam_succeed_if.so uid = 0 use_uid quiet
+
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 5.7 - Add root to the wheel group] **********************************************************************************************************
+[0;33mchanged: [dcax-hcshin01][0m
+
+TASK [cis_security : 6.1.[2,4] - Ensure permissions on /etc/passwd /etc/group] ***********************************************************************************
+[0;32mok: [dcax-hcshin01] => (item=passwd)[0m
+[0;32mok: [dcax-hcshin01] => (item=group)[0m
+
+TASK [cis_security : 6.1.[3,5] - Ensure permissions on /etc/shadow /etc/gshadow] *********************************************************************************
+[0;32mok: [dcax-hcshin01] => (item=shadow)[0m
+[0;32mok: [dcax-hcshin01] => (item=gshadow)[0m
+
+TASK [cis_security : 6.1.[6-9] - Ensure permissions on /etc/passwd- /etc/[g]shadow- /etc/group-] *****************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0644",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/passwd-"
+ }
+
+[0;33mchanged: [dcax-hcshin01] => (item=passwd-)[0m
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0000",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/shadow-"
+ }
+
+[0;33mchanged: [dcax-hcshin01] => (item=shadow-)[0m
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0644",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/group-"
+ }
+
+[0;33mchanged: [dcax-hcshin01] => (item=group-)[0m
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0000",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/gshadow-"
+ }
+
+[0;33mchanged: [dcax-hcshin01] => (item=gshadow-)[0m
+
+TASK [cis_security : 6.1.10 - Find any world writiable files] ****************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 6.1.10 - Print any world writable files found] **********************************************************************************************
+[0;33mchanged: [dcax-hcshin01] => {[0m
+[0;33m    "msg": "World writiable files found: /var/sqlite/KPProfile2\n/var/sqlite/MRIF16\n/var/sqlite/RoperQlist\n/var/NARcode/CatalogTest/.Rproj.user/62B73C16/graphics-r3/empty.png\n/var/NARcode/CatalogTest/.Rproj.user/62B73C16/graphics-r3/INDEX\n/var/NARcode/CatalogTest/.Rproj.user/62B73C16/session-persistent-state\n/var/NARcode/CatalogTest/.Rproj.user/62B73C16/sdb/prop/8C0271B7\n/var/NARcode/CatalogTest/.Rproj.user/62B73C16/sdb/prop/INDEX\n/var/NARcode/CatalogTest/.Rproj.user/62B73C16/sdb/prop/BF80FECB\n/var/NARcode/CatalogTest/.Rproj.user/62B73C16/sdb/prop/90F60F34\n/var/NARcode/CatalogTest/.Rproj.user/62B73C16/sdb/prop/DBF9D257\n/var/NARcode/CatalogTest/.Rproj.user/62B73C16/sdb/prop/A3EBB2BB\n/var/NARcode/CatalogTest/.Rproj.user/62B73C16/rmd-outputs\n/var/NARcode/CatalogTest/.Rproj.user/62B73C16/persistent-state\n/var/NARcode/CatalogTest/.Rproj.user/62B73C16/saved_source_markers\n/var/NARcode/CatalogTest/.Rproj.user/shared/notebooks/paths\n/var/NARcode/CatalogTest/CatalogTest.Rproj\n/var/NARcode/CatalogTest/.git/description\n/var/NARcode/CatalogTest/.git/hooks/applypatch-msg.sample\n/var/NARcode/CatalogTest/.git/hooks/commit-msg.sample\n/var/NARcode/CatalogTest/.git/hooks/post-update.sample\n/var/NARcode/CatalogTest/.git/hooks/pre-applypatch.sample\n/var/NARcode/CatalogTest/.git/hooks/pre-commit.sample\n/var/NARcode/CatalogTest/.git/hooks/pre-push.sample\n/var/NARcode/CatalogTest/.git/hooks/pre-rebase.sample\n/var/NARcode/CatalogTest/.git/hooks/prepare-commit-msg.sample\n/var/NARcode/CatalogTest/.git/hooks/update.sample\n/var/NARcode/CatalogTest/.git/info/exclude\n/var/NARcode/CatalogTest/.git/HEAD\n/var/NARcode/CatalogTest/.gitignore\n/var/NARcode/CodeKPVars/ui.R\n/var/NARcode/CodeKPVars/server.R\n/var/NARcode/CodeKPVars/.Rproj.user/62B73C16/graphics-r3/empty.png\n/var/NARcode/CodeKPVars/.Rproj.user/62B73C16/graphics-r3/INDEX\n/var/NARcode/CodeKPVars/.Rproj.user/62B73C16/session-persistent-state\n/var/NARcode/CodeKPVars/.Rproj.user/62B73C16/sdb/prop/21682D17\n/var/NARcode/CodeKPVars/.Rproj.user/62B73C16/sdb/prop/INDEX\n/var/NARcode/CodeKPVars/.Rproj.user/62B73C16/sdb/prop/240645B3\n/var/NARcode/CodeKPVars/.Rproj.user/62B73C16/sdb/prop/533F12A9\n/var/NARcode/CodeKPVars/.Rproj.user/62B73C16/sdb/prop/68DC1C84\n/var/NARcode/CodeKPVars/.Rproj.user/62B73C16/sdb/prop/726C74C2\n/var/NARcode/CodeKPVars/.Rproj.user/62B73C16/sdb/prop/8DE828F6\n/var/NARcode/CodeKPVars/.Rproj.user/62B73C16/sdb/prop/D73DC45E\n/var/NARcode/CodeKPVars/.Rproj.user/62B73C16/sdb/per/t/38BECE84\n/var/NARcode/CodeKPVars/.Rproj.user/62B73C16/sdb/per/t/DD4B43F6\n/var/NARcode/CodeKPVars/.Rproj.user/62B73C16/sdb/per/t/55FA31D8\n/var/NARcode/CodeKPVars/.Rproj.user/62B73C16/sdb/per/t/62121FDF\n/var/NARcode/CodeKPVars/.Rproj.user/62B73C16/rmd-outputs\n/var/NARcode/CodeKPVars/.Rproj.user/62B73C16/saved_source_markers\n/var/NARcode/CodeKPVars/.Rproj.user/62B73C16/persistent-state\n/var/NARcode/CodeKPVars/.Rproj.user/62B73C16/pcs/debug-breakpoints.pper\n/var/NARcode/CodeKPVars/.Rproj.user/62B73C16/pcs/files-pane.pper\n/var/NARcode/CodeKPVars/.Rproj.user/62B73C16/pcs/source-pane.pper\n/var/NARcode/CodeKPVars/.Rproj.user/62B73C16/pcs/windowlayoutstate.pper\n/var/NARcode/CodeKPVars/.Rproj.user/62B73C16/pcs/workbench-pane.pper\n/var/NARcode/CodeKPVars/.Rproj.user/shared/notebooks/paths\n/var/NARcode/CodeKPVars/CodeKPVars.Rproj\n/var/NARcode/CodeKPVars/.git/description\n/var/NARcode/CodeKPVars/.git/hooks/applypatch-msg.sample\n/var/NARcode/CodeKPVars/.git/hooks/commit-msg.sample\n/var/NARcode/CodeKPVars/.git/hooks/post-update.sample\n/var/NARcode/CodeKPVars/.git/hooks/pre-applypatch.sample\n/var/NARcode/CodeKPVars/.git/hooks/pre-commit.sample\n/var/NARcode/CodeKPVars/.git/hooks/pre-push.sample\n/var/NARcode/CodeKPVars/.git/hooks/pre-rebase.sample\n/var/NARcode/CodeKPVars/.git/hooks/prepare-commit-msg.sample\n/var/NARcode/CodeKPVars/.git/hooks/update.sample\n/var/NARcode/CodeKPVars/.git/info/exclude\n/var/NARcode/CodeKPVars/.git/HEAD\n/var/NARcode/CodeKPVars/.gitignore\n/var/NARcode/CodeKPVars/www/chooser-binding.js\n/var/NARcode/CodeKPVars/www/custom.css\n/var/NARcode/CodeKPVars/www/favicon.ico\n/var/NARcode/CodeKPVars/www/fonts/Insight_web_Regular.ttf\n/var/NARcode/CodeKPVars/www/fonts/Insight_web_Regular.woff\n/var/NARcode/CodeKPVars/www/global.R\n/var/NARcode/CodeKPVars/www/images/gfkIcon.png\n/var/NARcode/CodeKPVars/www/images/gfk_logo.png\n/var/NARcode/CodeKPVars/global.R\n/var/NARcode/CodeKPVars/All Profile Variables 20170705.csv\n/var/NARcode/CodeKPVars/KPProfile\n/var/NARcode/CodeKPVars/SomeTesting.R\n/var/NARcode/CodeKPVars/.Rhistory\n/var/NARcode/CodeKPVars/.RData\n/var/NARcode/CodeKPVars/USC472760.csv\n/var/NARcode/CodeKPVars/RoperQlist\n/var/NARcode/FusionEngine/FusionEngine.Rproj\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/session-persistent-state\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/E5A93EA9\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/INDEX\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/14233C\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/A6B125D3\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/5275B613\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/21CA9441\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/3585BE21\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/96A0F5C6\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/9E9F30F6\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/67E0207B\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/4DD022A2\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/7DBEDA63\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/19564D0E\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/AD335F42\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/34038010\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/C5F4E6DA\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/8821ED4A\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/22EA88DE\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/5F293E07\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/8AE10B1F\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/11BA7BFE\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/AA21FA3\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/9BF18965\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/3520C478\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/F72A5E47\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/9EE57DFB\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/AE4ADECE\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/93D4BB0C\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/C744B8B2\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/D6E69BE6\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/B11299F7\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/5167444A\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/58F2ED26\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/A42A6B37\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/CE37D814\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/1B31C9F0\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/52996514\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/5B71FFFE\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/E51323D2\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/18545323\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/7865CD1B\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/81C24E71\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/CDE385C1\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/CC91AEAA\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/82618B2F\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/32F08E2D\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/4457AA5\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/921BED86\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/18008FE5\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/81086A9B\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/76909A59\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/7B068875\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/218B09CA\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/5980DF7B\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/3A555827\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/D55E68D3\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/B904924F\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/9D8DD2BC\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/46F4D08F\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/C178579E\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/7C269471\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/6F265988\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/C940327D\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/7F84403C\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/sdb/prop/DEA9EF74\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/vcs_options\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/build_options\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/rmd-outputs\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/saved_source_markers\n/var/NARcode/FusionEngine/.Rproj.user/62B73C16/persistent-state\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/paths\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/chunks.json\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/csetup_chunk/000002.csv\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/c6sgnhm3wun9r/000002.csv\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/c6sgnhm3wun9r/000003.html\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/c6sgnhm3wun9r/000003.json\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/c6sgnhm3wun9r/000003.metadata\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/htmlwidgets-0.9/htmlwidgets.js\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/plotly-binding-4.7.1/plotly.js\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/typedarray-0.1/LICENSE\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/typedarray-0.1/typedarray.min.js\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/jquery-1.11.3/jquery-AUTHORS.txt\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/jquery-1.11.3/jquery.js\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/jquery-1.11.3/jquery.min.js\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/jquery-1.11.3/jquery.min.map\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/crosstalk-1.0.0/css/crosstalk.css\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/crosstalk-1.0.0/js/crosstalk.js\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/crosstalk-1.0.0/js/crosstalk.js.map\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/crosstalk-1.0.0/js/crosstalk.min.js\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/crosstalk-1.0.0/js/crosstalk.min.js.map\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/plotlyjs-1.29.2/LICENSE\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/plotlyjs-1.29.2/plotly-htmlwidgets.css\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/plotlyjs-1.29.2/plotly-latest.min.js\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/csetup_chunk/000002.csv\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/htmlwidgets-0.9/htmlwidgets.js\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/plotly-binding-4.7.1/plotly.js\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/typedarray-0.1/LICENSE\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/typedarray-0.1/typedarray.min.js\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/jquery-1.11.3/jquery-AUTHORS.txt\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/jquery-1.11.3/jquery.js\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/jquery-1.11.3/jquery.min.js\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/jquery-1.11.3/jquery.min.map\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/crosstalk-1.0.0/css/crosstalk.css\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/crosstalk-1.0.0/js/crosstalk.js\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/crosstalk-1.0.0/js/crosstalk.js.map\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/crosstalk-1.0.0/js/crosstalk.min.js\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/crosstalk-1.0.0/js/crosstalk.min.js.map\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/plotlyjs-1.29.2/LICENSE\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/plotlyjs-1.29.2/plotly-htmlwidgets.css\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/plotlyjs-1.29.2/plotly-latest.min.js\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/chunks.json\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/cw3210rpdsa57/000004.csv\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/cw3210rpdsa57/000005.html\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/cw3210rpdsa57/000005.json\n/var/NARcode/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/cw3210rpdsa57/000005.metadata\n/var/NARcode/FusionEngine/.Rhistory\n/var/NARcode/FusionEngine/ComputerUse1FeatureMatch.csv\n/var/NARcode/FusionEngine/CoreProfileFeatureMatch.csv\n/var/NARcode/FusionEngine/HealthProfileMatching.csv\n/var/NARcode/FusionEngine/GenericHealthFashionPsychMatching.csv\n/var/NARcode/FusionEngine/AddWeightsFunction.R\n/var/NARcode/FusionEngine/KPMRIFusionFunctions.R\n/var/NARcode/FusionEngine/SplitWeightFusionTransport.R\n/var/NARcode/FusionEngine/us_mam_split_weight_fusion_call21122016.R\n/var/NARcode/FusionEngine/WtdGowerDist.R\n/var/NARcode/FusionEngine/KPProfiles/Broadcast_tv_profile_combined.sav\n/var/NARcode/FusionEngine/KPProfiles/CableTV_profile_combined.sav\n/var/NARcode/FusionEngine/KPProfiles/Calibration_Profile.sav\n/var/NARcode/FusionEngine/KPProfiles/Computer_Usage_1_Profile_Combined.sav\n/var/NARcode/FusionEngine/KPProfiles/Computer_Usage_2_Profile_Combined.sav\n/var/NARcode/FusionEngine/KPProfiles/Financial_Services_Profile_Combined.sav\n/var/NARcode/FusionEngine/KPProfiles/Health 1_Profile_Combined.sav\n/var/NARcode/FusionEngine/KPProfiles/Health 2_Profile_Combined.sav\n/var/NARcode/FusionEngine/KPProfiles/Hispanic_Profile_Combined.sav\n/var/NARcode/FusionEngine/KPProfiles/Public_Affairs_Profile_Combined.sav\n/var/NARcode/FusionEngine/KPProfiles/Retail_Profile_Combined.sav\n/var/NARcode/FusionEngine/KPProfiles/Sports_Interest_Profile_Combined.sav\n/var/NARcode/FusionEngine/KPProfiles/s20712.sav\n/var/NARcode/FusionEngine/KPProfiles/s20719.sav\n/var/NARcode/FusionEngine/KPProfiles/s20721.sav\n/var/NARcode/FusionEngine/KPProfiles/s20722.sav\n/var/NARcode/FusionEngine/KPProfiles/s20737.sav\n/var/NARcode/FusionEngine/KPProfiles/Roper_Profile_combined.sav\n/var/NARcode/FusionEngine/KPProfiles/CoreProfileForMAM.sav\n/var/NARcode/FusionEngine/KPProfiles/Broadcast_tv_profile_combinedmain.csv\n/var/NARcode/FusionEngine/KPProfiles/Broadcast_tv_profile_combinedlabels.csv\n/var/NARcode/FusionEngine/KPProfiles/CableTV_profile_combinedmain.csv\n/var/NARcode/FusionEngine/KPProfiles/CableTV_profile_combinedlabels.csv\n/var/NARcode/FusionEngine/KPProfiles/Calibration_Profilemain.csv\n/var/NARcode/FusionEngine/KPProfiles/Calibration_Profilelabels.csv\n/var/NARcode/FusionEngine/KPProfiles/Computer_Usage_1_Profile_Combinedmain.csv\n/var/NARcode/FusionEngine/KPProfiles/Computer_Usage_1_Profile_Combinedlabels.csv\n/var/NARcode/FusionEngine/KPProfiles/Computer_Usage_2_Profile_Combinedmain.csv\n/var/NARcode/FusionEngine/KPProfiles/Computer_Usage_2_Profile_Combinedlabels.csv\n/var/NARcode/FusionEngine/KPProfiles/CoreProfileForMAMmain.csv\n/var/NARcode/FusionEngine/KPProfiles/CoreProfileForMAMlabels.csv\n/var/NARcode/FusionEngine/KPProfiles/Financial_Services_Profile_Combinedmain.csv\n/var/NARcode/FusionEngine/KPProfiles/Financial_Services_Profile_Combinedlabels.csv\n/var/NARcode/FusionEngine/KPProfiles/Hispanic_Profile_Combinedmain.csv\n/var/NARcode/FusionEngine/KPProfiles/Hispanic_Profile_Combinedlabels.csv\n/var/NARcode/FusionEngine/KPProfiles/Public_Affairs_Profile_Combinedmain.csv\n/var/NARcode/FusionEngine/KPProfiles/Public_Affairs_Profile_Combinedlabels.csv\n/var/NARcode/FusionEngine/KPProfiles/Retail_Profile_Combinedmain.csv\n/var/NARcode/FusionEngine/KPProfiles/Retail_Profile_Combinedlabels.csv\n/var/NARcode/FusionEngine/KPProfiles/Roper_Profile_combinedmain.csv\n/var/NARcode/FusionEngine/KPProfiles/Roper_Profile_combinedlabels.csv\n/var/NARcode/FusionEngine/KPProfiles/s20712main.csv\n/var/NARcode/FusionEngine/KPProfiles/s20712labels.csv\n/var/NARcode/FusionEngine/KPProfiles/s20719main.csv\n/var/NARcode/FusionEngine/KPProfiles/s20719labels.csv\n/var/NARcode/FusionEngine/KPProfiles/s20721main.csv\n/var/NARcode/FusionEngine/KPProfiles/s20721labels.csv\n/var/NARcode/FusionEngine/KPProfiles/s20722main.csv\n/var/NARcode/FusionEngine/KPProfiles/s20722labels.csv\n/var/NARcode/FusionEngine/KPProfiles/s20737main.csv\n/var/NARcode/FusionEngine/KPProfiles/s20737labels.csv\n/var/NARcode/FusionEngine/KPProfiles/Sports_Interest_Profile_Combinedmain.csv\n/var/NARcode/FusionEngine/KPProfiles/Sports_Interest_Profile_Combinedlabels.csv\n/var/NARcode/FusionEngine/KPProfiles/Broadcast_tv_profile_combinedmain.tsv\n/var/NARcode/FusionEngine/KPProfiles/Broadcast_tv_profile_combinedlabels.tsv\n/var/NARcode/FusionEngine/KPProfiles/CableTV_profile_combinedmain.tsv\n/var/NARcode/FusionEngine/KPProfiles/CableTV_profile_combinedlabels.tsv\n/var/NARcode/FusionEngine/KPProfiles/Calibration_Profilemain.tsv\n/var/NARcode/FusionEngine/KPProfiles/Calibration_Profilelabels.tsv\n/var/NARcode/FusionEngine/KPProfiles/Computer_Usage_1_Profile_Combinedmain.tsv\n/var/NARcode/FusionEngine/KPProfiles/Computer_Usage_1_Profile_Combinedlabels.tsv\n/var/NARcode/FusionEngine/KPProfiles/Computer_Usage_2_Profile_Combinedmain.tsv\n/var/NARcode/FusionEngine/KPProfiles/Computer_Usage_2_Profile_Combinedlabels.tsv\n/var/NARcode/FusionEngine/KPProfiles/CoreProfileForMAMmain.tsv\n/var/NARcode/FusionEngine/KPProfiles/CoreProfileForMAMlabels.tsv\n/var/NARcode/FusionEngine/KPProfiles/Financial_Services_Profile_Combinedmain.tsv\n/var/NARcode/FusionEngine/KPProfiles/Financial_Services_Profile_Combinedlabels.tsv\n/var/NARcode/FusionEngine/KPProfiles/Health 1_Profile_Combinedmain.tsv\n/var/NARcode/FusionEngine/KPProfiles/Health 1_Profile_Combinedlabels.tsv\n/var/NARcode/FusionEngine/KPProfiles/Health 2_Profile_Combinedmain.tsv\n/var/NARcode/FusionEngine/KPProfiles/Health 2_Profile_Combinedlabels.tsv\n/var/NARcode/FusionEngine/KPProfiles/Hispanic_Profile_Combinedmain.tsv\n/var/NARcode/FusionEngine/KPProfiles/Hispanic_Profile_Combinedlabels.tsv\n/var/NARcode/FusionEngine/KPProfiles/Public_Affairs_Profile_Combinedmain.tsv\n/var/NARcode/FusionEngine/KPProfiles/Public_Affairs_Profile_Combinedlabels.tsv\n/var/NARcode/FusionEngine/KPProfiles/Retail_Profile_Combinedmain.tsv\n/var/NARcode/FusionEngine/KPProfiles/Retail_Profile_Combinedlabels.tsv\n/var/NARcode/FusionEngine/KPProfiles/Roper_Profile_combinedmain.tsv\n/var/NARcode/FusionEngine/KPProfiles/Roper_Profile_combinedlabels.tsv\n/var/NARcode/FusionEngine/KPProfiles/s20712main.tsv\n/var/NARcode/FusionEngine/KPProfiles/s20712labels.tsv\n/var/NARcode/FusionEngine/KPProfiles/s20719main.tsv\n/var/NARcode/FusionEngine/KPProfiles/s20719labels.tsv\n/var/NARcode/FusionEngine/KPProfiles/s20721main.tsv\n/var/NARcode/FusionEngine/KPProfiles/s20721labels.tsv\n/var/NARcode/FusionEngine/KPProfiles/s20722main.tsv\n/var/NARcode/FusionEngine/KPProfiles/s20722labels.tsv\n/var/NARcode/FusionEngine/KPProfiles/s20737main.tsv\n/var/NARcode/FusionEngine/KPProfiles/s20737labels.tsv\n/var/NARcode/FusionEngine/KPProfiles/Sports_Interest_Profile_Combinedmain.tsv\n/var/NARcode/FusionEngine/KPProfiles/Sports_Interest_Profile_Combinedlabels.tsv\n/var/NARcode/FusionEngine/KPProfiles/Broadcast_tv_profile_combinedvarlabs.tsv\n/var/NARcode/FusionEngine/KPProfiles/CableTV_profile_combinedvarlabs.tsv\n/var/NARcode/FusionEngine/KPProfiles/Calibration_Profilevarlabs.tsv\n/var/NARcode/FusionEngine/KPProfiles/Computer_Usage_1_Profile_Combinedvarlabs.tsv\n/var/NARcode/FusionEngine/KPProfiles/Computer_Usage_2_Profile_Combinedvarlabs.tsv\n/var/NARcode/FusionEngine/KPProfiles/CoreProfileForMAMvarlabs.tsv\n/var/NARcode/FusionEngine/KPProfiles/Financial_Services_Profile_Combinedvarlabs.tsv\n/var/NARcode/FusionEngine/KPProfiles/Health 1_Profile_Combinedvarlabs.tsv\n/var/NARcode/FusionEngine/KPProfiles/Health 2_Profile_Combinedvarlabs.tsv\n/var/NARcode/FusionEngine/KPProfiles/Hispanic_Profile_Combinedvarlabs.tsv\n/var/NARcode/FusionEngine/KPProfiles/Public_Affairs_Profile_Combinedvarlabs.tsv\n/var/NARcode/FusionEngine/KPProfiles/Retail_Profile_Combinedvarlabs.tsv\n/var/NARcode/FusionEngine/KPProfiles/Roper_Profile_combinedvarlabs.tsv\n/var/NARcode/FusionEngine/KPProfiles/s20712varlabs.tsv\n/var/NARcode/FusionEngine/KPProfiles/s20719varlabs.tsv\n/var/NARcode/FusionEngine/KPProfiles/s20721varlabs.tsv\n/var/NARcode/FusionEngine/KPProfiles/s20722varlabs.tsv\n/var/NARcode/FusionEngine/KPProfiles/s20737varlabs.tsv\n/var/NARcode/FusionEngine/KPProfiles/Sports_Interest_Profile_Combinedvarlabs.tsv\n/var/NARcode/FusionEngine/KPProfiles/SplitWeightFusionTransport.R\n/var/NARcode/FusionEngine/RetailFeatureMatch.csv\n/var/NARcode/FusionEngine/GenericBuyingStylesPsychMatching.csv\n/var/NARcode/FusionEngine/GenericFoodPsychMatching.csv\n/var/NARcode/FusionEngine/Revised1To1Fusion08222017.R\n/var/NARcode/FusionEngine/RemoveMissingMRICodes.R\n/var/NARcode/FusionEngine/MRIKPOneToOneMatch.csv\n/var/NARcode/FusionEngine/PetPurchaseLocations.csv\n/var/NARcode/FusionEngine/MRI Categories Pet Webinar FINAL.xlsx\n/var/NARcode/FusionEngine/KPMRIOneToOneMatch.csv\n/var/NARcode/FusionEngine/KPPetBuyingStyles.csv\n/var/NARcode/FusionEngine/KPPetWebinarData.csv\n/var/NARcode/FusionEngine/PetAnalysis.R\n/var/NARcode/FusionEngine/SigDiffUnwt.csv\n/var/NARcode/FusionEngine/SigDiffwt.csv\n/var/NARcode/FusionEngine/JMS Coffee Segmentation Final Segment Flag for Fusion.xlsx\n/var/NARcode/FusionEngine/PsychographicsGrocery.csv\n/var/NARcode/FusionEngine/GroceryOrganic.csv\n/var/NARcode/FusionEngine/Shopping.csv\n/var/NARcode/FusionEngine/AmazonWholeFoodsFusion.csv\n/var/NARcode/FusionEngine/AmazonWholeFoodsLabeledFusion.csv\n/var/NARcode/FusionEngine/SmuckersAttitudess.csv\n/var/NARcode/FusionEngine/SmuckersFusion.R\n/var/NARcode/FusionEngine/AmazonWholeFoodsFusion.R\n/var/NARcode/FusionEngine/Smuckersout.csv\n/var/NARcode/FusionEngine/SmuckersoutLabelled.csv\n/var/NARcode/FusionEngine/SGraph.Rmd\n/var/NARcode/FusionEngine/SmuckersGraph.Rmd\n/var/NARcode/FusionEngine/ConvertAllSAV2CSV.R\n/var/NARcode/FusionEngine/CreateMatchFileAuto/global.R\n/var/NARcode/FusionEngine/CreateMatchFileAuto/code2.tab\n/var/NARcode/FusionEngine/CreateMatchFileAuto/server.R\n/var/NARcode/FusionEngine/CreateMatchFileAuto/ui.R\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFile.Rproj\n/var/NARcode/FusionEngine/CreateMatchFileAuto/.Rproj.user/62B73C16/graphics-r3/empty.png\n/var/NARcode/FusionEngine/CreateMatchFileAuto/.Rproj.user/62B73C16/graphics-r3/INDEX\n/var/NARcode/FusionEngine/CreateMatchFileAuto/.Rproj.user/62B73C16/session-persistent-state\n/var/NARcode/FusionEngine/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/prop/334046D8\n/var/NARcode/FusionEngine/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/prop/INDEX\n/var/NARcode/FusionEngine/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/prop/F33706B9\n/var/NARcode/FusionEngine/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/prop/2C5681B3\n/var/NARcode/FusionEngine/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/prop/82C712E4\n/var/NARcode/FusionEngine/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/s-9E61C15A/lock_file\n/var/NARcode/FusionEngine/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/s-9E61C15A/8BECA8C3\n/var/NARcode/FusionEngine/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/s-9E61C15A/9EC7FCEA\n/var/NARcode/FusionEngine/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/s-9E61C15A/EBD4111E\n/var/NARcode/FusionEngine/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/s-9E61C15A/99A4FB5C\n/var/NARcode/FusionEngine/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/s-9E61C15A/CA262AEF\n/var/NARcode/FusionEngine/CreateMatchFileAuto/.Rproj.user/62B73C16/rmd-outputs\n/var/NARcode/FusionEngine/CreateMatchFileAuto/.Rproj.user/62B73C16/persistent-state\n/var/NARcode/FusionEngine/CreateMatchFileAuto/.Rproj.user/62B73C16/saved_source_markers\n/var/NARcode/FusionEngine/CreateMatchFileAuto/.Rproj.user/62B73C16/pcs/files-pane.pper\n/var/NARcode/FusionEngine/CreateMatchFileAuto/.Rproj.user/62B73C16/pcs/source-pane.pper\n/var/NARcode/FusionEngine/CreateMatchFileAuto/.Rproj.user/62B73C16/pcs/windowlayoutstate.pper\n/var/NARcode/FusionEngine/CreateMatchFileAuto/.Rproj.user/62B73C16/pcs/workbench-pane.pper\n/var/NARcode/FusionEngine/CreateMatchFileAuto/chooser.R\n/var/NARcode/FusionEngine/CreateMatchFileAuto/.Rhistory\n/var/NARcode/FusionEngine/CreateMatchFileAuto/.RData\n/var/NARcode/FusionEngine/CreateMatchFileAuto/SprintData.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/www/chooser-binding.js\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/global.R\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/server.R\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/ui.R\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/graphics-r3/empty.png\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/graphics-r3/INDEX\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/session-persistent-state\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/prop/334046D8\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/prop/INDEX\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/prop/F33706B9\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/prop/2C5681B3\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/prop/82C712E4\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/prop/13E6AD52\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/prop/4B21A99A\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/prop/C42D2A5D\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/prop/29FD193\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/prop/40C40DAB\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/prop/70C9BD7C\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/prop/B8296738\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/prop/44E71434\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/prop/8DE52983\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/per/t/8BECA8C3\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/per/t/9EC7FCEA\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/per/t/EBD4111E\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/per/t/99A4FB5C\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/per/t/23E56BD5\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/sdb/per/t/B5C5DE09\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/viewer-cache/279C4D06.Rdata\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/rmd-outputs\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/persistent-state\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/saved_source_markers\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/pcs/files-pane.pper\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/pcs/source-pane.pper\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/pcs/windowlayoutstate.pper\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/62B73C16/pcs/workbench-pane.pper\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rproj.user/shared/notebooks/paths\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/chooser.R\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.Rhistory\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/.RData\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/www/chooser-binding.js\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/CreateMatchFileAuto.Rproj\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/tempautosubset.sav\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/LightVehicle17DEC_ID.SAV\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/fixlabels.R\n/var/NARcode/FusionEngine/CreateMatchFileAuto/CreateMatchFileAuto/aipvallabels.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/FusionEngine.Rproj\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/session-persistent-state\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/per/u/B338DBC9\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/per/u/4ED2014\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/per/t/AF50967C\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/per/t/38930C09\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/per/t/ECF2621F\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/per/t/F1084F65\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/E5A93EA9\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/INDEX\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/14233C\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/A6B125D3\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/5275B613\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/21CA9441\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/3585BE21\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/96A0F5C6\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/9E9F30F6\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/67E0207B\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/4DD022A2\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/7DBEDA63\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/19564D0E\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/AD335F42\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/34038010\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/C5F4E6DA\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/8821ED4A\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/22EA88DE\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/5F293E07\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/8AE10B1F\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/11BA7BFE\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/AA21FA3\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/9BF18965\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/3520C478\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/F72A5E47\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/9EE57DFB\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/AE4ADECE\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/93D4BB0C\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/C744B8B2\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/D6E69BE6\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/B11299F7\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/5167444A\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/58F2ED26\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/A42A6B37\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/CE37D814\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/1B31C9F0\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/52996514\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/5B71FFFE\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/E51323D2\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/18545323\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/7865CD1B\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/81C24E71\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/CDE385C1\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/CC91AEAA\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/82618B2F\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/32F08E2D\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/4457AA5\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/921BED86\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/18008FE5\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/81086A9B\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/76909A59\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/sdb/prop/7B068875\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/vcs_options\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/build_options\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/rmd-outputs\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/saved_source_markers\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/persistent-state\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/graphics-r3/empty.png\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/graphics-r3/INDEX\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/pcs/files-pane.pper\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/pcs/packages-pane.pper\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/pcs/source-pane.pper\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/pcs/windowlayoutstate.pper\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/62B73C16/pcs/workbench-pane.pper\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/paths\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/chunks.json\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/csetup_chunk/000002.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/c6sgnhm3wun9r/000002.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/c6sgnhm3wun9r/000003.html\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/c6sgnhm3wun9r/000003.json\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/c6sgnhm3wun9r/000003.metadata\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/htmlwidgets-0.9/htmlwidgets.js\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/plotly-binding-4.7.1/plotly.js\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/typedarray-0.1/LICENSE\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/typedarray-0.1/typedarray.min.js\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/jquery-1.11.3/jquery-AUTHORS.txt\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/jquery-1.11.3/jquery.js\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/jquery-1.11.3/jquery.min.js\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/jquery-1.11.3/jquery.min.map\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/crosstalk-1.0.0/css/crosstalk.css\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/crosstalk-1.0.0/js/crosstalk.js\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/crosstalk-1.0.0/js/crosstalk.js.map\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/crosstalk-1.0.0/js/crosstalk.min.js\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/crosstalk-1.0.0/js/crosstalk.min.js.map\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/plotlyjs-1.29.2/LICENSE\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/plotlyjs-1.29.2/plotly-htmlwidgets.css\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/948A4125-SGraph/1/s/lib/plotlyjs-1.29.2/plotly-latest.min.js\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/csetup_chunk/000002.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/htmlwidgets-0.9/htmlwidgets.js\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/plotly-binding-4.7.1/plotly.js\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/typedarray-0.1/LICENSE\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/typedarray-0.1/typedarray.min.js\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/jquery-1.11.3/jquery-AUTHORS.txt\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/jquery-1.11.3/jquery.js\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/jquery-1.11.3/jquery.min.js\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/jquery-1.11.3/jquery.min.map\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/crosstalk-1.0.0/css/crosstalk.css\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/crosstalk-1.0.0/js/crosstalk.js\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/crosstalk-1.0.0/js/crosstalk.js.map\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/crosstalk-1.0.0/js/crosstalk.min.js\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/crosstalk-1.0.0/js/crosstalk.min.js.map\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/plotlyjs-1.29.2/LICENSE\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/plotlyjs-1.29.2/plotly-htmlwidgets.css\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/lib/plotlyjs-1.29.2/plotly-latest.min.js\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/chunks.json\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/cw3210rpdsa57/000004.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/cw3210rpdsa57/000005.html\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/cw3210rpdsa57/000005.json\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rproj.user/shared/notebooks/1C47909E-SmuckersGraph/1/s/cw3210rpdsa57/000005.metadata\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.git/description\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.git/hooks/applypatch-msg.sample\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.git/hooks/commit-msg.sample\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.git/hooks/post-update.sample\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.git/hooks/pre-applypatch.sample\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.git/hooks/pre-commit.sample\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.git/hooks/pre-push.sample\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.git/hooks/pre-rebase.sample\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.git/hooks/prepare-commit-msg.sample\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.git/hooks/update.sample\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.git/info/exclude\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.git/HEAD\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.git/config\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.Rhistory\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/.gitignore\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/ComputerUse1FeatureMatch.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/CoreProfileFeatureMatch.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/HealthProfileMatching.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/GenericHealthFashionPsychMatching.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/AddWeightsFunction.R\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPMRIFusionFunctions.R\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/SplitWeightFusionTransport.R\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/us_mam_split_weight_fusion_call21122016.R\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/WtdGowerDist.R\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Broadcast_tv_profile_combined.sav\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/CableTV_profile_combined.sav\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Calibration_Profile.sav\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Computer_Usage_1_Profile_Combined.sav\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Computer_Usage_2_Profile_Combined.sav\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Financial_Services_Profile_Combined.sav\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Health 1_Profile_Combined.sav\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Health 2_Profile_Combined.sav\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Hispanic_Profile_Combined.sav\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Public_Affairs_Profile_Combined.sav\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Retail_Profile_Combined.sav\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Sports_Interest_Profile_Combined.sav\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/s20712.sav\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/s20719.sav\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/s20721.sav\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/s20722.sav\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/s20737.sav\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Roper_Profile_combined.sav\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/CoreProfileForMAM.sav\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Broadcast_tv_profile_combinedmain.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Broadcast_tv_profile_combinedlabels.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/CableTV_profile_combinedmain.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/CableTV_profile_combinedlabels.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Calibration_Profilemain.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Calibration_Profilelabels.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Computer_Usage_1_Profile_Combinedmain.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Computer_Usage_1_Profile_Combinedlabels.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Computer_Usage_2_Profile_Combinedmain.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Computer_Usage_2_Profile_Combinedlabels.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/CoreProfileForMAMmain.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/CoreProfileForMAMlabels.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Financial_Services_Profile_Combinedmain.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Financial_Services_Profile_Combinedlabels.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Hispanic_Profile_Combinedmain.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Hispanic_Profile_Combinedlabels.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Public_Affairs_Profile_Combinedmain.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Public_Affairs_Profile_Combinedlabels.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Retail_Profile_Combinedmain.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Retail_Profile_Combinedlabels.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Roper_Profile_combinedmain.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/Roper_Profile_combinedlabels.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/s20712main.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/s20712labels.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/s20719main.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/s20719labels.csv\n/var/NARcode/FusionEngine/CreateMatchFileAuto/FusionEngine/KPProfiles/s20721main.csv\n/var/NARcode/FusionEngine/SmuckersGraph.nb.html\n/var/NARcode/FusionEngine/PrepKPFilesForUpload.R\n/var/NARcode/FusionEngine/logs/log4j.spark.log\n/var/NARcode/FusionEngine/derby.log\n/var/NARcode/FusionEngine/ConnectToSpark.R\n/var/NARcode/FusionEngine/code.tab\n/var/NARcode/FusionEngine/Spark1To1Fusion08222017.R\n/var/NARcode/FusionEngine/FusionEngine1to1/ui.R\n/var/NARcode/FusionEngine/FusionEngine1to1/server.R\n/var/NARcode/FusionEngine/global.R\n/var/NARcode/FusionEngine/HealthThoughtLeadershipFusion.R\n/var/NARcode/FusionEngine/HealthMedicine.csv\n/var/NARcode/FusionEngine/PsychographicsHealth.csv\n/var/NARcode/FusionEngine/MakeMulti.R\n/var/NARcode/FusionEngine/HealthOmniout.csv\n/var/NARcode/FusionEngine/HealthOmnioutLabelled.csv\n/var/NARcode/FusionEngine/LoadAutoData.R\n/var/NARcode/FusionEngine/some_mri_sql.R\n/var/NARcode/FusionEngine/hiveconnections.R\n/var/NARcode/FusionEngine/dsa.weights.r\n/var/NARcode/FusionEngine/~test.txt\n/var/NARcode/FusionEngine/retailfoodlatest.log\n/var/NARcode/FusionEngine/RetailFoodFusion11292017.R\n/var/NARcode/FusionEngine/ExtTableScriptcode.hive\n/var/NARcode/FusionEngine/HealthFusion11292017.R\n/var/NARcode/FusionEngine/healthlatest.log\n/var/NARcode/FusionEngine/TechFusion11302017.R\n/var/NARcode/FusionEngine/GenericTechPsychMatching.csv\n/var/NARcode/FusionEngine/techlatest.log\n/var/NARcode/FusionEngine/RetailShoppingFusion11292017.R\n/var/NARcode/FusionEngine/retailshoppinglatest.log\n/var/NARcode/FusionEngine/CreateFusedDataEx1.R\n/var/NARcode/FusionEngine/IntTableScriptcode.hive\n/var/NARcode/FusionEngine/AutoFusion05102018.R\n/var/NARcode/FusionEngine/s21445_OUT.SAV\n/var/NARcode/FusionEngine/KohlsIDMatches.csv\n/var/NARcode/FusionEngine/WriteBackToHadoop.R\n/var/NARcode/FusionEngine/plumber.R\n/var/NARcode/FusionEngine/HivePrep/.RData\n/var/NARcode/FusionEngine/HivePrep/.Rhistory\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/2804E68E/console06/INDEX001\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/2804E68E/pcs/files-pane.pper\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/2804E68E/pcs/source-pane.pper\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/2804E68E/pcs/windowlayoutstate.pper\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/2804E68E/pcs/workbench-pane.pper\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/2804E68E/rmd-outputs\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/2804E68E/saved_source_markers\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/2804E68E/sources/prop/5CAFCCCB\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/2804E68E/sources/prop/AB83C698\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/2804E68E/sources/prop/D3F062AC\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/2804E68E/sources/prop/DC6D69F4\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/2804E68E/sources/prop/E17798B3\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/2804E68E/sources/prop/INDEX\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/2804E68E/sources/s-98B74CCE/666F9B37\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/2804E68E/sources/s-98B74CCE/666F9B37-contents\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/2804E68E/sources/s-98B74CCE/6F297CA7\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/2804E68E/sources/s-98B74CCE/6F297CA7-contents\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/2804E68E/sources/s-98B74CCE/E4C167D1\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/2804E68E/sources/s-98B74CCE/E4C167D1-contents\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/2804E68E/sources/s-98B74CCE/E520D8FC\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/2804E68E/sources/s-98B74CCE/E520D8FC-contents\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/2804E68E/sources/s-98B74CCE/lock_file\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/shared/notebooks/20A91BD-HiveScriptDocumentaiton/1/2804E68EAB37A24E/chunks.json\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/shared/notebooks/20A91BD-HiveScriptDocumentaiton/1/s/chunks.json\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/shared/notebooks/patch-chunk-names\n/var/NARcode/FusionEngine/HivePrep/.Rproj.user/shared/notebooks/paths\n/var/NARcode/FusionEngine/HivePrep/CreateDataLoadScriptsForHive.R\n/var/NARcode/FusionEngine/HivePrep/ExtTableScript.hive\n/var/NARcode/FusionEngine/HivePrep/HivePrep.Rproj\n/var/NARcode/FusionEngine/HivePrep/HiveScriptDocumentaiton.docx\n/var/NARcode/FusionEngine/HivePrep/HiveScriptDocumentaiton.rmd\n/var/NARcode/FusionEngine/HivePrep/HiveScriptDocumentaitonOut.docx\n/var/NARcode/FusionEngine/HivePrep/IntTableScript.hive\n/var/NARcode/FusionEngine/HivePrep/masterdata_skeleton.csv\n/var/NARcode/FusionEngine/HivePrep/CarBasedMidsizeSUV.SAV\n/var/NARcode/FusionEngine/HivePrep/Corporate.SAV\n/var/NARcode/FusionEngine/HivePrep/CrossOverSUV.sav\n/var/NARcode/FusionEngine/HivePrep/EntryCars.sav\n/var/NARcode/FusionEngine/HivePrep/FullsizeSUV.sav\n/var/NARcode/FusionEngine/HivePrep/LightVehicle17DEC_ID.SAV\n/var/NARcode/FusionEngine/HivePrep/LightVehicleMakes1000RatingSunSnow.sav\n/var/NARcode/FusionEngine/HivePrep/LuxuryCoupe.sav\n/var/NARcode/FusionEngine/HivePrep/LuxurySUV.sav\n/var/NARcode/FusionEngine/HivePrep/LuxurySUVMidsize.SAV\n/var/NARcode/FusionEngine/HivePrep/LuxurySUVSmall.SAV\n/var/NARcode/FusionEngine/HivePrep/MidsizeSUV.sav\n/var/NARcode/FusionEngine/HivePrep/PickupCompact.sav\n/var/NARcode/FusionEngine/HivePrep/SmallCoupe.sav\n/var/NARcode/FusionEngine/HivePrep/SmallEntryAfricanAmerican.sav\n/var/NARcode/FusionEngine/HivePrep/SportsCar.sav\n/var/NARcode/FusionEngine/HivePrep/SportWagon.sav\n/var/NARcode/FusionEngine/HivePrep/Sporty.SAV\n/var/NARcode/FusionEngine/HivePrep/SUVPremiumCompact.sav\n/var/NARcode/FusionEngine/HivePrep/SUVSmall.sav\n/var/NARcode/FusionEngine/HivePrep/VansCompact.sav\n/var/NARcode/FusionEngine/HivePrep/LightVehicleMakes450Rating_v2.sav\n/var/NARcode/FusionEngine/HivePrep/LuxuryMakes450Ratings_v3.sav\n/var/NARcode/FusionEngine/HivePrep/LuxuryMakesCustom450Ratings_v2.sav\n/var/NARcode/FusionEngine/HivePrep/MidLuxCustom_v2.sav\n/var/NARcode/FusionEngine/HivePrep/MidPrestigeLux_v3.sav\n/var/NARcode/FusionEngine/HivePrep/NearEntryLux_v4.SAV\n/var/NARcode/FusionEngine/HivePrep/PickupFullsize_v2.sav\n/var/NARcode/FusionEngine/HivePrep/PickupFullsizeHalfTon_v3.sav\n/var/NARcode/FusionEngine/HivePrep/PickupFullsizeHeavyDuty_v2.sav\n/var/NARcode/FusionEngine/HivePrep/SmallCars_v2.sav\n/var/NARcode/FusionEngine/HivePrep/TruckMakesCustom_v4.sav\n/var/NARcode/FusionEngine/HivePrep/LightVehicleMakes1000Rating_v2.sav\n/var/NARcode/FusionEngine/HivePrep/LightVehicleMakesNon_LuxAsian.SAV\n/var/NARcode/FusionEngine/HivePrep/LightVehicleMakesNon_LuxHispanic.SAV\n/var/NARcode/FusionEngine/HivePrep/LightVehicleNon_LuxAA.SAV\n/var/NARcode/FusionEngine/masterdata_skeleton.csv\n/var/NARcode/FusionEngine/loadAutoSynd.R\n/var/NARcode/FusionEngine/Automatching.csv\n/var/NARcode/FusionEngine/automrifusion1to1match.csv\n/var/NARcode/FusionEngine/CarIntentMRI.csv\n/var/NARcode/FusionEngine/automrifusion1to1matchV2.csv\n/var/NARcode/FusionEngine/HotdeckUsingWeightedGower.R\n/var/NARcode/FusionEngine/autooutraw.csv\n/var/NARcode/FusionEngine/TempEnvironment.RData\n/var/NARcode/FusionEngine/WtdGowerDistV2.R\n/var/NARcode/FusionEngine/AutoMRIOneToOneMatch.csv\n/var/NARcode/FusionEngine/AutoMRIOneToOneMatchW10.csv\n/var/NARcode/FusionEngine/mrioutraw.csv\n/var/NARcode/FusionEngine/AutoMRIOneToOneMatchStraightNND.csv\n/var/NARcode/FusionEngine/NNDwtdgower.R\n/var/NARcode/FusionEngine/AutoMRIOneToOneMatchWtdNND.csv\n/var/NARcode/FusionEngine/HyundaiIntederIDsFromMRI.csv\n/var/NARcode/FusionEngine/AutoSyndBrandCodes.csv\n/var/NARcode/FusionEngine/AutomatchingWIntent.csv\n/var/NARcode/FusionEngine/AutomatchingWIntentLtdDemos.csv\n/var/NARcode/FusionEngine/AutoMRIOneToOneMatchWtdNNDLtdDemos.csv\n/var/NARcode/FusionEngine/AutoMRIOneToOneMatchUnWtdNND.csv\n/var/NARcode/FusionEngine/AutoMRIOneToOneMatchWtdNND10.csv\n/var/NARcode/FusionEngine/MRIAutoOneToOneMatchWtdNND10.csv\n/usr/local/bin/Anaconda/pkgs/py-1.4.33-py27_0/info/LICENSE.txt\n/usr/local/bin/Anaconda/pkgs/py-1.4.33-py27_0/lib/python2.7/site-packages/py-1.4.33-py2.7.egg-info/PKG-INFO\n/usr/local/bin/Anaconda/pkgs/py-1.4.33-py27_0/lib/python2.7/site-packages/py-1.4.33-py2.7.egg-info/SOURCES.txt\n/usr/local/bin/Anaconda/pkgs/py-1.4.33-py27_0/lib/python2.7/site-packages/py-1.4.33-py2.7.egg-info/dependency_links.txt\n/usr/local/bin/Anaconda/pkgs/py-1.4.33-py27_0/lib/python2.7/site-packages/py-1.4.33-py2.7.egg-info/not-zip-safe\n/usr/local/bin/Anaconda/pkgs/py-1.4.33-py27_0/lib/python2.7/site-packages/py-1.4.33-py2.7.egg-info/top_level.txt\n/usr/local/bin/Anaconda/pkgs/pylint-1.6.4-py27_1/info/LICENSE.txt\n/usr/local/bin/Anaconda/pkgs/pyparsing-2.1.4-py27_0/lib/python2.7/site-packages/pyparsing-2.1.4-py2.7.egg-info/PKG-INFO\n/usr/local/bin/Anaconda/pkgs/pyparsing-2.1.4-py27_0/lib/python2.7/site-packages/pyparsing-2.1.4-py2.7.egg-info/SOURCES.txt\n/usr/local/bin/Anaconda/pkgs/pyparsing-2.1.4-py27_0/lib/python2.7/site-packages/pyparsing-2.1.4-py2.7.egg-info/dependency_links.txt\n/usr/local/bin/Anaconda/pkgs/pyparsing-2.1.4-py27_0/lib/python2.7/site-packages/pyparsing-2.1.4-py2.7.egg-info/top_level.txt\n/usr/local/bin/Anaconda/pkgs/scandir-1.5-py27_0/info/LICENSE.txt\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/info/LICENSE.txt\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels-0.8.0-py2.7.egg-info/PKG-INFO\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels-0.8.0-py2.7.egg-info/SOURCES.txt\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels-0.8.0-py2.7.egg-info/dependency_links.txt\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels-0.8.0-py2.7.egg-info/not-zip-safe\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels-0.8.0-py2.7.egg-info/requires.txt\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels-0.8.0-py2.7.egg-info/top_level.txt\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/anes96/anes96.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/cancer/cancer.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/ccard/ccard.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/china_smoking/china_smoking.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/co2/co2.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/committee/committee.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/copper/copper.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/cpunish/cpunish.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/elnino/elnino.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/engel/engel.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/fair/fair.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/fertility/fertility.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/grunfeld/grunfeld.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/heart/heart.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/longley/longley.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/macrodata/macrodata.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/macrodata/macrodata.dta\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/modechoice/modechoice.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/nile/nile.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/randhie/randhie.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/scotland/scotvote.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/spector/spector.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/stackloss/stackloss.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/star98/star98.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/statecrime/statecrime.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/strikes/strikes.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/sunspots/sunspots.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/tests/raw.github.com,vincentarelbundock,Rdatasets,master,csv,car,Duncan.csv.zip\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/tests/raw.github.com,vincentarelbundock,Rdatasets,master,datasets.csv.zip\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/datasets/tests/raw.github.com,vincentarelbundock,Rdatasets,master,doc,car,rst,Duncan.rst.zip\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/discrete/tests/results/mn_logit_summary.txt\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/discrete/tests/results/mnlogit_resid.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/discrete/tests/results/nbinom_resids.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/discrete/tests/results/phat_mnlogit.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/discrete/tests/results/poisson_resid.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/discrete/tests/results/predict_prob_poisson.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/discrete/tests/results/ships.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/discrete/tests/results/yhat_mnlogit.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/discrete/tests/results/yhat_poisson.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/duration/tests/results/bmt.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/duration/tests/results/bmt_results.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/duration/tests/results/survival_data_1000_10.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/duration/tests/results/survival_data_100_5.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/duration/tests/results/survival_data_20_1.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/duration/tests/results/survival_data_50_1.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/duration/tests/results/survival_data_50_2.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/genmod/tests/results/enet_binomial.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/genmod/tests/results/enet_poisson.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/genmod/tests/results/epil.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/genmod/tests/results/gee_linear_1.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/genmod/tests/results/gee_logistic_1.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/genmod/tests/results/gee_nested_linear_1.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/genmod/tests/results/gee_nominal_1.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/genmod/tests/results/gee_ordinal_1.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/genmod/tests/results/gee_poisson_1.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/genmod/tests/results/igaussident_resids.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/genmod/tests/results/inv_gaussian.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/genmod/tests/results/iris.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/genmod/tests/results/medparlogresids.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/genmod/tests/results/stata_cancer_glm.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/genmod/tests/results/stata_lbw_glm.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/genmod/tests/results/stata_medpar1_glm.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/iolib/tests/results/data_missing.dta\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/iolib/tests/results/time_series_examples.dta\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/nonparametric/tests/results/results_kcde.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/nonparametric/tests/results/results_kde.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/nonparametric/tests/results/results_kde_fft.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/nonparametric/tests/results/results_kde_univ_weights.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/nonparametric/tests/results/results_kde_weights.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/nonparametric/tests/results/results_kernel_regression.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/nonparametric/tests/results/test_lowess_delta.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/nonparametric/tests/results/test_lowess_frac.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/nonparametric/tests/results/test_lowess_iter.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/nonparametric/tests/results/test_lowess_simple.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/regression/tests/results/lasso_data.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/regression/tests/results/leverage_influence_ols_nostars.txt\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/regression/tests/results/lme00.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/regression/tests/results/lme01.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/regression/tests/results/lme02.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/regression/tests/results/lme03.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/regression/tests/results/lme04.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/regression/tests/results/lme05.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/regression/tests/results/lme06.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/regression/tests/results/lme07.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/regression/tests/results/lme08.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/regression/tests/results/lme09.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/regression/tests/results/lme10.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/regression/tests/results/lme11.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/regression/tests/results/pastes.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/regression/tests/results/results_rls_R.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/regression/tests/results/results_rls_stata.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/sandbox/regression/tests/griliches76.dta\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/sandbox/regression/tests/racd10data_with_transformed.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/stats/libqsturng/CH.r\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/stats/libqsturng/LICENSE.txt\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/stats/libqsturng/tests/bootleg.dat\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/stats/tests/results/bootleg.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/stats/tests/results/contingency_table_r_results.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/stats/tests/results/framing.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/stats/tests/results/influence_lsdiag_R.json\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/stats/tests/results/influence_measures_R.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/stats/tests/results/influence_measures_bool_R.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/stats/tests/test_data.txt\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/regime_switching/tests/results/mar_filardo.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/regime_switching/tests/results/results_predict_fedfunds.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/regime_switching/tests/results/results_predict_rgnp.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/clark1989.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/manufac.dta\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/results_clark1989_R.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/results_dynamic_factor_stata.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/results_realgdpar_stata.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/results_sarimax_coverage.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/results_smoothing_R.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/results_var_stata.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/results_varmax_stata.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/results_wpi1_ar3_matlab_ssm.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/results_wpi1_ar3_regression.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/results_wpi1_ar3_stata.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/results_wpi1_missing_ar3_matlab_ssm.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/results_wpi1_missing_ar3_regression.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/ARMLEConstantPredict.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/AROLSConstantPredict.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/AROLSNoConstantPredict.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/arima111_forecasts.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/arima212_forecast.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/bds_data.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/bds_results.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/resids_css_c.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/resids_css_nc.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/resids_exact_c.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/resids_exact_nc.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/results_ar_forecast_mle_dynamic.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/results_arima_exog_forecasts_css.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/results_arima_exog_forecasts_mle.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/results_arima_forecasts.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/results_arima_forecasts_all_css.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/results_arima_forecasts_all_css_diff.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/results_arima_forecasts_all_mle.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/results_arima_forecasts_all_mle_diff.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/results_arma_forecasts.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/results_corrgram.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/y_arma_data.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/yhat_css_c.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/yhat_css_nc.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/yhat_exact_c.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/tests/results/yhat_exact_nc.csv\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/vector_ar/data/e1.dat\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/vector_ar/data/e2.dat\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/vector_ar/data/e3.dat\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/vector_ar/data/e4.dat\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/vector_ar/data/e5.dat\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/vector_ar/data/e6.dat\n/usr/local/bin/Anaconda/pkgs/statsmodels-0.8.0-np112py27_0/lib/python2.7/site-packages/statsmodels/tsa/vector_ar/tests/results/vars_results.npz\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/py-1.4.33-py2.7.egg-info/PKG-INFO\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/py-1.4.33-py2.7.egg-info/SOURCES.txt\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/py-1.4.33-py2.7.egg-info/dependency_links.txt\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/py-1.4.33-py2.7.egg-info/not-zip-safe\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/py-1.4.33-py2.7.egg-info/top_level.txt\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/pyparsing-2.1.4-py2.7.egg-info/PKG-INFO\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/pyparsing-2.1.4-py2.7.egg-info/SOURCES.txt\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/pyparsing-2.1.4-py2.7.egg-info/dependency_links.txt\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/pyparsing-2.1.4-py2.7.egg-info/top_level.txt\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels-0.8.0-py2.7.egg-info/PKG-INFO\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels-0.8.0-py2.7.egg-info/SOURCES.txt\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels-0.8.0-py2.7.egg-info/dependency_links.txt\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels-0.8.0-py2.7.egg-info/not-zip-safe\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels-0.8.0-py2.7.egg-info/requires.txt\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels-0.8.0-py2.7.egg-info/top_level.txt\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/anes96/anes96.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/cancer/cancer.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/ccard/ccard.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/china_smoking/china_smoking.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/co2/co2.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/committee/committee.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/copper/copper.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/cpunish/cpunish.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/elnino/elnino.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/engel/engel.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/fair/fair.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/fertility/fertility.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/grunfeld/grunfeld.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/heart/heart.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/longley/longley.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/macrodata/macrodata.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/macrodata/macrodata.dta\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/modechoice/modechoice.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/nile/nile.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/randhie/randhie.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/scotland/scotvote.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/spector/spector.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/stackloss/stackloss.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/star98/star98.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/statecrime/statecrime.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/strikes/strikes.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/sunspots/sunspots.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/tests/raw.github.com,vincentarelbundock,Rdatasets,master,csv,car,Duncan.csv.zip\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/tests/raw.github.com,vincentarelbundock,Rdatasets,master,datasets.csv.zip\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/datasets/tests/raw.github.com,vincentarelbundock,Rdatasets,master,doc,car,rst,Duncan.rst.zip\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/discrete/tests/results/mn_logit_summary.txt\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/discrete/tests/results/mnlogit_resid.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/discrete/tests/results/nbinom_resids.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/discrete/tests/results/phat_mnlogit.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/discrete/tests/results/poisson_resid.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/discrete/tests/results/predict_prob_poisson.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/discrete/tests/results/ships.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/discrete/tests/results/yhat_mnlogit.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/discrete/tests/results/yhat_poisson.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/duration/tests/results/bmt.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/duration/tests/results/bmt_results.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/duration/tests/results/survival_data_1000_10.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/duration/tests/results/survival_data_100_5.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/duration/tests/results/survival_data_20_1.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/duration/tests/results/survival_data_50_1.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/duration/tests/results/survival_data_50_2.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/genmod/tests/results/enet_binomial.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/genmod/tests/results/enet_poisson.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/genmod/tests/results/epil.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/genmod/tests/results/gee_linear_1.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/genmod/tests/results/gee_logistic_1.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/genmod/tests/results/gee_nested_linear_1.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/genmod/tests/results/gee_nominal_1.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/genmod/tests/results/gee_ordinal_1.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/genmod/tests/results/gee_poisson_1.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/genmod/tests/results/igaussident_resids.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/genmod/tests/results/inv_gaussian.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/genmod/tests/results/iris.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/genmod/tests/results/medparlogresids.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/genmod/tests/results/stata_cancer_glm.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/genmod/tests/results/stata_lbw_glm.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/genmod/tests/results/stata_medpar1_glm.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/iolib/tests/results/data_missing.dta\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/iolib/tests/results/time_series_examples.dta\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/nonparametric/tests/results/results_kcde.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/nonparametric/tests/results/results_kde.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/nonparametric/tests/results/results_kde_fft.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/nonparametric/tests/results/results_kde_univ_weights.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/nonparametric/tests/results/results_kde_weights.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/nonparametric/tests/results/results_kernel_regression.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/nonparametric/tests/results/test_lowess_delta.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/nonparametric/tests/results/test_lowess_frac.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/nonparametric/tests/results/test_lowess_iter.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/nonparametric/tests/results/test_lowess_simple.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/regression/tests/results/lasso_data.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/regression/tests/results/leverage_influence_ols_nostars.txt\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/regression/tests/results/lme00.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/regression/tests/results/lme01.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/regression/tests/results/lme02.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/regression/tests/results/lme03.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/regression/tests/results/lme04.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/regression/tests/results/lme05.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/regression/tests/results/lme06.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/regression/tests/results/lme07.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/regression/tests/results/lme08.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/regression/tests/results/lme09.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/regression/tests/results/lme10.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/regression/tests/results/lme11.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/regression/tests/results/pastes.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/regression/tests/results/results_rls_R.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/regression/tests/results/results_rls_stata.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/sandbox/regression/tests/griliches76.dta\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/sandbox/regression/tests/racd10data_with_transformed.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/stats/libqsturng/CH.r\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/stats/libqsturng/LICENSE.txt\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/stats/libqsturng/tests/bootleg.dat\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/stats/tests/results/bootleg.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/stats/tests/results/contingency_table_r_results.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/stats/tests/results/framing.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/stats/tests/results/influence_lsdiag_R.json\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/stats/tests/results/influence_measures_R.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/stats/tests/results/influence_measures_bool_R.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/stats/tests/test_data.txt\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/regime_switching/tests/results/mar_filardo.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/regime_switching/tests/results/results_predict_fedfunds.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/regime_switching/tests/results/results_predict_rgnp.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/clark1989.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/manufac.dta\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/results_clark1989_R.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/results_dynamic_factor_stata.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/results_realgdpar_stata.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/results_sarimax_coverage.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/results_smoothing_R.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/results_var_stata.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/results_varmax_stata.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/results_wpi1_ar3_matlab_ssm.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/results_wpi1_ar3_regression.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/results_wpi1_ar3_stata.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/results_wpi1_missing_ar3_matlab_ssm.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/statespace/tests/results/results_wpi1_missing_ar3_regression.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/ARMLEConstantPredict.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/AROLSConstantPredict.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/AROLSNoConstantPredict.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/arima111_forecasts.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/arima212_forecast.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/bds_data.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/bds_results.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/resids_css_c.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/resids_css_nc.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/resids_exact_c.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/resids_exact_nc.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/results_ar_forecast_mle_dynamic.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/results_arima_exog_forecasts_css.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/results_arima_exog_forecasts_mle.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/results_arima_forecasts.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/results_arima_forecasts_all_css.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/results_arima_forecasts_all_css_diff.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/results_arima_forecasts_all_mle.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/results_arima_forecasts_all_mle_diff.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/results_arma_forecasts.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/results_corrgram.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/y_arma_data.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/yhat_css_c.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/yhat_css_nc.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/yhat_exact_c.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/tests/results/yhat_exact_nc.csv\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/vector_ar/data/e1.dat\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/vector_ar/data/e2.dat\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/vector_ar/data/e3.dat\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/vector_ar/data/e4.dat\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/vector_ar/data/e5.dat\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/vector_ar/data/e6.dat\n/usr/local/bin/Anaconda/lib/python2.7/site-packages/statsmodels/tsa/vector_ar/tests/results/vars_results.npz"[0m
+[0;33m}[0m
+
+TASK [cis_security : 6.1.11 - Find any unowned files] ************************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 6.1.11 - Print any unowned files found] *****************************************************************************************************
+[0;33mchanged: [dcax-hcshin01] => {[0m
+[0;33m    "msg": "unowned files found: /srv/shiny-server/filelist"[0m
+[0;33m}[0m
+
+TASK [cis_security : 6.1.12 - Find any ungrouped files] **********************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 6.1.12 - Print any ungrouped files found] ***************************************************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 6.2.1 - Check to see if there are any accounts with empty passwords] ************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 6.2.1 - Report the named users to the report] ***********************************************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 6.2.[2,4-5] - Ensure no legacy "+" entries exist in password files] *************************************************************************
+[0;32mok: [dcax-hcshin01] => (item=/etc/passwd)[0m
+[0;32mok: [dcax-hcshin01] => (item=/etc/shadow)[0m
+[0;32mok: [dcax-hcshin01] => (item=/etc/group)[0m
+
+TASK [cis_security : 6.2.3 - Run script on path variable] ********************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 6.2.3 - Print report to user] ***************************************************************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 6.2.6 - find accounts with UID of 0] ********************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 6.2.6 - Report on mulitple accounts with UID of 0] ******************************************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 6.2.14 - Use script to pull the list of groups] *********************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 6.2.14 - Report to user any unreferenced groups] ********************************************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 6.2.15 - Use script to pull the list of duplicate UIDs] *************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 6.2.15 - Print report of duplicated UIDs to user] *******************************************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 6.2.16 - Use script to pull the list of duplicate GIDs] *************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 6.2.16 - Print report of duplcate GIDs to user] *********************************************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 6.2.17 - Use script to pull the list of users] **********************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 6.2.17 - Print report of duplicate users to user] *******************************************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 6.2.18 - Use script to pull the list of groups] *********************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 6.2.18 - Print report of duplicate groups to user] ******************************************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 6.2.19 - Determine if the shadow group exists in /etc/group] ********************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 6.2.19 - Print report of shadow group to user] **********************************************************************************************
+[0;36mskipping: [dcax-hcshin01][0m
+
+TASK [cis_security : 6.2.20 - Use script to find the users] ******************************************************************************************************
+[0;32mok: [dcax-hcshin01][0m
+
+TASK [cis_security : 6.2.20 - Print report of users that do not have a home directory] ***************************************************************************
+[0;33mchanged: [dcax-hcshin01] => {[0m
+[0;33m    "msg": [[0m
+[0;33m        "User: \"rstudio-server\" home directory: \"/home/rstudio-server\" does not exist."[0m
+[0;33m    ][0m
+[0;33m}[0m
+
+TASK [cis_security : Add hardening file.] ************************************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,7 +1,7 @@[0m
+[0;36m[0m {
+[0;31m-    "atime": 1690551706.9577568,[0m
+[0;31m[0m[0;31m-    "mode": "0640",[0m
+[0;31m[0m[0;31m-    "mtime": 1690551706.9577568,[0m
+[0;31m[0m[0;32m+    "atime": 1690551706.9636836,[0m
+[0;32m[0m[0;32m+    "mode": "0400",[0m
+[0;32m[0m[0;32m+    "mtime": 1690551706.9636836,[0m
+[0;32m[0m     "path": "/etc/.hardening",
+[0;31m-    "state": "absent"[0m
+[0;31m[0m[0;32m+    "state": "touch"[0m
+[0;32m[0m }
+
+[0;33mchanged: [dcax-hcshin01][0m
+
+RUNNING HANDLER [cis_security : restart sshd] ********************************************************************************************************************
+[0;33mchanged: [dcax-hcshin01][0m
+
+RUNNING HANDLER [cis_security : restart chronyd] *****************************************************************************************************************
+[0;33mchanged: [dcax-hcshin01][0m
+
+RUNNING HANDLER [cis_security : restart tmpfs] *******************************************************************************************************************
+[0;31mfatal: [dcax-hcshin01]: FAILED! => {"changed": false, "msg": "Unable to enable service tmp.mount: Failed to enable unit: File /etc/systemd/system/local-fs.target.wants/tmp.mount already exists.\n"}[0m
+
+PLAY RECAP *******************************************************************************************************************************************************
+[0;31mdcax-hcshin01[0m              : [0;32mok=158 [0m [0;33mchanged=68  [0m unreachable=0    [0;31mfailed=1   [0m [0;36mskipped=29  [0m rescued=0    [1;35mignored=2   [0m
+
+
+Script done on 2023-07-28 15:41:55+02:00

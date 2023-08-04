@@ -1,0 +1,161 @@
+Script started on 2023-05-30 12:45:45+02:00
+[1;35m[WARNING]: While constructing a mapping from /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/defaults/main.yml, line 6, column 1, found a duplicate dict key[0m
+[1;35m(enable_firewall). Using last defined value only.[0m
+[1;35m[WARNING]: While constructing a mapping from /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/defaults/main.yml, line 6, column 1, found a duplicate dict key[0m
+[1;35m(ssh_max_sessions). Using last defined value only.[0m
+[0;35m[DEPRECATION WARNING]: "include" is deprecated, use include_tasks/import_tasks instead. See https://docs.ansible.com/ansible-core/2.14/user_guide/playbooks_reuse_includes.html for details.[0m
+[0;35m This feature will be removed in version 2.16. Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.[0m
+
+PLAY [all] **********************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] **********************************************************************************************************************************************************************
+[1;35m[WARNING]: Platform linux on host dcex1441pw0km4h is using the discovered Python interpreter at /usr/bin/python3.6, but future installation of another Python interpreter could change the[0m
+[1;35mmeaning of that path. See https://docs.ansible.com/ansible-core/2.14/reference_appendices/interpreter_discovery.html for more information.[0m
+[0;32mok: [dcex1441pw0km4h][0m
+
+TASK [cis_security : include] ***************************************************************************************************************************************************************
+[0;35m[DEPRECATION WARNING]: "include" is deprecated, use include_tasks/import_tasks/import_playbook instead. This feature will be removed in version 2.16. Deprecation warnings can be disabled [0m
+[0;35mby setting deprecation_warnings=False in ansible.cfg.[0m
+[0;36mincluded: /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/tasks/CIS-OracleLinux-8.yml for dcex1441pw0km4h[0m
+
+TASK [cis_security : include] ***************************************************************************************************************************************************************
+[1;35m[WARNING]: While constructing a mapping from /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/tasks/type-files/oracle-8-type.yml, line 907, column 5, found a duplicate dict[0m
+[1;35mkey (tags). Using last defined value only.[0m
+[0;36mincluded: /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/tasks/type-files/oracle-8-type.yml for dcex1441pw0km4h[0m
+
+TASK [cis_security : Print Header] **********************************************************************************************************************************************************
+[0;32mok: [dcex1441pw0km4h] => {[0m
+[0;32m    "msg": "CIS Controls for OracleLinux 8"[0m
+[0;32m}[0m
+
+TASK [cis_security : Collect package list] **************************************************************************************************************************************************
+[0;32mok: [dcex1441pw0km4h][0m
+
+TASK [cis_security : 1.1.1.1 Ensure mounting of cramfs filesystems is disabled] *************************************************************************************************************
+[0;32mok: [dcex1441pw0km4h] => (item={'From': '(?m)^\\S+\\s+install cramfs', 'To': 'install cramfs /bin/true'})[0m
+[0;32mok: [dcex1441pw0km4h] => (item={'From': '(?m)^\\S+\\s+blacklist cramfs', 'To': 'blacklist cramfs'})[0m
+
+TASK [cis_security : 1.1.1.1 Ensure mounting of cramfs filesystems is disabled | modprobe] **************************************************************************************************
+[0;32mok: [dcex1441pw0km4h][0m
+
+TASK [cis_security : Get file system] *******************************************************************************************************************************************************
+[0;32mok: [dcex1441pw0km4h][0m
+
+TASK [cis_security : debug] *****************************************************************************************************************************************************************
+[0;32mok: [dcex1441pw0km4h] => {[0m
+[0;32m    "filesystem.stdout": "xfs"[0m
+[0;32m}[0m
+
+TASK [cis_security : Check /tmp config] *****************************************************************************************************************************************************
+[0;32mok: [dcex1441pw0km4h][0m
+
+TASK [cis_security : Remount /tmp] **********************************************************************************************************************************************************
+[0;36mskipping: [dcex1441pw0km4h][0m
+
+TASK [cis_security : Get file system] *******************************************************************************************************************************************************
+[0;32mok: [dcex1441pw0km4h][0m
+
+TASK [cis_security : debug] *****************************************************************************************************************************************************************
+[0;32mok: [dcex1441pw0km4h] => {[0m
+[0;32m    "varsystem.stdout": "xfs"[0m
+[0;32m}[0m
+
+TASK [cis_security : Check /var config] *****************************************************************************************************************************************************
+[0;32mok: [dcex1441pw0km4h][0m
+
+TASK [cis_security : Remount /var] **********************************************************************************************************************************************************
+[0;36mskipping: [dcex1441pw0km4h][0m
+
+TASK [cis_security : 1.1.4 Ensure nodev option set on /var/tmp partitions] ******************************************************************************************************************
+[0;36mskipping: [dcex1441pw0km4h][0m
+
+TASK [cis_security : /var/tmp partitions] ***************************************************************************************************************************************************
+[0;32mok: [dcex1441pw0km4h] => {[0m
+[0;32m    "msg": {[0m
+[0;32m        "changed": false,[0m
+[0;32m        "cmd": "mount | grep \"on /var\" && true || true\n",[0m
+[0;32m        "delta": null,[0m
+[0;32m        "end": null,[0m
+[0;32m        "failed": false,[0m
+[0;32m        "msg": "Command would have run if not in check mode",[0m
+[0;32m        "rc": 0,[0m
+[0;32m        "skipped": true,[0m
+[0;32m        "start": null,[0m
+[0;32m        "stderr": "",[0m
+[0;32m        "stderr_lines": [],[0m
+[0;32m        "stdout": "",[0m
+[0;32m        "stdout_lines": [][0m
+[0;32m    }[0m
+[0;32m}[0m
+
+TASK [cis_security : Get file system] *******************************************************************************************************************************************************
+[0;32mok: [dcex1441pw0km4h][0m
+
+TASK [cis_security : debug] *****************************************************************************************************************************************************************
+[0;32mok: [dcex1441pw0km4h] => {[0m
+[0;32m    "varlogsystem.stdout": "xfs"[0m
+[0;32m}[0m
+
+TASK [cis_security : Check /var/log config] *************************************************************************************************************************************************
+[0;32mok: [dcex1441pw0km4h][0m
+
+TASK [cis_security : Remount /var/log] ******************************************************************************************************************************************************
+[0;36mskipping: [dcex1441pw0km4h][0m
+
+TASK [cis_security : Get file system] *******************************************************************************************************************************************************
+[0;32mok: [dcex1441pw0km4h][0m
+
+TASK [cis_security : debug] *****************************************************************************************************************************************************************
+[0;32mok: [dcex1441pw0km4h] => {[0m
+[0;32m    "varauditsystem.stdout": "xfs"[0m
+[0;32m}[0m
+
+TASK [cis_security : Check /var/log/audit config] *******************************************************************************************************************************************
+[0;32mok: [dcex1441pw0km4h][0m
+
+TASK [cis_security : Remount /var/log/audit] ************************************************************************************************************************************************
+[0;36mskipping: [dcex1441pw0km4h][0m
+
+TASK [cis_security : Get file system] *******************************************************************************************************************************************************
+[0;32mok: [dcex1441pw0km4h][0m
+
+TASK [cis_security : debug] *****************************************************************************************************************************************************************
+[0;32mok: [dcex1441pw0km4h] => {[0m
+[0;32m    "homesystem.stdout": "xfs"[0m
+[0;32m}[0m
+
+TASK [cis_security : Check /home config] ****************************************************************************************************************************************************
+[0;32mok: [dcex1441pw0km4h][0m
+
+TASK [cis_security : Remount /home] *********************************************************************************************************************************************************
+[0;33mchanged: [dcex1441pw0km4h][0m
+
+TASK [cis_security :  Ensure /dev/shm is configured
+ 1.1.8.1 Ensure nodev option set on /dev/shm partition
+ 1.1.8.2 Ensure nosuid option set on /dev/shm partition
+ 1.1.8.3 Ensure noexec option set on /dev/shm partition] ***
+[0;32mok: [dcex1441pw0km4h][0m
+
+TASK [cis_security : 1.1.9 - disable automounting] ******************************************************************************************************************************************
+[0;36mskipping: [dcex1441pw0km4h][0m
+
+TASK [cis_security : 1.1.23 - Disable USB storage module] ***********************************************************************************************************************************
+[0;32mok: [dcex1441pw0km4h][0m
+
+TASK [cis_security : 1.2.2 - set master yum.conf gpgcheck to '1'] ***************************************************************************************************************************
+[0;36mskipping: [dcex1441pw0km4h][0m
+
+TASK [cis_security : 1.2.2 - set master dnf.conf gpgcheck to '1'] ***************************************************************************************************************************
+[0;36mskipping: [dcex1441pw0km4h][0m
+
+TASK [cis_security : 1.2.2 - find all repo files in /etc/yum.repos.d/] **********************************************************************************************************************
+[0;32mok: [dcex1441pw0km4h][0m
+
+TASK [cis_security : 1.2.2 - Set all repos gpgchecks to '1'] ********************************************************************************************************************************
+[0;32mok: [dcex1441pw0km4h] => (item={'path': '/etc/yum.repos.d/elasticsearch.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 453, 'inode': 36581023, 'dev': 64768, 'nlink': 1, 'atime': 1685420531.3363576, 'mtime': 1667921824.2685173, 'ctime': 1678655692.8731797, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})[0m
+[0;32mok: [dcex1441pw0km4h] => (item={'path': '/etc/yum.repos.d/oracle-linux-ol8.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 3660, 'inode': 51100463, 'dev': 64768, 'nlink': 1, 'atime': 1685363833.8680694, 'mtime': 1680856476.1315439, 'ctime': 1680856476.1315439, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})[0m
+[0;32mok: [dcex1441pw0km4h] => (item={'path': '/etc/yum.repos.d/uek-ol8.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 941, 'inode': 51550301, 'dev': 64768, 'nlink': 1, 'atime': 1685363836.8120992, 'mtime': 1680856476.4335473, 'ctime': 1680856476.4335473, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})[0m
+[0;32mok: [dcex1441pw0km4h] => (item={'path': '/etc/yum.repos.d/virt-ol8.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 243, 'inode': 51550302, 'dev': 64768, 'nlink': 1, 'atime': 1685363836.8160992, 'mtime': 1668044583.0, 'ctime': 1680856282.0455863, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})[0m
+^C[0;31m [ERROR]: User interrupted execution[0m
+
+Script done on 2023-05-30 12:46:03+02:00

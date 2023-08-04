@@ -1,0 +1,1262 @@
+Script started on 2023-06-12 14:40:31+02:00
+[1;35m[WARNING]: While constructing a mapping from /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/defaults/main.yml, line 6, column 1, found a duplicate dict key[0m
+[1;35m(enable_firewall). Using last defined value only.[0m
+[1;35m[WARNING]: While constructing a mapping from /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/defaults/main.yml, line 6, column 1, found a duplicate dict key[0m
+[1;35m(ssh_max_sessions). Using last defined value only.[0m
+[0;35m[DEPRECATION WARNING]: "include" is deprecated, use include_tasks/import_tasks instead. See https://docs.ansible.com/ansible-core/2.14/user_guide/playbooks_reuse_includes.html for details.[0m
+[0;35m This feature will be removed in version 2.16. Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.[0m
+
+PLAY [all] **********************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] **********************************************************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : include] ***************************************************************************************************************************************************************
+[0;35m[DEPRECATION WARNING]: "include" is deprecated, use include_tasks/import_tasks/import_playbook instead. This feature will be removed in version 2.16. Deprecation warnings can be disabled [0m
+[0;35mby setting deprecation_warnings=False in ansible.cfg.[0m
+[0;36mincluded: /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/tasks/CIS-Ubuntu-20.yml for dcex1335bamboo2[0m
+
+TASK [cis_security : include] ***************************************************************************************************************************************************************
+[0;36mincluded: /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/tasks/type-files/ubuntu-20-type.yml for dcex1335bamboo2[0m
+
+TASK [cis_security : 1.1.1.[1..7] Ensure mounting of unused filesystems is disabled] ********************************************************************************************************
+[0;32mok: [dcex1335bamboo2] => (item=cramfs)[0m
+[0;32mok: [dcex1335bamboo2] => (item=freevxfs)[0m
+[0;32mok: [dcex1335bamboo2] => (item=freevxfs)[0m
+[0;32mok: [dcex1335bamboo2] => (item=hfs)[0m
+[0;32mok: [dcex1335bamboo2] => (item=hfsplus)[0m
+[0;32mok: [dcex1335bamboo2] => (item=udf)[0m
+
+TASK [cis_security : Ensure that unused filesystems are in blacklist] ***********************************************************************************************************************
+[0;32mok: [dcex1335bamboo2] => (item=cramfs)[0m
+[0;32mok: [dcex1335bamboo2] => (item=freevxfs)[0m
+[0;32mok: [dcex1335bamboo2] => (item=freevxfs)[0m
+[0;32mok: [dcex1335bamboo2] => (item=hfs)[0m
+[0;32mok: [dcex1335bamboo2] => (item=hfsplus)[0m
+[0;32mok: [dcex1335bamboo2] => (item=udf)[0m
+
+TASK [cis_security : 1.1.1.[1..7] Ensure mounting of cramfs filesystems is disabled | modprobe] *********************************************************************************************
+[0;32mok: [dcex1335bamboo2] => (item=cramfs)[0m
+[0;32mok: [dcex1335bamboo2] => (item=freevxfs)[0m
+[0;32mok: [dcex1335bamboo2] => (item=freevxfs)[0m
+[0;32mok: [dcex1335bamboo2] => (item=hfs)[0m
+[0;32mok: [dcex1335bamboo2] => (item=hfsplus)[0m
+[0;32mok: [dcex1335bamboo2] => (item=udf)[0m
+
+TASK [cis_security : 1.1.2 Ensure /tmp is configured] ***************************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.1.2 Ensure /tmp is configured | edit file] ***************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.1.2 Ensure /tmp is configured | reload demon] ************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.1.2 Ensure /tmp is configured | enable and start tmp.mount] **********************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : Get file system] *******************************************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : debug] *****************************************************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2] => {[0m
+[0;32m    "filesystem.stdout": "ext4"[0m
+[0;32m}[0m
+
+TASK [cis_security : Check /tmp config] *****************************************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : Remount /tmp] **********************************************************************************************************************************************************
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.1.6 Ensure /dev/shm is configured
+ 1.1.7 Ensure nodev option set on /dev/shm partition
+ 1.1.8 Ensure nosuid option set on /dev/shm partition
+ 1.1.9 Ensure noexec option set on /dev/shm partition] ***
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.1.12 Ensure nodev option set on /var/tmp partitions] *****************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : /var/tmp partitions] ***************************************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2] => {[0m
+[0;32m    "msg": {[0m
+[0;32m        "changed": false,[0m
+[0;32m        "cmd": "mount | grep \"on /var\" && true || true\n",[0m
+[0;32m        "delta": "0:00:00.008110",[0m
+[0;32m        "end": "2023-06-12 14:40:45.099305",[0m
+[0;32m        "failed": false,[0m
+[0;32m        "msg": "",[0m
+[0;32m        "rc": 0,[0m
+[0;32m        "start": "2023-06-12 14:40:45.091195",[0m
+[0;32m        "stderr": "",[0m
+[0;32m        "stderr_lines": [],[0m
+[0;32m        "stdout": "/dev/mapper/system-var on /var type ext4 (rw,relatime)\n/dev/mapper/system-log on /var/log type ext4 (rw,relatime)\n/dev/mapper/docker--vg-docker_lv_1 on /var/lib/docker type ext4 (rw,relatime)\n/dev/mapper/system-audit on /var/log/audit type ext4 (rw,relatime)",[0m
+[0;32m        "stdout_lines": [[0m
+[0;32m            "/dev/mapper/system-var on /var type ext4 (rw,relatime)",[0m
+[0;32m            "/dev/mapper/system-log on /var/log type ext4 (rw,relatime)",[0m
+[0;32m            "/dev/mapper/docker--vg-docker_lv_1 on /var/lib/docker type ext4 (rw,relatime)",[0m
+[0;32m            "/dev/mapper/system-audit on /var/log/audit type ext4 (rw,relatime)"[0m
+[0;32m        ][0m
+[0;32m    }[0m
+[0;32m}[0m
+
+TASK [cis_security : 1.1.18 Ensure nodev option set on /home partition] *********************************************************************************************************************
+[0;32mok: [dcex1335bamboo2] => {[0m
+[0;32m    "msg": "For new installations, during installation create a custom partition setup and specify a separate partition"[0m
+[0;32m}[0m
+
+TASK [cis_security : 1.1.22 Ensure sticky bit is set on all world-writable directories | get info] ******************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.1.22 Ensure sticky bit is set on all world-writable directories | fix] ***********************************************************************************************
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.1.23 Disable Automounting | service disable] *************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.1.23 Disable Automounting | package remove] **************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.1.24 Disable USB Storage | modprobe] *********************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2] => (item={'From': '(?m)^\\S+\\s+install usb-storage', 'To': 'install usb-storage /bin/true'})[0m
+[0;32mok: [dcex1335bamboo2] => (item={'From': '^(#)?blacklist usb-storage', 'To': 'blacklist usb-storage'})[0m
+
+TASK [cis_security : 1.1.24 Disable USB Storage] ********************************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.3.1 Ensure AIDE is installed] ****************************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.4.1 Ensure permissions on bootloader config are not overridden - step 1 - update chmod 444 to chmod 400 in /usr/sbin/grubmkconfig] ***********************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.4.1 Ensure permissions on bootloader config are not overridden - step 2 -  check on password not being set before running chmod command] *****************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.4.3 Ensure permissions on bootloader config are configured] **********************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.5.2 Ensure address space layout randomization (ASLR) is enabled] *****************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.5.3 Ensure prelink is not installed] *********************************************************************************************************************************
+[0;31mfatal: [dcex1335bamboo2]: FAILED! => {"changed": false, "cmd": "prelink -ua", "msg": "[Errno 2] No such file or directory: b'prelink'", "rc": 2, "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}[0m
+[0;36m...ignoring[0m
+
+TASK [cis_security : 1.5.3 Ensure prelink is not installed] *********************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.5.4 Ensure core dumps are restricted | sysctl] ***********************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.5.4 Ensure core dumps are restricted | limits.conf] ******************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.5.4 Ensure core dumps are restricted | apt] **************************************************************************************************************************
+[0;31mfatal: [dcex1335bamboo2]: FAILED! => {"changed": false, "msg": "No package matching 'systemd-coredump' is available"}[0m
+[0;36m...ignoring[0m
+
+TASK [cis_security : 1.5.4 Ensure core dumps are restricted | coredump.conf] ****************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.5.4 Ensure core dumps are restricted | coredump.conf] ****************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.5.4 Ensure core dumps are restricted | reload] ***********************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.6.1.1 Ensure AppArmor is installed] **********************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.6.1.3 Ensure all AppArmor Profiles are in enforce or complain mode
+ 1.6.1.4 Ensure all AppArmor Profiles are enforcing] ***********************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.7.2 Ensure local login warning banner is configured properly
+ 1.7.5 Ensure permissions on /etc/issue are configured] **************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.7.2 Ensure local login warning banner is configured properly
+ 1.7.5 Ensure permissions on /etc/issue are configured  | Show templates used] ***************************
+[0;32mok: [dcex1335bamboo2] => {[0m
+[0;32m    "msg": "custom file not found, using default"[0m
+[0;32m}[0m
+
+TASK [cis_security : 1.7.3 Ensure local remote warning banner is configured properly
+ 1.7.6 Ensure permissions on /etc/issue.net are configured] *********************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 1.7.3 Ensure remote login warning banner is configured properly
+ 1.7.6 Ensure permissions on /etc/issue.net are configured  | Show templates used] **********************
+[0;32mok: [dcex1335bamboo2] => {[0m
+[0;32m    "msg": "custom file not found, using default"[0m
+[0;32m}[0m
+
+TASK [cis_security : 2.1.1.1 Ensure time synchronization is in use - service install] *******************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.1.1 Ensure time synchronization is in use - service start] *********************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.1.2 Remove NTP] ****************************************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.1.2 Ensure systemd-timesyncd is configured | install systemd-timesyncd] ********************************************************************************************
+The following packages will be REMOVED:
+  chrony
+The following NEW packages will be installed:
+  systemd-timesyncd
+0 upgraded, 1 newly installed, 1 to remove and 9 not upgraded.
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.1.2 Ensure systemd-timesyncd is configured | set timezone] *********************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.1.2 Ensure systemd-timesyncd is configured | Configure systemd-timesyncd] ******************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.1.2 Ensure systemd-timesyncd is configured | Start and enable systemd-timesyncd] ***********************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.1.3 Remove NTP] ****************************************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.1.3 Ensure chrony is configured | Install Chrony] ******************************************************************************************************************
+The following packages will be REMOVED:
+  systemd-timesyncd
+The following NEW packages will be installed:
+  chrony
+0 upgraded, 1 newly installed, 1 to remove and 9 not upgraded.
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.1.3 Ensure chrony is configured | Start Chrony service] ************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.1.3 Ensure chrony is configured | Generate configuration] **********************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.1.3 Ensure chrony is configured | Restart Chrony service] **********************************************************************************************************
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.2 Ensure X Window System is not installed] *************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.3 Ensure Avahi Server is not installed] ****************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.4 Ensure CUPS is not installed] ************************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.5 Ensure DHCP Server is not installed] *****************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.6 Ensure LDAP server is not installed] *****************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : Check is NFS is operational] *******************************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : NFS service status] ****************************************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2] => {[0m
+[0;32m    "smbd_service.status.ActiveState": "VARIABLE IS NOT DEFINED!"[0m
+[0;32m}[0m
+
+TASK [cis_security : 2.1.7 Ensure NFS is not installed] *************************************************************************************************************************************
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.8 Ensure DNS Server is not installed] ******************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.9 Ensure FTP Server is not installed] ******************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : Check is HTTP server is operational] ***********************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : Http server status] ****************************************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2] => {[0m
+[0;32m    "https_service.status.ActiveState": "inactive"[0m
+[0;32m}[0m
+
+TASK [cis_security : Ensure HTTP server is not installed] ***********************************************************************************************************************************
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.11 Ensure IMAP and POP3 server are not installed] ******************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.12 Check is Samba is operational] **********************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.12 Check for log files] ********************************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.12 Cheking for Samba logs] *****************************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2] => {[0m
+[0;32m    "smbd_logs.matched": "0"[0m
+[0;32m}[0m
+
+TASK [cis_security : 2.1.12 Cheking for Samba service] **************************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2] => {[0m
+[0;32m    "smbd_service.status.ActiveState": "inactive"[0m
+[0;32m}[0m
+
+TASK [cis_security : 2.1.12 Ensure Samba is not installed] **********************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.13 Ensure HTTP Proxy Server is not installed] **********************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.14 Ensure SNMP Server is not installed] ****************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.15 Ensure mail transfer agent is configured for local-only mode] ***************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.15 Ensure mail transfer agent is configured for local-only mode] ***************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.15 Restart Mail transfer agent] ************************************************************************************************************************************
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.1.17 Ensure NIS Server is not installed] *****************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.2.1 Ensure NIS Client is not installed] ******************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.2.2 Ensure rsh client is not installed] ******************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.2.3 Ensure talk client is not installed] *****************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.2.4 Ensure telnet client is not installed] ***************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 2.2.5 Ensure LDAP client is not installed] *****************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : verify no wireless interfaces are active on the system] ****************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 3.1.2 Ensure wireless interfaces are disabled] *************************************************************************************************************************
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 3.2.1 Ensure packet redirect sending is disabled | set] ****************************************************************************************************************
+[0;32mok: [dcex1335bamboo2] => (item={'name': 'net.ipv4.conf.all.send_redirects', 'value': 0})[0m
+[0;32mok: [dcex1335bamboo2] => (item={'name': 'net.ipv4.conf.default.send_redirects', 'value': 0})[0m
+
+TASK [cis_security : 3.2.1 Ensure packet redirect sending is disabled | load] ***************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : Check for runing docker] ***********************************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : Docker service status] *************************************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2] => {[0m
+[0;32m    "docker_service.status.ActiveState": "active"[0m
+[0;32m}[0m
+
+TASK [cis_security : 3.2.2 Ensure IP forwarding is disabled | ipv4"] ************************************************************************************************************************
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 3.2.2 Ensure IP forwarding is disabled | ipv6"] ************************************************************************************************************************
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 3.2.2 Ensure IP forwarding is disabled | IPV4 load"] *******************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 3.2.2 Ensure IP forwarding is disabled | IPV6 load"] *******************************************************************************************************************
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 3.3.1 Ensure source routed packets are not accepted | ipv4"] ***********************************************************************************************************
+[0;32mok: [dcex1335bamboo2] => (item={'name': 'net.ipv4.conf.all.accept_source_route', 'value': 0})[0m
+[0;32mok: [dcex1335bamboo2] => (item={'name': 'net.ipv4.conf.default.accept_source_route', 'value': 0})[0m
+
+TASK [cis_security : 3.3.1 Ensure source routed packets are not accepted | ipv4 load"] ******************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 3.3.1 Ensure source routed packets are not accepted | ipv6"] ***********************************************************************************************************
+[0;36mskipping: [dcex1335bamboo2] => (item={'name': 'net.ipv6.conf.all.accept_source_route', 'value': 0}) [0m
+[0;36mskipping: [dcex1335bamboo2] => (item={'name': 'net.ipv6.conf.default.accept_source_route', 'value': 0}) [0m
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 3.3.1 Ensure source routed packets are not accepted | ipv6 load"] ******************************************************************************************************
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 3.3.3 Ensure secure ICMP redirects are not accepted | save] ************************************************************************************************************
+[0;32mok: [dcex1335bamboo2] => (item={'name': 'net.ipv4.conf.all.secure_redirects', 'value': 0})[0m
+[0;32mok: [dcex1335bamboo2] => (item={'name': 'net.ipv4.conf.default.secure_redirects', 'value': 0})[0m
+
+TASK [cis_security : 3.3.3 Ensure secure ICMP redirects are not accepted | load] ************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 3.3.4 Ensure suspicious packets are logged | save] *********************************************************************************************************************
+[0;32mok: [dcex1335bamboo2] => (item={'name': 'net.ipv4.conf.all.log_martians', 'value': 1})[0m
+[0;32mok: [dcex1335bamboo2] => (item={'name': 'net.ipv4.conf.default.log_martians', 'value': 1})[0m
+
+TASK [cis_security : 3.3.4 Ensure suspicious packets are logged | load] *********************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 3.3.5 Ensure broadcast ICMP requests are ignored | save] ***************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 3.3.5 Ensure broadcast ICMP requests are ignored | load] ***************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 3.3.6 Ensure bogus ICMP responses are ignored | save] ******************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 3.3.6 Ensure bogus ICMP responses are ignored | load] ******************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 3.3.7 Ensure Reverse Path Filtering is enabled | save] *****************************************************************************************************************
+[0;32mok: [dcex1335bamboo2] => (item={'name': 'net.ipv4.conf.all.rp_filter', 'value': 1})[0m
+[0;32mok: [dcex1335bamboo2] => (item={'name': 'net.ipv4.conf.default.rp_filter', 'value': 1})[0m
+
+TASK [cis_security : 3.3.7 Ensure Reverse Path Filtering is enabled | load] *****************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 3.3.8 Ensure TCP SYN Cookies is enabled | save] ************************************************************************************************************************
+[0;31mfatal: [dcex1335bamboo2]: FAILED! => {"changed": false, "msg": "Failed to reload sysctl: net.ipv4.conf.all.arp_ignore = 1\nfs.protected_hardlinks = 1\nnet.ipv4.ip_forward = 0\nnet.ipv4.conf.default.rp_filter = 1\nnet.ipv4.conf.all.send_redirects = 0\nfs.protected_symlinks = 1\nnet.ipv4.icmp_ratelimit = 100\nnet.ipv4.conf.default.secure_redirects = 0\nkernel.randomize_va_space = 2\nnet.ipv4.tcp_timestamps = 0\nnet.ipv4.conf.all.accept_source_route = 0\nnet.ipv4.conf.all.secure_redirects = 0\nnet.ipv4.conf.default.shared_media = 1\nnet.ipv4.conf.default.send_redirects = 0\nnet.ipv4.conf.all.accept_redirects = 0\nkernel.kptr_restrict = 1\nnet.ipv4.conf.default.log_martians = 1\nnet.ipv4.icmp_echo_ignore_broadcasts = 1\nkernel.yama.ptrace_scope = 1\nvm.mmap_min_addr = 65536\nnet.ipv4.conf.all.log_martians = 1\nfs.suid_dumpable = 0\nnet.ipv4.conf.default.accept_redirects = 0\nnet.ipv4.icmp_ignore_bogus_error_responses = 1\nnet.ipv4.conf.default.accept_source_route = 0\nkernel.core_uses_pid = 1\nnet.ipv4.icmp_ratemask = 88089\nnet.ipv4.conf.all.rp_filter = 1\nnet.ipv4.conf.all.shared_media = 1\nnet.ipv4.tcp_rfc1337 = 1\nkernel.sysrq = 0\nnet.ipv4.conf.all.arp_announce = 2\nnet.ipv4.tcp_syncookies = 1\nsysctl: cannot stat /proc/sys/net/ipv6/conf/default/accept_ra_rtr_pref: No such file or directory\nsysctl: cannot stat /proc/sys/net/ipv6/conf/default/accept_ra_pinfo: No such file or directory\nsysctl: cannot stat /proc/sys/net/ipv6/conf/all/disable_ipv6: No such file or directory\nsysctl: cannot stat /proc/sys/net/ipv6/conf/all/forwarding: No such file or directory\nsysctl: cannot stat /proc/sys/net/ipv6/conf/default/accept_ra: No such file or directory\nsysctl: cannot stat /proc/sys/net/ipv6/conf/default/dad_transmits: No such file or directory\nsysctl: cannot stat /proc/sys/net/ipv6/conf/default/accept_ra_defrtr: No such file or directory\nsysctl: cannot stat /proc/sys/net/ipv6/conf/default/autoconf: No such file or directory\nsysctl: cannot stat /proc/sys/net/ipv6/conf/default/accept_redirects: No such file or directory\nsysctl: cannot stat /proc/sys/net/ipv6/conf/default/router_solicitations: No such file or directory\nsysctl: cannot stat /proc/sys/net/ipv6/conf/all/accept_redirects: No such file or directory\nsysctl: cannot stat /proc/sys/net/ipv6/conf/default/max_addresses: No such file or directory\nsysctl: cannot stat /proc/sys/net/ipv6/conf/all/accept_ra: No such file or directory\n"}[0m
+[0;36m...ignoring[0m
+
+TASK [cis_security : 3.3.8 Ensure TCP SYN Cookies is enabled | load] ************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 3.3.9 Ensure IPv6 router advertisements are not accepted | save] *******************************************************************************************************
+[0;36mskipping: [dcex1335bamboo2] => (item={'name': 'net.ipv6.conf.all.accept_ra', 'value': 0}) [0m
+[0;36mskipping: [dcex1335bamboo2] => (item={'name': 'net.ipv6.conf.default.accept_ra', 'value': 0}) [0m
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 3.3.9 Ensure IPv6 router advertisements are not accepted | load] *******************************************************************************************************
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 3.5.1.1 Ensure ufw is installed | ufw] *********************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 3.5.1.2 Ensure iptables-persistent is not installed] *******************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 3.5.3.1.2 Ensure ufw is uninstalled or disabled with nftables] *********************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 4.2.1.1 Ensure rsyslog is installed] ***********************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 4.2.1.2 Ensure rsyslog Service is enabled] *****************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 4.2.1.4 Ensure rsyslog default file permissions configured] ************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 4.2.1.5 Ensure rsyslog default file permissions configured] ************************************************************************************************************
+[0;31m--- before: /etc/rsyslog.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/rsyslog.conf (content)[0m
+[0;32m[0m[0;36m@@ -57,3 +57,4 @@[0m
+[0;36m[0m # Include all config files in /etc/rsyslog.d/
+ #
+ $IncludeConfig /etc/rsyslog.d/*.conf
+[0;32m+ *.* action(type="omfwd" target="192.168.2.100" port="514" protocol="tcp"action.resumeRetryCount="100"queue.type="LinkedList" queue.size="1000")[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 4.2.2.1 Ensure journald is configured to send logs to rsyslog] *********************************************************************************************************
+[0;31m--- before: /etc/systemd/journald.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/systemd/journald.conf (content)[0m
+[0;32m[0m[0;36m@@ -29,7 +29,7 @@[0m
+[0;36m[0m #RuntimeMaxFiles=100
+ #MaxRetentionSec=
+ #MaxFileSec=1month
+[0;31m-#ForwardToSyslog=yes[0m
+[0;31m[0m[0;32m+ForwardToSyslog=yes[0m
+[0;32m[0m #ForwardToKMsg=no
+ #ForwardToConsole=no
+ #ForwardToWall=yes
+
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 4.2.2.2 Ensure journald is configured to compress large log files] *****************************************************************************************************
+[0;31m--- before: /etc/systemd/journald.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/systemd/journald.conf (content)[0m
+[0;32m[0m[0;36m@@ -13,7 +13,7 @@[0m
+[0;36m[0m 
+ [Journal]
+ #Storage=auto
+[0;31m-#Compress=yes[0m
+[0;31m[0m[0;32m+Compress=yes[0m
+[0;32m[0m #Seal=yes
+ #SplitMode=uid
+ #SyncIntervalSec=5m
+
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 4.2.2.3 Ensure journald is configured to write logfiles to persistent disk] ********************************************************************************************
+[0;31m--- before: /etc/systemd/journald.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/systemd/journald.conf (content)[0m
+[0;32m[0m[0;36m@@ -12,7 +12,7 @@[0m
+[0;36m[0m # See journald.conf(5) for details.
+ 
+ [Journal]
+[0;31m-#Storage=auto[0m
+[0;31m[0m[0;32m+Storage=persistent[0m
+[0;32m[0m Compress=yes
+ #Seal=yes
+ #SplitMode=uid
+
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.1.1 Ensure cron daemon is enabled and running] ***********************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.1.2 Ensure permissions on /etc/crontab are configured] ***************************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0644",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/crontab"
+ }
+
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.1.3 Ensure permissions on /etc/cron.hourly are configured] ***********************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0755",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/cron.hourly"
+ }
+
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.1.4 Ensure permissions on /etc/cron.daily are configured] ************************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0755",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/cron.daily"
+ }
+
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.1.5 Ensure permissions on /etc/cron.weekly are configured] ***********************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0755",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/cron.weekly"
+ }
+
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.1.6 Ensure permissions on /etc/cron.monthly are configured] **********************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0755",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/cron.monthly"
+ }
+
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.1.7 Ensure permissions on /etc/cron.d are configured] ****************************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0755",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/cron.d"
+ }
+
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.1.8 Ensure cron is restricted to authorized users | /etc/cron.deny] **************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : stat] ******************************************************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.1.8 Ensure cron is restricted to authorized users | /etc/cron.allow] *************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,6 +1,6 @@[0m
+[0;36m[0m {
+[0;31m-    "atime": 1686573718.4087574,[0m
+[0;31m[0m[0;31m-    "mtime": 1686573718.4087574,[0m
+[0;31m[0m[0;32m+    "atime": 1686573718.416175,[0m
+[0;32m[0m[0;32m+    "mtime": 1686573718.416175,[0m
+[0;32m[0m     "path": "/etc/cron.allow",
+[0;31m-    "state": "absent"[0m
+[0;31m[0m[0;32m+    "state": "touch"[0m
+[0;32m[0m }
+
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.1.9 Ensure at is restricted to authorized users | /etc/at.deny] ******************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : stat] ******************************************************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.1.9 Ensure at is restricted to authorized users | /etc/at.allow] *****************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,6 +1,6 @@[0m
+[0;36m[0m {
+[0;31m-    "atime": 1686573719.4047735,[0m
+[0;31m[0m[0;31m-    "mtime": 1686573719.4047735,[0m
+[0;31m[0m[0;32m+    "atime": 1686573719.4106364,[0m
+[0;32m[0m[0;32m+    "mtime": 1686573719.4106364,[0m
+[0;32m[0m     "path": "/etc/at.allow",
+[0;31m-    "state": "absent"[0m
+[0;31m[0m[0;32m+    "state": "touch"[0m
+[0;32m[0m }
+
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.2.1 Ensure sudo is installed] ****************************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.2.2 Ensure sudo commands use pty] ************************************************************************************************************************************
+[0;31m--- before: /etc/sudoers (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/sudoers (content)[0m
+[0;32m[0m[0;36m@@ -28,3 +28,4 @@[0m
+[0;36m[0m # See sudoers(5) for more information on "#include" directives:
+ 
+ #includedir /etc/sudoers.d
+[0;32m+Defaults use_pty[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.2.3 Ensure sudo log file exists] *************************************************************************************************************************************
+[0;31m--- before: /etc/sudoers (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/sudoers (content)[0m
+[0;32m[0m[0;36m@@ -29,3 +29,4 @@[0m
+[0;36m[0m 
+ #includedir /etc/sudoers.d
+ Defaults use_pty
+[0;32m+Defaults    logfile=/var/log/sudo.log[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.3.1 Ensure permissions on /etc/ssh/sshd_config are configured] *******************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0644",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/ssh/sshd_config"
+ }
+
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.3.2 Ensure permissions on SSH private host key files are configured | find keys] *************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.3.2 Ensure permissions on SSH private host key files are configured | fix permissions] *******************************************************************************
+[1;35m[WARNING]: conditional statements should not include jinja2 templating delimiters such as {{ }} or {% %}. Found: {{ private_keys.stdout_lines|length > 0 }}[0m
+[0;32mok: [dcex1335bamboo2] => (item=/etc/ssh/ssh_host_ed25519_key)[0m
+[0;32mok: [dcex1335bamboo2] => (item=/etc/ssh/ssh_host_ecdsa_key)[0m
+[0;32mok: [dcex1335bamboo2] => (item=/etc/ssh/ssh_host_rsa_key)[0m
+
+TASK [cis_security : 5.3.3 Ensure permissions on SSH public host key files are configured | find keys] **************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.3.3 Ensure permissions on SSH public host key files are configured | fix permissions] ********************************************************************************
+[1;35m[WARNING]: conditional statements should not include jinja2 templating delimiters such as {{ }} or {% %}. Found: {{ public_keys.stdout_lines|length > 0 }}[0m
+[0;32mok: [dcex1335bamboo2] => (item=/etc/ssh/ssh_host_rsa_key.pub)[0m
+[0;32mok: [dcex1335bamboo2] => (item=/etc/ssh/ssh_host_ecdsa_key.pub)[0m
+[0;32mok: [dcex1335bamboo2] => (item=/etc/ssh/ssh_host_ed25519_key.pub)[0m
+
+TASK [cis_security : 5.3.4 Ensure SSH access is limited | allow groups] *********************************************************************************************************************
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.3.4 Ensure SSH access is limited | denyusers] ************************************************************************************************************************
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.3.4 Ensure SSH access is limited | denygroups] ***********************************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -121,3 +121,4 @@[0m
+[0;36m[0m #	AllowTcpForwarding no
+ #	PermitTTY no
+ #	ForceCommand cvs server
+[0;32m+DenyGroups games[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.3.5 Ensure SSH LogLevel is appropriate] ******************************************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -122,3 +122,4 @@[0m
+[0;36m[0m #	PermitTTY no
+ #	ForceCommand cvs server
+ DenyGroups games
+[0;32m+LogLevel VERBOSE[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.3.7 Ensure SSH MaxAuthTries is set to 4 or less] *********************************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -32,7 +32,7 @@[0m
+[0;36m[0m #PermitRootLogin prohibit-password
+ PermitRootLogin yes
+ #StrictModes yes
+[0;31m-#MaxAuthTries 6[0m
+[0;31m[0m[0;32m+MaxAuthTries 2[0m
+[0;32m[0m #MaxSessions 10
+ 
+ #PubkeyAuthentication yes
+
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.3.8 Ensure SSH IgnoreRhosts is enabled] ******************************************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -123,3 +123,4 @@[0m
+[0;36m[0m #	ForceCommand cvs server
+ DenyGroups games
+ LogLevel VERBOSE
+[0;32m+IgnoreRhosts yes[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.3.9 Ensure SSH HostbasedAuthentication is disabled] ******************************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -124,3 +124,4 @@[0m
+[0;36m[0m DenyGroups games
+ LogLevel VERBOSE
+ IgnoreRhosts yes
+[0;32m+HostbasedAuthentication no[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.3.11 Ensure SSH PermitEmptyPasswords is disabled] ********************************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -125,3 +125,4 @@[0m
+[0;36m[0m LogLevel VERBOSE
+ IgnoreRhosts yes
+ HostbasedAuthentication no
+[0;32m+PermitEmptyPasswords no[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.3.12 Ensure SSH PermitUserEnvironment is disabled] *******************************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -126,3 +126,4 @@[0m
+[0;36m[0m IgnoreRhosts yes
+ HostbasedAuthentication no
+ PermitEmptyPasswords no
+[0;32m+PermitUserEnvironment no[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.3.13 Ensure only strong Ciphers are used] ****************************************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -127,3 +127,4 @@[0m
+[0;36m[0m HostbasedAuthentication no
+ PermitEmptyPasswords no
+ PermitUserEnvironment no
+[0;32m+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.3.14 Ensure only strong MAC algorithms are used] *********************************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -128,3 +128,4 @@[0m
+[0;36m[0m PermitEmptyPasswords no
+ PermitUserEnvironment no
+ Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+[0;32m+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.3.15 Ensure only strong Key Exchange algorithms are used] ************************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -129,3 +129,4 @@[0m
+[0;36m[0m PermitUserEnvironment no
+ Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+ MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
+[0;32m+KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.3.16 Ensure SSH Idle Timeout Interval is configured | clientalive] ***************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -130,3 +130,4 @@[0m
+[0;36m[0m Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+ MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
+ KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
+[0;32m+ClientAliveInterval 300[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.3.16 Ensure SSH Idle Timeout Interval is configured | MaxAlive] ******************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -131,3 +131,4 @@[0m
+[0;36m[0m MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
+ KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
+ ClientAliveInterval 300
+[0;32m+ClientAliveCountMax 3[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.3.17 Ensure SSH LoginGraceTime is set to one minute or less] *********************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -132,3 +132,4 @@[0m
+[0;36m[0m KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
+ ClientAliveInterval 300
+ ClientAliveCountMax 3
+[0;32m+LoginGraceTime 30[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.3.18 Ensure SSH warning banner is configured] ************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.3.19 Ensure SSH PAM is enabled] **************************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.3.21 Ensure SSH MaxStartups is configured to 10:30:60] ***************************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -133,3 +133,4 @@[0m
+[0;36m[0m ClientAliveInterval 300
+ ClientAliveCountMax 3
+ LoginGraceTime 30
+[0;32m+MaxStartups 10:30:60[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.3.22 Ensure SSH MaxSessions is limited to 4] *************************************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -134,3 +134,4 @@[0m
+[0;36m[0m ClientAliveCountMax 3
+ LoginGraceTime 30
+ MaxStartups 10:30:60
+[0;32m+MaxSessions 4[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : restart_sshd] **********************************************************************************************************************************************************
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.4.3.1 Ensure password reuse is limited | delete possible duplicate lines] ********************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.4.3.2 Ensure password reuse is limited | update file according to CIS] ***********************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.4.4 Ensure password hashing algorithm is SHA-512] ********************************************************************************************************************
+[0;31m--- before: /etc/pam.d/common-password (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/pam.d/common-password (content)[0m
+[0;32m[0m[0;36m@@ -24,7 +24,7 @@[0m
+[0;36m[0m # here are the per-package modules (the "Primary" block)
+ password	requisite     pam_passwdqc.so min=disabled,disabled,16,12,8
+ password       required                       pam_pwhistory.so remember=5
+[0;31m-password	[success=1 default=ignore]	pam_unix.so obscure use_authtok try_first_pass sha512[0m
+[0;31m[0m[0;32m+password [success=1 default=ignore]	pam_unix.so obscure use_authtok try_first_pass  sha512 [0m
+[0;32m[0m # here's the fallback if no module succeeds
+ password	requisite			pam_deny.so
+ # prime the stack with a positive return value if there isn't one already;
+
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.5.1.1 Ensure minimum days between password changes is configured | PASS_MIN_DAYS] ************************************************************************************
+[0;31m--- before: /etc/login.defs (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/login.defs (content)[0m
+[0;32m[0m[0;36m@@ -101,7 +101,7 @@[0m
+[0;36m[0m PASS_MAX_DAYS 99999
+ 
+ # Minimum number of days allowed between password changes.
+[0;31m-PASS_MIN_DAYS 0[0m
+[0;31m[0m[0;32m+PASS_MIN_DAYS   0[0m
+[0;32m[0m 
+ # Number of days warning given before a password expires.
+ PASS_WARN_AGE	7
+
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.5.1.1 Ensure minimum days between password changes is configured  | chage --mindays] *********************************************************************************
+[0;32mok: [dcex1335bamboo2] => (item=root)[0m
+[0;31mfailed: [dcex1335bamboo2] (item=sshaccess) => {"ansible_loop_var": "item", "changed": false, "cmd": ["chage", "--mindays", "0", "sshaccess"], "delta": "0:00:00.009441", "end": "2023-06-12 14:42:12.775790", "item": "sshaccess", "msg": "non-zero return code", "rc": 1, "start": "2023-06-12 14:42:12.766349", "stderr": "chage: user 'sshaccess' does not exist in /etc/passwd", "stderr_lines": ["chage: user 'sshaccess' does not exist in /etc/passwd"], "stdout": "", "stdout_lines": []}[0m
+[0;31mfailed: [dcex1335bamboo2] (item=pam_rpcdisc) => {"ansible_loop_var": "item", "changed": false, "cmd": ["chage", "--mindays", "0", "pam_rpcdisc"], "delta": "0:00:00.007989", "end": "2023-06-12 14:42:13.111087", "item": "pam_rpcdisc", "msg": "non-zero return code", "rc": 1, "start": "2023-06-12 14:42:13.103098", "stderr": "chage: user 'pam_rpcdisc' does not exist in /etc/passwd", "stderr_lines": ["chage: user 'pam_rpcdisc' does not exist in /etc/passwd"], "stdout": "", "stdout_lines": []}[0m
+[0;36m...ignoring[0m
+
+TASK [cis_security : 5.5.1.3 Ensure password expiration warning days is 7 or more | PASS_WARN_AGE] ******************************************************************************************
+[0;31m--- before: /etc/login.defs (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/login.defs (content)[0m
+[0;32m[0m[0;36m@@ -104,7 +104,7 @@[0m
+[0;36m[0m PASS_MIN_DAYS   0
+ 
+ # Number of days warning given before a password expires.
+[0;31m-PASS_WARN_AGE	7[0m
+[0;31m[0m[0;32m+PASS_WARN_AGE  7[0m
+[0;32m[0m 
+ # Min/max values for automatic uid selection in useradd
+ UID_MIN			 1000
+
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.5.1.3 Ensure password expiration warning days is 7 or more  | chage --warndays] **************************************************************************************
+[0;32mok: [dcex1335bamboo2] => (item=root)[0m
+[0;31mfailed: [dcex1335bamboo2] (item=sshaccess) => {"ansible_loop_var": "item", "changed": false, "cmd": ["chage", "--warndays", "7", "sshaccess"], "delta": "0:00:00.005714", "end": "2023-06-12 14:42:14.205599", "item": "sshaccess", "msg": "non-zero return code", "rc": 1, "start": "2023-06-12 14:42:14.199885", "stderr": "chage: user 'sshaccess' does not exist in /etc/passwd", "stderr_lines": ["chage: user 'sshaccess' does not exist in /etc/passwd"], "stdout": "", "stdout_lines": []}[0m
+[0;31mfailed: [dcex1335bamboo2] (item=pam_rpcdisc) => {"ansible_loop_var": "item", "changed": false, "cmd": ["chage", "--warndays", "7", "pam_rpcdisc"], "delta": "0:00:00.007841", "end": "2023-06-12 14:42:14.519032", "item": "pam_rpcdisc", "msg": "non-zero return code", "rc": 1, "start": "2023-06-12 14:42:14.511191", "stderr": "chage: user 'pam_rpcdisc' does not exist in /etc/passwd", "stderr_lines": ["chage: user 'pam_rpcdisc' does not exist in /etc/passwd"], "stdout": "", "stdout_lines": []}[0m
+[0;36m...ignoring[0m
+
+TASK [cis_security : 5.5.1.5 Ensure all users last password change date is in the past | get list] ******************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.5.1.5 Ensure all users last password change date is in the past | save list] *****************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-2711555ub4j1tty/tmpgzdi_tqk[0m
+[0;32m[0m[0;36m@@ -0,0 +1 @@[0m
+[0;36m[0m[0;32m+[][0m
+[0;32m\ No newline at end of file[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.5.2 Ensure system accounts are secured | set all system accounts to a non login shell] *******************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.5.3 Ensure default group for the root account is GID 0] **************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.5.4 Ensure default user umask is 027 or more restrictive - /etc/profile] *********************************************************************************************
+[0;31m--- before: /etc/profile (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/profile (content)[0m
+[0;32m[0m[0;36m@@ -25,3 +25,4 @@[0m
+[0;36m[0m   done
+   unset i
+ fi
+[0;32m+umask 027[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.5.4 Ensure default user umask is 027 or more restrictive - Fix for /etc/apt/apt.conf.d/50command-not-found] **********************************************************
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.5.5 Ensure default user shell timeout is 900 seconds or less | /etc/profile] *****************************************************************************************
+[0;31m--- before: /etc/profile (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/profile (content)[0m
+[0;32m[0m[0;36m@@ -26,3 +26,4 @@[0m
+[0;36m[0m   unset i
+ fi
+ umask 027
+[0;32m+readonly TMOUT=900 ; export TMOUT[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.7 Ensure access to the su command is restricted  | create su-group-access] *******************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-2711555ub4j1tty/tmp3_1zcbu3/su-group-access.j2[0m
+[0;32m[0m[0;36m@@ -0,0 +1,2 @@[0m
+[0;36m[0m[0;32m+# Managed by ansible alivx/CIS-Ubuntu-20.04-Ansible[0m
+[0;32m[0m[0;32m+root[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 5.7 Ensure access to the su command is restricted  | create pam-d-su] **************************************************************************************************
+[0;31m--- before: /etc/pam.d/su[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-2711555ub4j1tty/tmpm11jb43x/pam-d-su.j2[0m
+[0;32m[0m[0;36m@@ -12,7 +12,7 @@[0m
+[0;36m[0m # denying "root" user, unless she's a member of "foo" or explicitly
+ # permitted earlier by e.g. "sufficient pam_rootok.so").
+ # (Replaces the `SU_WHEEL_ONLY' option from login.defs)
+[0;31m-# auth       required   pam_wheel.so[0m
+[0;31m[0m[0;32m+auth           required        pam_wheel.so use_uid[0m
+[0;32m[0m 
+ # Uncomment this if you want wheel members to be able to
+ # su without a password.
+[0;36m@@ -20,7 +20,7 @@[0m
+[0;36m[0m 
+ # Uncomment this if you want members of a specific group to not
+ # be allowed to use su at all.
+[0;31m-# auth       required   pam_wheel.so deny group=nosu[0m
+[0;31m[0m[0;32m+auth           required        pam_wheel.so use_uid deny group=nosu[0m
+[0;32m[0m 
+ # Uncomment and edit /etc/security/time.conf if you need to set
+ # time restrainst on su usage.
+[0;36m@@ -31,7 +31,7 @@[0m
+[0;36m[0m # This module parses environment configuration file(s)
+ # and also allows you to use an extended config
+ # file /etc/security/pam_env.conf.
+[0;31m-# [0m
+[0;31m[0m[0;32m+#[0m
+[0;32m[0m # parsing /etc/environment needs "readenv=1"
+ session       required   pam_env.so readenv=1
+ # locale variables are also kept into /etc/default/locale in etch
+[0;36m@@ -40,7 +40,7 @@[0m
+[0;36m[0m 
+ # Defines the MAIL environment variable
+ # However, userdel also needs MAIL_DIR and MAIL_FILE variables
+[0;31m-# in /etc/login.defs to make sure that removing a user [0m
+[0;31m[0m[0;32m+# in /etc/login.defs to make sure that removing a user[0m
+[0;32m[0m # also removes the user's mail spool file.
+ # See comments in /etc/login.defs
+ #
+
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.1.2 Ensure permissions on /etc/passwd are configured] ****************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.1.3 Ensure permissions on /etc/passwd- are configured] ***************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.1.4 Ensure permissions on /etc/group are configured] *****************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.1.5 Ensure permissions on /etc/group- are configured] ****************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.1.6 Ensure permissions on /etc/shadow are configured, with group 'shadow'] *******************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.1.7 Ensure permissions on /etc/shadow- are configured] ***************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.1.8 Ensure permissions on /etc/gshadow are configured] ***************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.1.9 Ensure permissions on /etc/gshadow- are configured] **************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.1.10 Ensure no world writable files exist | find files] **************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.1.10 Ensure no world writable files exist | save output] *************************************************************************************************************
+diff skipped: source file size is greater than 104448
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.1 Ensure accounts in /etc/passwd use shadowed passwords] ***********************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.2  Ensure password fields are not empty | list] ********************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.2 Ensure password fields are not empty | Save output] **************************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-2711555ub4j1tty/tmp_z3s2p4u[0m
+[0;32m[0m[0;36m@@ -0,0 +1 @@[0m
+[0;36m[0m[0;32m+[][0m
+[0;32m\ No newline at end of file[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.2 Ensure password fields are not empty | Lock account] *************************************************************************************************************
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.3 Ensure all groups in /etc/passwd exist in /etc/group | list] *****************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.3 Ensure all groups in /etc/passwd exist in /etc/group | save output] **********************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.4 Ensure all users' home directories exist | list] *****************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.4 Ensure all users' home directories exist | save] *****************************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-2711555ub4j1tty/tmp0bj5vln_[0m
+[0;32m[0m[0;36m@@ -0,0 +1 @@[0m
+[0;36m[0m[0;32m+[][0m
+[0;32m\ No newline at end of file[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.4 Ensure all users' home directories exist | fix] ******************************************************************************************************************
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.5 Ensure users own their home directories | list] ******************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.5 Ensure users own their home directories | Var] *******************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.5 Ensure users own their home directories | save output] ***********************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-2711555ub4j1tty/tmp8lc6f1k3[0m
+[0;32m[0m[0;36m@@ -0,0 +1 @@[0m
+[0;36m[0m[0;32m+[][0m
+[0;32m\ No newline at end of file[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.5 Ensure users own their home directories | fix] *******************************************************************************************************************
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.6 Ensure users home directories permissions are 750 or more restrictive - list] ************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.6 Ensure users' home directories permissions are 750 or more restrictive - print output] ***************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-2711555ub4j1tty/tmp1reh9l2h[0m
+[0;32m[0m[0;36m@@ -0,0 +1 @@[0m
+[0;36m[0m[0;32m+["/home/ansible", "/home/ansible", "/home/ansible", "/home/ansible", "/home/ansible"][0m
+[0;32m\ No newline at end of file[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.6 Ensure users home directories permissions are 750 or more restrictive - fix] *************************************************************************************
+[1;35m[WARNING]: conditional statements should not include jinja2 templating delimiters such as {{ }} or {% %}. Found: {{ output_6_2_6.stdout_lines|length > 0 }}[0m
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0755",[0m
+[0;31m[0m[0;32m+    "mode": "0750",[0m
+[0;32m[0m     "path": "/home/ansible"
+ }
+
+[0;33mchanged: [dcex1335bamboo2] => (item=/home/ansible)[0m
+[0;32mok: [dcex1335bamboo2] => (item=/home/ansible)[0m
+[0;32mok: [dcex1335bamboo2] => (item=/home/ansible)[0m
+[0;32mok: [dcex1335bamboo2] => (item=/home/ansible)[0m
+[0;32mok: [dcex1335bamboo2] => (item=/home/ansible)[0m
+
+TASK [cis_security : 6.2.7 Ensure users' dot files are not group or world writable | list] **************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.7 Ensure users' dot files and folders are not group or world writable | list] **************************************************************************************
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.7 Ensure users' dot files are not group or world writable | save output] *******************************************************************************************
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.7 Ensure users' dot files and folders are not group or world writable | save output] *******************************************************************************
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.7 Ensure users' dot files are not group or world writable | correct file permissions] ******************************************************************************
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.7 Ensure users' dot files and folders are not group or world writable | correct file permissions] ******************************************************************
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.8 Ensure no users have .netrc files | list] ************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.8 Ensure no users have .netrc files | save output] *****************************************************************************************************************
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.9 Ensure no users have .forward files | list] **********************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.9 Ensure no users have .forward files  | save output] **************************************************************************************************************
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.10 Ensure no users have .rhosts files | list] **********************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.10 Ensure no users have .rhosts files | save output] ***************************************************************************************************************
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.11 Ensure root is the only UID 0 account| list] ********************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.11 Ensure root is the only UID 0 account | Save output] ************************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-2711555ub4j1tty/tmpf5dxxt2a[0m
+[0;32m[0m[0;36m@@ -0,0 +1 @@[0m
+[0;36m[0m[0;32m+[][0m
+[0;32m\ No newline at end of file[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.12 Ensure root PATH Integrity | run | Delete non-existing folders from PATH] ***************************************************************************************
+[0;36mskipping: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.12 Ensure root PATH Integrity | run] *******************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.12 Ensure root PATH Integrity | run] *******************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.12 Ensure root PATH Integrity | save output] ***********************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.13 Ensure no duplicate UIDs exist | list] **************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.13 Ensure no duplicate UIDs exist | save output] *******************************************************************************************************************
+[0;31mfatal: [dcex1335bamboo2]: FAILED! => {"changed": false, "checksum": "b8dd780e722a38d0a6738b755113e327be034a6c", "msg": "Unsupported parameters for (ansible.legacy.copy) module: changed_when. Supported parameters include: _original_basename, attributes, backup, checksum, content, dest, directory_mode, follow, force, group, local_follow, mode, owner, remote_src, selevel, serole, setype, seuser, src, unsafe_writes, validate (attr)."}[0m
+[0;36m...ignoring[0m
+
+TASK [cis_security : 6.2.14 Ensure no duplicate GIDs exist | list] **************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.14 Ensure no duplicate GIDs exist | save output] *******************************************************************************************************************
+[0;31mfatal: [dcex1335bamboo2]: FAILED! => {"changed": false, "checksum": "9c05692c1b4387f6a3a104accd08daf0e3d8ff3c", "msg": "Unsupported parameters for (ansible.legacy.copy) module: changed_when. Supported parameters include: _original_basename, attributes, backup, checksum, content, dest, directory_mode, follow, force, group, local_follow, mode, owner, remote_src, selevel, serole, setype, seuser, src, unsafe_writes, validate (attr)."}[0m
+[0;36m...ignoring[0m
+
+TASK [cis_security : 6.2.15 Ensure no duplicate user names exist | list] ********************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.15 Ensure no duplicate user names exist | save output] *************************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-2711555ub4j1tty/tmpn1_wf_o9[0m
+[0;32m[0m[0;36m@@ -0,0 +1 @@[0m
+[0;36m[0m[0;32m+[][0m
+[0;32m\ No newline at end of file[0m
+[0;32m[0m
+[0;33mchanged: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.16 Ensure no duplicate group names exist | list] *******************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.16 Ensure no duplicate group names exist | save output] ************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.17 Ensure shadow group is empty | list] ****************************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : 6.2.17 Ensure shadow group is empty | save output] *********************************************************************************************************************
+[0;32mok: [dcex1335bamboo2][0m
+
+TASK [cis_security : Add hardening file.] ***************************************************************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,7 +1,7 @@[0m
+[0;36m[0m {
+[0;31m-    "atime": 1686573777.5976713,[0m
+[0;31m[0m[0;31m-    "mode": "0640",[0m
+[0;31m[0m[0;31m-    "mtime": 1686573777.5976713,[0m
+[0;31m[0m[0;32m+    "atime": 1686573777.6062267,[0m
+[0;32m[0m[0;32m+    "mode": "0400",[0m
+[0;32m[0m[0;32m+    "mtime": 1686573777.6062267,[0m
+[0;32m[0m     "path": "/etc/.hardening",
+[0;31m-    "state": "absent"[0m
+[0;31m[0m[0;32m+    "state": "touch"[0m
+[0;32m[0m }
+
+[0;33mchanged: [dcex1335bamboo2][0m
+
+PLAY RECAP **********************************************************************************************************************************************************************************
+[0;33mdcex1335bamboo2[0m            : [0;32mok=210 [0m [0;33mchanged=54  [0m unreachable=0    failed=0    [0;36mskipped=25  [0m rescued=0    [1;35mignored=7   [0m
+
+
+Script done on 2023-06-12 14:42:57+02:00

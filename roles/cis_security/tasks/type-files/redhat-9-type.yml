@@ -266,17 +266,23 @@
 #    tags:
 #      - 1.1.9
 
-  - name: 1.1.9 - Disable USB storage module
-    ansible.builtin.lineinfile:
-      dest: /etc/modprobe.d/CIS.conf
-      line: "install usb-storage /bin/true"
-      state: present
-      create: true
-      owner: root
-      group: root
-      mode: 0640
+  - name: 1.1.9 Disable USB
+    script:
+      cmd: files/disableusb.sh
+    check_mode: false
     tags:
-      - 1.1.9
+      - 1.1.9 
+#  - name: Disable USB storage module
+#    ansible.builtin.lineinfile:
+#      dest: /etc/modprobe.d/CIS.conf
+#      line: "install usb-storage /bin/true"
+#      state: present
+#      create: true
+#      owner: root
+#      group: root
+#      mode: 0640
+#    tags:
+#      - 1.1.9
 
 # Control 1.2.1 is system updating. Make sure system is set for some kind of system software update
   #  from a given repo must be signed with the appropriate key
@@ -401,7 +407,49 @@
     tags:
       - 1.3.0
 # 1.5 Additional Process Hardening
-
+  - name: 1.3.2 Ensure filesystem integrity is regularly checked | Cron
+    cron:
+      name: Run AIDE integrity check weekly
+      user: root
+      minute: "0"
+      hour: "5"
+      day: "*"
+      month: "*"
+      weekday: "*"
+      job: "/usr/sbin/aide --check"
+    tags:
+      - section1
+      - level_1_server
+      - level_1_workstation
+      - 1.3.2
+  - name: 1.3.3 Ensure cryptographic mechanisms are used to protect the integrity of audit tools (Automated)
+    ansible.builtin.blockinfile:
+      path: /etc/aide.conf 
+      block: |
+        # Audit Tools 
+        /sbin/auditctl p+i+n+u+g+s+b+acl+xattrs+sha512 
+        /sbin/auditd p+i+n+u+g+s+b+acl+xattrs+sha512 
+        /sbin/ausearch p+i+n+u+g+s+b+acl+xattrs+sha512 
+        /sbin/aureport p+i+n+u+g+s+b+acl+xattrs+sha512 
+        /sbin/autrace p+i+n+u+g+s+b+acl+xattrs+sha512 
+        /sbin/augenrules p+i+n+u+g+s+b+acl+xattrs+sha512
+    tags: 
+      - section1
+      - level_1_server
+      - level_1_workstation
+      - 1.3.3
+  - name: 1.4.2 - Ensure permissions on /etc/crontab
+    ansible.builtin.file:
+      path: "{{ item }}"
+      owner: root
+      group: root
+      mode: 0600
+    with_items:
+      - "/boot/grub2/grub.cfg"
+      - "/boot/grub2/grubenv"
+    tags:
+      - 1.4.2
+  
   - name: 1.5.2 - Ensure IgnoreRhosts is set
     ansible.builtin.lineinfile:
       path: /etc/systemd/coredump.conf
@@ -477,34 +525,42 @@
     when: selinux is defined and selinux != "Disabled"
     tags:
       - 1.6.1.1
-
+  - name: Enable SELinux
+    ansible.posix.selinux:
+      policy: targeted
+      state: enforcing
   # re-gather system facts in case we installed selinux packages.
   #  If selinux wasn't installed, it will not populate ansible_selinux fact correctly, regathering
   #  will pull it with the right information
-  - name: Regather facts
-    ansible.builtin.setup:
     tags:
       - 1.6.1.1
 
   # Use the replace module to remove any disablment of selinux in grub if
   #  it isn't expressly disabled from a variable
-  - name: 1.6.1.2 - Ensure SELinux is not disabled in bootloader configuration
-    ansible.builtin.replace:
-      dest: /etc/default/grub
-      regexp: "{{ item }}"
-      replace: ""
-    with_items:
-      - selinux=0
-      - enforcing=0
+  - name: 1.6.1.2 - Ensure SELinux is not disabled in bootloader configuration 
+    block:
+    - name: Run grubby
+      shell: grubby --update-kernel ALL --remove-args "selinux=0 enforcing=0"
+    - name: Ensure SELinux is not disabled in bootloader configuration
+      ansible.builtin.replace:
+        dest: /etc/default/grub
+        regexp: "{{ item }}"
+        replace: ""
+      with_items:
+        - selinux=0
+        - enforcing=0
     when: selinux is defined and selinux != "Disabled"
     notify: rebuild grub
     tags:
       - 1.6.1.2
 
-
-
-
-
+  - name: 1.6.1.4 Ensure the SELinux mode is not disabled
+    ansible.builtin.lineinfile:
+      dest: /etc/selinux/config 
+      regexp: "^SELINUX="
+      line: "SELINUX=enforcing"
+    tags:
+      - 1.6.1.4
   # Let the user know if there are any processes that are not running under the
   #  a selinux context
   - name: 1.6.1.6 - Report on unconfined running services
@@ -701,41 +757,35 @@
     when: dhcp_server is defined and not dhcp_server
     tags:
       - 2.2.3
-  - name: 2.2.5 - Disable dhcpd server [controlled by host variable dhcp_server]; add to removal list
+  - name: 2.2.4 - Disable dhcpd server [controlled by host variable dhcp_server]; add to removal list
     ansible.builtin.set_fact:
       unneeded_packages: "{{ unneeded_packages + [ 'dhcp-server' ] }}"
     when: dhcp_server is defined and not dhcp_server
     tags:
-      - 2.2.5
-  - name: 2.2.6 - Remove bind; add to removal list
+      - 2.2.4
+  - name: 2.2.5 - Remove bind; add to removal list
     ansible.builtin.set_fact:
       unneeded_packages: "{{ unneeded_packages + [ 'bind' ] + [ 'unbound' ] }}"
     when: dns_server is defined and not dns_server
     tags:
-      - 2.2.6
-  - name: 2.2.7 - Remove ftp; add to removal list
-    ansible.builtin.set_fact:
-      unneeded_packages: "{{ unneeded_packages + [ 'ftp' ] }}"
-    when: ftp_server is defined and not ftp_server
-    tags:
-      - 2.2.7
-  - name: 2.2.8 - Remove vsftpd; add to removal list
+      - 2.2.5
+  - name: 2.2.6 - Remove vsftpd; add to removal list
     ansible.builtin.set_fact:
       unneeded_packages: "{{ unneeded_packages + [ 'vsftpd' ] }}"
     when: ftp_server is defined and not ftp_server
     tags:
-      - 2.2.8
-  - name: 2.2.9 - Remove tftp; add to removal list
+      - 2.2.6
+  - name: 2.2.7 - Remove tftp; add to removal list
     ansible.builtin.set_fact:
       unneeded_packages: "{{ unneeded_packages + [ 'tftp-server' ] + [ 'tftp' ] }}"
     when: ftp_server is defined and not ftp_server
     tags:
-      - 2.2.9
-      - 2.3.6
+      - 2.2.7
+      - 2.3.4
 
-  - name: 2.2.10 - Remove httpd; add to removal list
+  - name: 2.2.8 - Remove httpd; add to removal list
     block:
-      - name: 2.2.10 Check is Httpd is operational
+      - name: 2.2.8 Check is Httpd is operational
         systemd:
           name: httpd.service
         register: httpd_service
@@ -748,110 +798,98 @@
           unneeded_packages: "{{ unneeded_packages + [ 'httpd' ] + [ 'httpd-tools' ] + [ 'mod_ssl' ] }}"
         when: http_server is defined and not http_server and httpd_service.status.ActiveState == "inactive"
     tags:
-      - 2.2.10
-  - name: 2.2.11 - Remove dovecot; add to removal list
+      - 2.2.8
+  - name: 2.2.9 - Remove dovecot; add to removal list
     ansible.builtin.set_fact:
       unneeded_packages: "{{ unneeded_packages + [ 'dovecot' ] + [ 'cyrus-imapd' ] }}"
     when: email_server is defined and not email_server
     tags:
-      - 2.2.11
-  - name: 2.2.12 - Remove samba; add to removal list
+      - 2.2.9
+  - name: 2.2.10 - Remove samba; add to removal list
     block:
-      - name: 2.2.12 Check is Samba is operational
+      - name: 2.2.10 Check is Samba is operational
         systemd:
           name: smbd.service
         register: smbd_service
         ignore_errors: yes
-      - name: 2.2.12 Check for log files  
+      - name: 2.2.10 Check for log files  
         find:
           paths: /var/log/samba/ 
           age: -7d
           recurse: yes
         register: smbd_logs
-      - name: 2.2.12 Cheking for Samba logs
+      - name: 2.2.10 Cheking for Samba logs
         debug:
           var: smbd_logs.matched
-      - name: 2.2.12 Cheking for Samba service 
+      - name: 2.2.10 Cheking for Samba service 
         debug:
           var: smbd_service.status.ActiveState
-      - name: 2.2.12 - Remove samba; add to removal list
+      - name: 2.2.10 - Remove samba; add to removal list
         ansible.builtin.set_fact:
           unneeded_packages: "{{ unneeded_packages + [ 'samba' ] }}"
         when: smb_server is defined and not smb_server and smbd_service.status.ActiveState == "inactive" and smbd_logs.matched == 0
     tags:
-      - 2.2.12
-  - name: 2.2.13 - Remove squid; add to removal list
+      - 2.2.10
+  - name: 2.2.11 - Remove squid; add to removal list
     ansible.builtin.set_fact:
       unneeded_packages: "{{ unneeded_packages + [ 'squid' ] }}"
     tags:
-      - 2.2.13
-  - name: 2.2.14 - Remove snmp; add to removal list
+      - 2.2.11
+  - name: 2.2.12 - Remove snmp; add to removal list
     ansible.builtin.set_fact:
       unneeded_packages: "{{ unneeded_packages + [ 'net-snmp' ] }}"
     tags:
-      - 2.2.14
-  - name: 2.2.15 - Remove ypserv; add to removal list
-    ansible.builtin.set_fact:
-      unneeded_packages: "{{ unneeded_packages + [ 'ypserv' ] }}"
-    tags:
-      - 2.2.15
-  - name: 2.2.16 - Remove telnet; add to removal list
+      - 2.2.12
+#  - name: 2.2.15 - Remove ypserv; add to removal list
+#    ansible.builtin.set_fact:
+#      unneeded_packages: "{{ unneeded_packages + [ 'ypserv' ] }}"
+#    tags:
+#      - 2.2.15
+  - name: 2.2.13 - Remove telnet; add to removal list
     ansible.builtin.set_fact:
       unneeded_packages: "{{ unneeded_packages + [ 'telnet' ] }}"
     tags:
-      - 2.3.4
-      - 2.2.16
-  - name: 2.2.[18-19]- Remove nfs server; add to removal list
+      - 2.3.1
+      - 2.2.13
+  - name: 2.2.14 - Remove dnsmasq; add to removal list
+    ansible.builtin.set_fact:
+      unneeded_packages: "{{ unneeded_packages + [ 'dnsmasq' ] }}"
+    tags:
+      - 2.2.14
+  - name: 2.2.[16-17] - Remove nfs server; add to removal list
     block:
-      - name: 2.2.[18-19] Check for nfs in /etc/fstab
+      - name: 2.2.[16-17] Check for nfs in /etc/fstab
         shell: grep nfs /etc/fstab
         register: nfs_mp
         ignore_errors: yes
-      - name: 2.2.[18-19] Check for nfs shares
+      - name: 2.2.[16-17] Check for nfs shares
         shell: nfsstat -m
         register: nfs_shares
         ignore_errors: yes
-      - name: 2.2.[18-19] Fstab result
+      - name: 2.2.[16-17] Fstab result
         debug:
           var: nfs_mp.stdout
-      - name: 2.2.[18-19] Nfs shares found
+      - name: 2.2.[16-17] Nfs shares found
         debug:
           var: nfs_shares.stdout
-      - name: 2.2.[18-19] - Remove nfs server; add to removal list
+      - name: 2.2.[16-17] Remove nfs server; add to removal list
         ansible.builtin.set_fact:
           unneeded_packages: "{{ unneeded_packages + [ 'nfs-utils' ] + [ 'rpcbind' ] }}"
         when: nfs_mp.stdout | length == 0 and nfs_shares.stdout | length == 0
     tags:
-      - 2.2.18
-      - 2.2.19
+      - 2.2.16
+      - 2.2.17
       - section2
-  - name: 2.2.20 - Remove rsync; add to removal list
+  - name: 2.2.18 - Remove rsync; add to removal list
     ansible.builtin.set_fact:
       unneeded_packages: "{{ unneeded_packages + [ 'rsync' ] }}"
     tags:
-      - 2.2.20
-
-  - name: 2.3.1 - Remove ypbind; add to removal list
-    ansible.builtin.set_fact:
-      unneeded_packages: "{{ unneeded_packages + [ 'ypbind' ] }}"
-    tags:
-      - 2.3.1
-  - name: 2.3.2 - Remove rsh; add to removal list
-    ansible.builtin.set_fact:
-      unneeded_packages: "{{ unneeded_packages + [ 'rsh' ] }}"
-    tags:
-      - 2.3.2
-  - name: 2.3.3 - Ensure talk client is not installed
-    ansible.builtin.set_fact:
-      unneeded_packages: "{{ unneeded_packages + [ 'talk' ] }}"
-    tags:
-      - 2.3.3
-  - name: 2.3.5 - Remove openldap-clients; add to removal list
+      - 2.2.18
+  - name: 2.3.2 - Ensure LDAP client is not installed
     ansible.builtin.set_fact:
       unneeded_packages: "{{ unneeded_packages + [ 'openldap-clients' ] }}"
     tags:
-      - 2.3.5
-  
+      - 2.3.2
   - name: 2.[2-3] - list of packages to remove
     ansible.builtin.debug:
       var: unneeded_packages
@@ -871,14 +909,14 @@
 
   # Use the stat module to determine if the mail server config file exists.
   #  If it does and we are to be a mail server, then modify it per the control.
-  - name: 2.2.17 - Configure email for local-only mode if mail software is installed and not intending to be an external email relay (mail_server=false)
+  - name: 2.2.15 - Configure email for local-only mode if mail software is installed and not intending to be an external email relay (mail_server=false)
     block:
-      - name: 2.2.17 - Find if we have a mail agent config file
+      - name: 2.2.15 - Find if we have a mail agent config file
         ansible.builtin.stat:
           path: /etc/postfix/main.cf
         register: postfix_out
         changed_when: false
-      - name: 2.2.17 - If the file exists and not a mail server, then set loopback only
+      - name: 2.2.15 - If the file exists and not a mail server, then set loopback only
         ansible.builtin.lineinfile:
           dest: /etc/postfix/main.cf
           regexp: "^inet_interfaces"
@@ -886,14 +924,42 @@
         when: postfix_out.stat.exists and not email_server
         notify: restart postfix
     tags:
-      - 2.2.17
+      - 2.2.15
 
   # Section 3, Network parameters
 
   # The sysctl module will configure certain sysctl parameters. They are
   #  collected into a loop here to speed the implementation
   # Once complete, notify the system to flush the network routes
-  - name: 3.1.1 - Set networking parameters for host only communications
+  #
+  - name: 3.1.1 - Disable IPv6
+    block:
+      - name: 3.1.1 - Find if IPv6 is currently in the grub file, shows changed when it is in the file
+        ansible.builtin.lineinfile:
+          path: /etc/default/grub
+          regexp: '^\s*GRUB_CMDLINE_LINUX.*ipv6.disable=1'
+          state: absent
+        check_mode: true
+        changed_when: false
+        register: ipv6_disable_grub
+        failed_when: false
+      - name: 3.6 - Disable IPv6 in grub
+        ansible.builtin.replace:
+          path: /etc/default/grub
+          regexp: '^GRUB_CMDLINE_LINUX="'
+          replace: 'GRUB_CMDLINE_LINUX="ipv6.disable=1 '
+        notify: rebuild grub
+        when: not ipv6_disable_grub.found and ipv6_disable
+    tags:
+      - 3.1.1
+
+  - name: 3.1.2 - Disable Wifi
+    script:
+      cmd: files/disablewifi.sh
+    check_mode: false
+    tags:
+      - 3.1.2
+  - name: 3.2.1 - Set networking parameters for host only communications
     block:
       - name: Check for runing docker
         systemd:
@@ -903,7 +969,7 @@
       - name: Docker service status
         debug:
           var: docker_service.status.ActiveState
-      - name: 3.1.1 - Set ipv4 networking parameters (OFF)
+      - name: 3.2.1 - Set ipv4 networking parameters (OFF)
         ansible.builtin.sysctl:
           name: "{{ item }}"
           value: "0"
@@ -912,8 +978,10 @@
           sysctl_set: true
         loop:
           - net.ipv4.conf.all.forwarding # (3.1.1)
+          - net.ipv6.conf.all.forwarding # (3.1.1)
+          - net.ipv4.ip_forward
         when: docker_service.status.ActiveState == "inactive"
-      - name: 3.1.1 - Set ipv6 networking parameters (OFF)
+      - name: 3.2.1 - Set ipv6 networking parameters (OFF)
         ansible.builtin.sysctl:
           name: "{{ item }}"
           value: "0"
@@ -925,23 +993,33 @@
         when: not ipv6_disable
         notify: flush network routes
     tags:
-      - 3.1.1
-  - name: 3.1.2 - Set ipv4 networking parameters (OFF)
-    ansible.builtin.sysctl:
-      name: "{{ item }}"
-      value: "0"
-      reload: true
-      state: present
-      sysctl_set: true
-    loop:
-      - net.ipv4.conf.all.send_redirects # (3.1.2)
-      - net.ipv4.conf.default.send_redirects # (3.1.2)
+      - 3.2.1
+  - name: 3.2.1.1 - Set ipv4 networking parameters (OFF)
+    block:
+      - name:  Set in the running configuration 
+        ansible.builtin.sysctl:
+          name: "{{ item }}"
+          value: "0"
+          reload: true
+          state: present
+          sysctl_set: true
+        loop:
+          - net.ipv4.conf.all.send_redirects # (3.2.1)
+          - net.ipv4.conf.default.send_redirects # (3.2.1)
+#      - name: set in a kernel parameter configuration file
+#        ansible.builtin.lineinfile:
+#          path: /etc/sysctl.d/99-gfk-custom.conf
+#          regexp: '^127\.0\.0\.1'
+#          line: "{{ item }}"
+#        with_items:
+#          - "net.ipv4.ip_forward = 0"
+
     notify: flush network routes
     tags:
-      - 3.1.2
-  - name: 3.2 - Set networking parameters for host as router communications
+      - 3.2.1.1
+  - name: 3.3. - Set networking parameters for host as router communications
     block:
-      - name: 3.2 - Set ipv4 network parameters (OFF)
+      - name: 3.3.[1-3] - Set ipv4 network parameters (OFF)
         ansible.builtin.sysctl:
           name: "{{ item }}"
           value: "0"
@@ -957,7 +1035,7 @@
           - net.ipv4.conf.default.secure_redirects # (3.2.3)
         notify: flush network routes
 
-      - name: 3.2.[4-8] - Set ipv4 networking parameters (ON)
+      - name: 3.3.[4-8] - Set ipv4 networking parameters (ON)
         ansible.builtin.sysctl:
           name: "{{ item }}"
           value: "1"
@@ -974,7 +1052,7 @@
           - net.ipv4.tcp_syncookies # ( 3.2.8)
         notify: flush network routes
 
-      - name: 3.2 - Set ipv6 networking parameters (OFF)
+      - name: 3.3.9 - Set ipv6 networking parameters (OFF)
         ansible.builtin.sysctl:
           name: "{{ item }}"
           value: "0"
@@ -991,23 +1069,17 @@
         notify: flush network routes
         when: not ipv6_disable
     tags:
-      - 3.2.0
+      - 3.3.0
 
   # With the list complete, use it with the system's package manager
   #  to remove packages from the system that are not needed.
-      - name: 3.5.0 - Process uncommon network list
-        ansible.builtin.lineinfile:
-          dest: /etc/modprobe.d/CIS.conf
-          line: "install {{ item }} /bin/true"
-          state: present
-          create: true
-          owner: root
-          group: root
-          mode: 0644
-        with_items:
-          - "{{ uncommon_network }}"
+  - name: 3.3.7 Ensure Reverse Path Filtering is enabled 
+    ansible.builtin.lineinfile:
+      dest: /usr/lib/sysctl.d/50-default.conf
+      regex: "net.ipv4.conf.default.rp_filter"
+      line: "net.ipv4.conf.default.rp_filter = 1"
     tags:
-      - 3.3.0
+      - 3.3.7 
 
   # Section 3 - Firewall
 
@@ -1018,7 +1090,11 @@
         name: "firewalld"
         state: present
       notify: start firewalld # 3.4.2.1
-
+    - name: Enable and start firewalld
+      ansible.builtin.service:
+        name: firewalld
+        enabled: true
+        state: started
     - name: 3.4.2.2 - Disable iptables service
       ansible.builtin.service:
         name: iptables
@@ -1051,40 +1127,16 @@
       ansible.builtin.debug:
         msg:
           - "3.4.2.7 - Ensure default firewalld policy must be handled locally"
-      tags:
-        - 3.4.2
     when: firewall is defined and firewall == "firewalld"
     tags:
       - 3.4.1
       - 3.4.2
-
-
-  - name: 3.6 - Disable IPv6
-      # We check here because we don't know what position the ipv6.disable is in
-      # order to simply do the replace, so we are instead looking for the match in the file first.
-      # If it doesn't exist, then we can just insert it
-    block:
-      - name: 3.6 - Find if IPv6 is currently in the grub file, shows changed when it is in the file
-        ansible.builtin.lineinfile:
-          path: /etc/default/grub
-          regexp: '^\s*GRUB_CMDLINE_LINUX.*ipv6.disable=1'
-          state: absent
-        check_mode: true
-        changed_when: false
-        register: ipv6_disable_grub
-        failed_when: false
-      # use the replace module to add it to grub bootloader and then notify
-      #  grub to rebuild
-      - name: 3.6 - Disable IPv6 in grub
-        ansible.builtin.replace:
-          path: /etc/default/grub
-          regexp: '^GRUB_CMDLINE_LINUX="'
-          replace: 'GRUB_CMDLINE_LINUX="ipv6.disable=1 '
-        notify: rebuild grub
-        when: not ipv6_disable_grub.found and ipv6_disable
-
+  - name: 3.4.2.4 Ensure host based firewall loopback traffic is configured
+    script:
+      cmd: files/loop_traf.sh
+    check_mode: false
     tags:
-      3.6.0
+      - 3.4.2.4
 
   # Section 4 - Logging and Auditing
  # Section 4, Logging
@@ -1120,6 +1172,15 @@
 
   - name: 4.2.2 - Configure journald
     block:
+      - name: Ensure Journald is installed
+        ansible.builtin.dnf:
+          name: systemd-journald
+          state: present
+        ignore_errors: yes
+      - name: Enable Journald
+        ansible.builtin.service:
+          name: systemd-journald
+          enabled: true
       - name: Find any rsyslog files where all logs are being forwarded to a loghost
         shell: /usr/bin/grep -l -s "^*.*[^I][^I]*@" /etc/rsyslog.conf /etc/rsyslog.d/*.conf
         register: rsyslog_forward_out
@@ -1245,9 +1306,9 @@
       # Control 5.2.2, Ensure SSH access is limited is environment dependent
       # skipping
 
-      - name: 5.2.3 - Set Permissions on ssh private host keys
+      - name: 5.2.2 - Set Permissions on ssh private host keys
         block:
-          - name: 5.2.3 - Find all ssh private host keys
+          - name: 5.2.2 - Find all ssh private host keys
             ansible.builtin.find:
               paths: /etc/ssh
               file_type: file
@@ -1255,19 +1316,19 @@
             register: ssh_host_out
             changed_when: false
 
-          - name: 5.2.3 - Set permissions on all ssh private host keys (Red Hat set the group to ssh_keys and mode to 640)
+          - name: 5.2.2 - Set permissions on all ssh private host keys (Red Hat set the group to ssh_keys and mode to 640)
             ansible.builtin.file:
               dest: "{{ item.path }}"
               owner: root
-              group: ssh_keys
-              mode: 0640
+              group: ssh_keys 
+              mode: 0600
             loop: "{{ ssh_host_out.files }}"
         tags:
-          - 5.2.3
+          - 5.2.2
 
-      - name: 5.2.4 - Set Permissions on ssh public host keys
+      - name: 5.2.3 - Set Permissions on ssh public host keys
         block:
-          - name: 5.2.4 - Find all ssh public host keys
+          - name: 5.2.3 - Find all ssh public host keys
             ansible.builtin.find:
               paths: /etc/ssh
               file_type: file
@@ -1275,7 +1336,7 @@
             register: ssh_hostpub_out
             changed_when: false
 
-          - name: 5.2.4 - Set permissions on all ssh public host keys
+          - name: 5.2.3 - Set permissions on all ssh public host keys
             ansible.builtin.file:
               dest: "{{ item.path }}"
               owner: root
@@ -1283,8 +1344,38 @@
               mode: 0644
             loop: "{{ ssh_hostpub_out.files }}"
         tags:
+          - 5.2.3
+      - name: 5.2.4 Ensure SSH access is limited
+        block:
+          - name: 5.2.4 Ensure SSH access is limited | allow groups
+            lineinfile:
+              state: present
+              dest: /etc/ssh/sshd_config
+              regexp: "^AllowGroups"
+              line: "AllowGroups {{ allowed_groups }}"
+            register: ssh_config4
+            when:
+              - allowed_groups != "None"
+          - name: 5.2.4 Ensure SSH access is limited | denyusers
+            lineinfile:
+              state: present
+              dest: /etc/ssh/sshd_config
+              regexp: "^DenyUsers"
+              line: "DenyUsers {{ deny_users }}"
+            register: ssh_config4
+            when:
+              - deny_users != "None"
+          - name: 5.2.4 Ensure SSH access is limited | denygroups
+            lineinfile:
+              state: present
+              dest: /etc/ssh/sshd_config
+              regexp: "^DenyGroups"
+              line: "DenyGroups games"
+        tags:
+          - section5
+          - level_1_server
+          - level_1_workstation
           - 5.2.4
-
       - name: 5.2.5 - Set LogLevel to {{ ssh_log_level }} or more verbose, but not debug
         ansible.builtin.replace:
           path: /etc/ssh/sshd_config
@@ -1379,7 +1470,7 @@
       - name: 5.2.20 - Ensure SSH Idle Timeout is configured ClientAliveInterval
         ansible.builtin.lineinfile:
           path: /etc/ssh/sshd_config
-          line: "ClientAliveInterval {{ ssh_alive_interval }}"
+          line: "ClientAliveInterval {{ ssh_alive_interval9 }}"
           regexp: "^ClientAliveInterval"
           insertafter: "^#ClientAliveInterval"
         notify: restart sshd
@@ -1389,7 +1480,7 @@
       - name: 5.2.20 - Ensure SSH Idle Timeout is configured ClientAliveCountMax
         ansible.builtin.lineinfile:
           path: /etc/ssh/sshd_config
-          line: "ClientAliveCountMax {{ ssh_alive_count_max }}"
+          line: "ClientAliveCountMax {{ ssh_alive_count_max9 }}"
           regexp: "^ClientAliveCountMax"
           insertafter: "^#ClientAliveInterval"
         notify: restart sshd
@@ -1539,14 +1630,19 @@
     tags:
       - 5.5.4
   - name: 5.6.1.2 - Ensure password change days is set to {{ password_min_days }}
-    ansible.builtin.lineinfile:
-      dest: /etc/login.defs
-      regexp: '^PASS_MIN_DAYS\s*((?!{{ password_min_days }}).)*$'
-      line: "PASS_MIN_DAYS  {{ password_min_days }}"
-      state: present
+    block:
+      - name: set to {{ password_min_days }} in config
+        ansible.builtin.lineinfile:
+          dest: /etc/login.defs
+          regexp: '^PASS_MIN_DAYS'
+          line: "PASS_MIN_DAYS  {{ password_min_days9 }}"
+          state: present
+      - name:  5.6.1.2 - Ensure password change days is set to {{ password_min_days }}
+        command: "chage --mindays {{ pass_min_days }} {{ item }}"
+        loop: "{{ list_of_os_users}}"
+    ignore_errors: yes
     tags:
       - 5.6.1.2
-
   - name: 5.6.1.3 - Ensure password warning days is set to {{ password_warning_days }}
     ansible.builtin.lineinfile:
       dest: /etc/login.defs

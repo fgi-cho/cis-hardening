@@ -67,7 +67,7 @@ ipv6_disable: true              # Common: Set to true to disable ipv6 support on
 
 # SSH Server settings
 ssh_log_level: INFO             # Linux: Control is INFO or VERBOSE. Stricter is not approved and more verbose exposes user info
-ssh_max_auth_tries: 2           # Linux: Control is 4 retries
+ssh_max_auth_tries: 4           # Linux: Control is 4 retries
 ssh_mac_list: "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com"   # Linux: RHEL7 only control
 ssh_ciphers_list: "chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr"                        # Linux: Ubuntu control only
 ssh_kex_list: "curve25519-sha256,curve25519-sha256@libssh.org,ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256,diffie-hellman-group14-sha1,diffie-hellman-group1-sha1" # Linux: Ubuntu control only
@@ -76,13 +76,15 @@ ssh_alive_count_max: 0          # Linux: Control is 0 count
 ssh_grace_time: 30             # Linux: Control is for 60 seconds or less
 #ssh_max_sessions: 4             # Linux: Control is 4 sessions from a single host
 ssh_login_banner: issue     # Linux: a file with no path will exist in the role's files directory, an absolute path will exist on the control host
-
+ssh_alive_count_max9: 3
+ssh_alive_interval9: 15
 # Password and account settings, all settings below match controls
 password_min_length: 14           # Common
 password_req_digit: true          # Linux
 password_req_upper: true          # Linux
 password_req_lower: true          # Linux
 password_req_special: true        # Linux
+password_min_days9: 1
 password_min_days: 0              # Common: Windows has this control listed as 1 day
 password_expire_days: 365         # Common: Windows has this control listed as 24 days
 password_warning_days: 7          # Common: Windows has this control listed as 'between 5 and 14 days'
@@ -366,7 +368,7 @@ adminGroup: root
 # Section 6 settings
 withoutOwnerFileDirOwner: root
 withoutGroupFilesDirGroup: root
-outputfiles: /root/hardening #Output dir of some command
+outputfiles: /root #Output dir of some command
 disable_autofs: true
 disable_usb: true
 install_apparmor: true

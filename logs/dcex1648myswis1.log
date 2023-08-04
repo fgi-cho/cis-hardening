@@ -1,0 +1,1434 @@
+Script started on 2023-05-26 09:32:52+02:00
+[1;35m[WARNING]: While constructing a mapping from /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/defaults/main.yml, line 6, column 1, found a duplicate dict key[0m
+[1;35m(enable_firewall). Using last defined value only.[0m
+[1;35m[WARNING]: While constructing a mapping from /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/defaults/main.yml, line 6, column 1, found a duplicate dict key[0m
+[1;35m(ssh_max_sessions). Using last defined value only.[0m
+[0;35m[DEPRECATION WARNING]: "include" is deprecated, use include_tasks/import_tasks instead. See https://docs.ansible.com/ansible-core/2.14/user_guide/playbooks_reuse_includes.html for details.[0m
+[0;35m This feature will be removed in version 2.16. Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.[0m
+
+PLAY [all] **********************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] **********************************************************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : include] ***************************************************************************************************************************************************************
+[0;35m[DEPRECATION WARNING]: "include" is deprecated, use include_tasks/import_tasks/import_playbook instead. This feature will be removed in version 2.16. Deprecation warnings can be disabled [0m
+[0;35mby setting deprecation_warnings=False in ansible.cfg.[0m
+[0;36mincluded: /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/tasks/CIS-Ubuntu-20.yml for dcex1648myswis1[0m
+
+TASK [cis_security : include] ***************************************************************************************************************************************************************
+[0;36mincluded: /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/tasks/type-files/ubuntu-20-type.yml for dcex1648myswis1[0m
+
+TASK [cis_security : 1.1.1.1 Ensure mounting of cramfs filesystems is disabled] *************************************************************************************************************
+[0;31m--- before: /etc/modprobe.d/CIS.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/modprobe.d/CIS.conf (content)[0m
+[0;32m[0m[0;36m@@ -0,0 +1 @@[0m
+[0;36m[0m[0;32m+install cramfs /bin/true[0m
+[0;32m[0m
+[0;31m--- before: /etc/modprobe.d/CIS.conf (file attributes)[0m
+[0;31m[0m[0;32m+++ after: /etc/modprobe.d/CIS.conf (file attributes)[0m
+[0;32m[0m[0;36m@@ -1,3 +1,3 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0640"[0m
+[0;31m[0m[0;32m+    "mode": "0644"[0m
+[0;32m[0m }
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.1.1.1 Ensure mounting of cramfs filesystems is disabled | modprobe] **************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.1.1.2 Ensure mounting of freevxfs filesystems is disabled] ***********************************************************************************************************
+[0;31m--- before: /etc/modprobe.d/CIS.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/modprobe.d/CIS.conf (content)[0m
+[0;32m[0m[0;36m@@ -1 +1,2 @@[0m
+[0;36m[0m install cramfs /bin/true
+[0;32m+install freevxfs /bin/true[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.1.1.2 Ensure mounting of freevxfs filesystems is disabled | modprobe] ************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.1.1.3 Ensure mounting of jffs2 filesystems is disabled] **************************************************************************************************************
+[0;31m--- before: /etc/modprobe.d/CIS.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/modprobe.d/CIS.conf (content)[0m
+[0;32m[0m[0;36m@@ -1,2 +1,3 @@[0m
+[0;36m[0m install cramfs /bin/true
+ install freevxfs /bin/true
+[0;32m+install jffs2 /bin/true[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.1.1.3 Ensure mounting of jffs2 filesystems is disabled] **************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.1.1.4 Ensure mounting of hfs filesystems is disabled] ****************************************************************************************************************
+[0;31m--- before: /etc/modprobe.d/CIS.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/modprobe.d/CIS.conf (content)[0m
+[0;32m[0m[0;36m@@ -1,3 +1,4 @@[0m
+[0;36m[0m install cramfs /bin/true
+ install freevxfs /bin/true
+ install jffs2 /bin/true
+[0;32m+install hfs /bin/true[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.1.1.4 Ensure mounting of hfs filesystems is disabled | modprobe] *****************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.1.1.5 Ensure mounting of hfsplus filesystems is disabled] ************************************************************************************************************
+[0;31m--- before: /etc/modprobe.d/CIS.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/modprobe.d/CIS.conf (content)[0m
+[0;32m[0m[0;36m@@ -2,3 +2,4 @@[0m
+[0;36m[0m install freevxfs /bin/true
+ install jffs2 /bin/true
+ install hfs /bin/true
+[0;32m+install hfsplus /bin/true[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.1.1.5 Ensure mounting of hfsplus filesystems is disabled | modprobe] *************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.1.1.7 Ensure mounting of udf filesystems is disabled] ****************************************************************************************************************
+[0;31m--- before: /etc/modprobe.d/CIS.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/modprobe.d/CIS.conf (content)[0m
+[0;32m[0m[0;36m@@ -3,3 +3,4 @@[0m
+[0;36m[0m install jffs2 /bin/true
+ install hfs /bin/true
+ install hfsplus /bin/true
+[0;32m+install udf /bin/true[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.1.1.7 Ensure mounting of udf filesystems is disabled | modprobe] *****************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.1.2 Ensure /tmp is configured] ***************************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.1.2 Ensure /tmp is configured | edit file] ***************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.1.2 Ensure /tmp is configured | reload demon] ************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.1.2 Ensure /tmp is configured | enable and start tmp.mount] **********************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : Get file system] *******************************************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : debug] *****************************************************************************************************************************************************************
+[0;32mok: [dcex1648myswis1] => {[0m
+[0;32m    "filesystem.stdout": "ext4"[0m
+[0;32m}[0m
+
+TASK [cis_security : Check /tmp config] *****************************************************************************************************************************************************
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : Remount /tmp] **********************************************************************************************************************************************************
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.1.6 Ensure /dev/shm is configured
+ 1.1.7 Ensure nodev option set on /dev/shm partition
+ 1.1.8 Ensure nosuid option set on /dev/shm partition
+ 1.1.9 Ensure noexec option set on /dev/shm partition] ***
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.1.12 Ensure nodev option set on /var/tmp partitions] *****************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : /var/tmp partitions] ***************************************************************************************************************************************************
+[0;32mok: [dcex1648myswis1] => {[0m
+[0;32m    "msg": {[0m
+[0;32m        "changed": false,[0m
+[0;32m        "cmd": "mount | grep \"on /var\" && true || true\n",[0m
+[0;32m        "delta": "0:00:00.005000",[0m
+[0;32m        "end": "2023-05-26 09:33:01.973102",[0m
+[0;32m        "failed": false,[0m
+[0;32m        "msg": "",[0m
+[0;32m        "rc": 0,[0m
+[0;32m        "start": "2023-05-26 09:33:01.968102",[0m
+[0;32m        "stderr": "",[0m
+[0;32m        "stderr_lines": [],[0m
+[0;32m        "stdout": "/dev/mapper/system-var on /var type ext4 (rw,nosuid,nodev,relatime)\n/dev/mapper/system-log on /var/log type ext4 (rw,nodev,relatime)\n/dev/mapper/system-audit on /var/log/audit type ext4 (rw,nodev,relatime)",[0m
+[0;32m        "stdout_lines": [[0m
+[0;32m            "/dev/mapper/system-var on /var type ext4 (rw,nosuid,nodev,relatime)",[0m
+[0;32m            "/dev/mapper/system-log on /var/log type ext4 (rw,nodev,relatime)",[0m
+[0;32m            "/dev/mapper/system-audit on /var/log/audit type ext4 (rw,nodev,relatime)"[0m
+[0;32m        ][0m
+[0;32m    }[0m
+[0;32m}[0m
+
+TASK [cis_security : 1.1.18 Ensure nodev option set on /home partition] *********************************************************************************************************************
+[0;32mok: [dcex1648myswis1] => {[0m
+[0;32m    "msg": "For new installations, during installation create a custom partition setup and specify a separate partition"[0m
+[0;32m}[0m
+
+TASK [cis_security : 1.1.22 Ensure sticky bit is set on all world-writable directories | get info] ******************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.1.22 Ensure sticky bit is set on all world-writable directories | fix] ***********************************************************************************************
+[0;36mskipping: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.1.23 Disable Automounting | service disable] *************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.1.23 Disable Automounting | package remove] **************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.1.24 Disable USB Storage | modprobe] *********************************************************************************************************************************
+[0;31m--- before: /etc/modprobe.d/CIS.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/modprobe.d/CIS.conf (content)[0m
+[0;32m[0m[0;36m@@ -4,3 +4,4 @@[0m
+[0;36m[0m install hfs /bin/true
+ install hfsplus /bin/true
+ install udf /bin/true
+[0;32m+install usb-storage /bin/true[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.1.24 Disable USB Storage] ********************************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.3.1 Ensure AIDE is installed] ****************************************************************************************************************************************
+The following packages were automatically installed and are no longer required:
+  libboost-context1.67.0-icinga libboost-coroutine1.67.0-icinga
+  libboost-filesystem1.67.0-icinga libboost-program-options1.67.0-icinga
+  libboost-regex1.67.0-icinga libboost-system1.67.0-icinga
+  libboost-thread1.67.0-icinga libreadline5 python-certifi python-cffi-backend
+  python-chardet python-cryptography python-dateutil python-dbus python-debian
+  python-decorator python-enum34 python-ethtool python-gi python-gobject
+  python-gobject-2 python-idna python-iniparse python-ipaddress python-openssl
+  python-pkg-resources python-requests python-rpm python-six
+  python-subscription-manager python-urllib3
+Use 'apt autoremove' to remove them.
+The following additional packages will be installed:
+  bsd-mailx liblockfile-bin liblockfile1 postfix ssl-cert
+Suggested packages:
+  figlet procmail postfix-mysql postfix-pgsql postfix-ldap postfix-pcre
+  postfix-lmdb postfix-sqlite sasl2-bin | dovecot-common resolvconf
+  postfix-cdb postfix-doc openssl-blacklist
+The following NEW packages will be installed:
+  aide aide-common bsd-mailx liblockfile-bin liblockfile1 postfix ssl-cert
+0 upgraded, 7 newly installed, 0 to remove and 0 not upgraded.
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.4.1 Ensure permissions on bootloader config are not overridden - step 1 - update chmod 444 to chmod 400 in /usr/sbin/grubmkconfig] ***********************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.4.1 Ensure permissions on bootloader config are not overridden - step 2 -  check on password not being set before running chmod command] *****************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.4.3 Ensure permissions on bootloader config are configured] **********************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0444",[0m
+[0;31m[0m[0;32m+    "mode": "0400",[0m
+[0;32m[0m     "path": "/boot/grub/grub.cfg"
+ }
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.5.2 Ensure address space layout randomization (ASLR) is enabled] *****************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.5.3 Ensure prelink is not installed] *********************************************************************************************************************************
+[0;31mfatal: [dcex1648myswis1]: FAILED! => {"changed": false, "cmd": "prelink -ua", "msg": "[Errno 2] No such file or directory: b'prelink'", "rc": 2, "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}[0m
+[0;36m...ignoring[0m
+
+TASK [cis_security : 1.5.3 Ensure prelink is not installed] *********************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.5.4 Ensure core dumps are restricted | sysctl] ***********************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.5.4 Ensure core dumps are restricted | limits.conf] ******************************************************************************************************************
+[0;31m--- before: /etc/security/limits.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/security/limits.conf (content)[0m
+[0;32m[0m[0;36m@@ -53,4 +53,5 @@[0m
+[0;36m[0m #ftp             -       chroot          /ftp
+ #@student        -       maxlogins       4
+ 
+[0;32m+*                hard    core            0[0m
+[0;32m[0m # End of file
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.5.4 Ensure core dumps are restricted | apt] **************************************************************************************************************************
+[0;31mfatal: [dcex1648myswis1]: FAILED! => {"cache_update_time": 1685085518, "cache_updated": false, "changed": false, "msg": "'/usr/bin/apt-get -y -o \"Dpkg::Options::=--force-confdef\" -o \"Dpkg::Options::=--force-confold\"       install 'systemd-coredump=245.4-4ubuntu3.20'' failed: E: Unable to correct problems, you have held broken packages.\n", "rc": 100, "stderr": "E: Unable to correct problems, you have held broken packages.\n", "stderr_lines": ["E: Unable to correct problems, you have held broken packages."], "stdout": "Reading package lists...\nBuilding dependency tree...\nReading state information...\nSome packages could not be installed. This may mean that you have\nrequested an impossible situation or if you are using the unstable\ndistribution that some required packages have not yet been created\nor been moved out of Incoming.\nThe following information may help to resolve the situation:\n\nThe following packages have unmet dependencies:\n systemd-coredump : Depends: systemd (= 245.4-4ubuntu3.20) but 245.4-4ubuntu3.21 is to be installed\n", "stdout_lines": ["Reading package lists...", "Building dependency tree...", "Reading state information...", "Some packages could not be installed. This may mean that you have", "requested an impossible situation or if you are using the unstable", "distribution that some required packages have not yet been created", "or been moved out of Incoming.", "The following information may help to resolve the situation:", "", "The following packages have unmet dependencies:", " systemd-coredump : Depends: systemd (= 245.4-4ubuntu3.20) but 245.4-4ubuntu3.21 is to be installed"]}[0m
+[0;36m...ignoring[0m
+
+TASK [cis_security : 1.5.4 Ensure core dumps are restricted | coredump.conf] ****************************************************************************************************************
+[0;31m--- before: /etc/systemd/coredump.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/systemd/coredump.conf (content)[0m
+[0;32m[0m[0;36m@@ -0,0 +1 @@[0m
+[0;36m[0m[0;32m+Storage=none[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.5.4 Ensure core dumps are restricted | coredump.conf] ****************************************************************************************************************
+[0;31m--- before: /etc/systemd/coredump.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/systemd/coredump.conf (content)[0m
+[0;32m[0m[0;36m@@ -1 +1,2 @@[0m
+[0;36m[0m Storage=none
+[0;32m+ProcessSizeMax=0[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.5.4 Ensure core dumps are restricted | reload] ***********************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.6.1.1 Ensure AppArmor is installed] **********************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.6.1.3 Ensure all AppArmor Profiles are in enforce or complain mode
+ 1.6.1.4 Ensure all AppArmor Profiles are enforcing] ***********************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.7.1 Ensure message of the day is configured properly
+ 1.7.4 Ensure permissions on /etc/motd are configured] ***********************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-33000199y43llhr/tmpjlrx7kzp/motd.j2[0m
+[0;32m[0m[0;36m@@ -0,0 +1,6 @@[0m
+[0;36m[0m[0;32m+-----------------------------------------------------------------------------[0m
+[0;32m[0m[0;32m+WARNING: This is a private system.  Do not attempt to login unless you are an[0m
+[0;32m[0m[0;32m+authorized user.  Any authorized or unauthorized access and use may be moni-[0m
+[0;32m[0m[0;32m+tored and can result in criminal or civil prosecution under applicable law.[0m
+[0;32m[0m[0;32m+-----------------------------------------------------------------------------[0m
+[0;32m[0m[0;32m+[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.7.1 Ensure message of the day is configured properly
+ 1.7.4 Ensure permissions on /etc/motd are configured  | Show templates used] ************************************
+[0;32mok: [dcex1648myswis1] => {[0m
+[0;32m    "msg": "custom file not found, using default"[0m
+[0;32m}[0m
+
+TASK [cis_security : 1.7.2 Ensure local login warning banner is configured properly
+ 1.7.5 Ensure permissions on /etc/issue are configured] **************************************************
+[0;31m--- before: /etc/issue[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-33000199y43llhr/tmp38ik0eqc/issue.j2[0m
+[0;32m[0m[0;36m@@ -1,2 +1,5 @@[0m
+[0;36m[0m[0;31m-Ubuntu 20.04.6 LTS \n \l[0m
+[0;31m[0m[0;31m-[0m
+[0;31m[0m[0;32m+-----------------------------------------------------------------------------[0m
+[0;32m[0m[0;32m+WARNING: This is a private system.  Do not attempt to login unless you are an[0m
+[0;32m[0m[0;32m+authorized user.  Any authorized or unauthorized access and use may be moni-[0m
+[0;32m[0m[0;32m+tored and can result in criminal or civil prosecution under applicable law.[0m
+[0;32m[0m[0;32m+-----------------------------------------------------------------------------[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.7.2 Ensure local login warning banner is configured properly
+ 1.7.5 Ensure permissions on /etc/issue are configured  | Show templates used] ***************************
+[0;32mok: [dcex1648myswis1] => {[0m
+[0;32m    "msg": "custom file not found, using default"[0m
+[0;32m}[0m
+
+TASK [cis_security : 1.7.3 Ensure local remote warning banner is configured properly
+ 1.7.6 Ensure permissions on /etc/issue.net are configured] *********************************************
+[0;31m--- before: /etc/issue.net[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-33000199y43llhr/tmp6dmpx35h/issue.net.j2[0m
+[0;32m[0m[0;36m@@ -1 +1,5 @@[0m
+[0;36m[0m[0;31m-Ubuntu 20.04.6 LTS[0m
+[0;31m[0m[0;32m+-----------------------------------------------------------------------------[0m
+[0;32m[0m[0;32m+WARNING: This is a private system.  Do not attempt to login unless you are an[0m
+[0;32m[0m[0;32m+authorized user.  Any authorized or unauthorized access and use may be moni-[0m
+[0;32m[0m[0;32m+tored and can result in criminal or civil prosecution under applicable law.[0m
+[0;32m[0m[0;32m+-----------------------------------------------------------------------------[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 1.7.3 Ensure remote login warning banner is configured properly
+ 1.7.6 Ensure permissions on /etc/issue.net are configured  | Show templates used] **********************
+[0;32mok: [dcex1648myswis1] => {[0m
+[0;32m    "msg": "custom file not found, using default"[0m
+[0;32m}[0m
+
+TASK [cis_security : 2.1.1.1 Ensure time synchronization is in use - service install] *******************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.1.1 Ensure time synchronization is in use - service start] *********************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.1.2 Remove NTP] ****************************************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.1.2 Ensure systemd-timesyncd is configured | install systemd-timesyncd] ********************************************************************************************
+[0;31mfatal: [dcex1648myswis1]: FAILED! => {"cache_update_time": 1685085518, "cache_updated": false, "changed": false, "msg": "'/usr/bin/apt-get -y -o \"Dpkg::Options::=--force-confdef\" -o \"Dpkg::Options::=--force-confold\"       install 'systemd-timesyncd=245.4-4ubuntu3.20'' failed: E: Unable to correct problems, you have held broken packages.\n", "rc": 100, "stderr": "E: Unable to correct problems, you have held broken packages.\n", "stderr_lines": ["E: Unable to correct problems, you have held broken packages."], "stdout": "Reading package lists...\nBuilding dependency tree...\nReading state information...\nSome packages could not be installed. This may mean that you have\nrequested an impossible situation or if you are using the unstable\ndistribution that some required packages have not yet been created\nor been moved out of Incoming.\nThe following information may help to resolve the situation:\n\nThe following packages have unmet dependencies:\n systemd-timesyncd : Depends: systemd (= 245.4-4ubuntu3.20) but 245.4-4ubuntu3.21 is to be installed\n", "stdout_lines": ["Reading package lists...", "Building dependency tree...", "Reading state information...", "Some packages could not be installed. This may mean that you have", "requested an impossible situation or if you are using the unstable", "distribution that some required packages have not yet been created", "or been moved out of Incoming.", "The following information may help to resolve the situation:", "", "The following packages have unmet dependencies:", " systemd-timesyncd : Depends: systemd (= 245.4-4ubuntu3.20) but 245.4-4ubuntu3.21 is to be installed"]}[0m
+[0;36m...ignoring[0m
+
+TASK [cis_security : 2.1.1.2 Ensure systemd-timesyncd is configured | set timezone] *********************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.1.2 Ensure systemd-timesyncd is configured | Configure systemd-timesyncd] ******************************************************************************************
+[0;31m--- before: /etc/systemd/timesyncd.conf[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-33000199y43llhr/tmpvac9zqs7/timesyncd.conf.j2[0m
+[0;32m[0m[0;36m@@ -1,19 +1,4 @@[0m
+[0;36m[0m[0;31m-#  This file is part of systemd.[0m
+[0;31m[0m[0;31m-#[0m
+[0;31m[0m[0;31m-#  systemd is free software; you can redistribute it and/or modify it[0m
+[0;31m[0m[0;31m-#  under the terms of the GNU Lesser General Public License as published by[0m
+[0;31m[0m[0;31m-#  the Free Software Foundation; either version 2.1 of the License, or[0m
+[0;31m[0m[0;31m-#  (at your option) any later version.[0m
+[0;31m[0m[0;31m-#[0m
+[0;31m[0m[0;31m-# Entries in this file show the compile time defaults.[0m
+[0;31m[0m[0;31m-# You can change settings by editing this file.[0m
+[0;31m[0m[0;31m-# Defaults can be restored by simply deleting this file.[0m
+[0;31m[0m[0;31m-#[0m
+[0;31m[0m[0;31m-# See timesyncd.conf(5) for details.[0m
+[0;31m[0m[0;31m-[0m
+[0;31m[0m[0;32m+# Ansible managed[0m
+[0;32m[0m [Time]
+[0;31m-#NTP=[0m
+[0;31m[0m[0;31m-#FallbackNTP=ntp.ubuntu.com[0m
+[0;31m[0m[0;31m-#RootDistanceMaxSec=5[0m
+[0;31m[0m[0;31m-#PollIntervalMinSec=32[0m
+[0;31m[0m[0;31m-#PollIntervalMaxSec=2048[0m
+[0;31m[0m[0;32m+NTP=[0m
+[0;32m[0m[0;32m+FallbackNTP=uxtime1.gfk.de uxtime2.gfk.de[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.1.2 Ensure systemd-timesyncd is configured | Start and enable systemd-timesyncd] ***********************************************************************************
+[0;31mfatal: [dcex1648myswis1]: FAILED! => {"changed": false, "msg": "Unable to enable service systemd-timesyncd.service: Failed to enable unit: Unit file /etc/systemd/system/systemd-timesyncd.service is masked.\n"}[0m
+[0;36m...ignoring[0m
+
+TASK [cis_security : 2.1.1.3 Remove NTP] ****************************************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.1.3 Ensure chrony is configured | Install Chrony] ******************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.1.3 Ensure chrony is configured | Start Chrony service] ************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.1.3 Ensure chrony is configured | Generate configuration] **********************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.1.3 Ensure chrony is configured | Restart Chrony service] **********************************************************************************************************
+[0;36mskipping: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.2 Ensure X Window System is not installed] *************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.3 Ensure Avahi Server is not installed] ****************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.4 Ensure CUPS is not installed] ************************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.5 Ensure DHCP Server is not installed] *****************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.6 Ensure LDAP server is not installed] *****************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.7 Ensure NFS is not installed] *************************************************************************************************************************************
+[0;36mskipping: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.8 Ensure DNS Server is not installed] ******************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.9 Ensure FTP Server is not installed] ******************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.10 Ensure HTTP server is not installed] ****************************************************************************************************************************
+[0;36mskipping: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.11 Ensure IMAP and POP3 server are not installed] ******************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.12 Check is Samba is operational] **********************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.12 Check for log files] ********************************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.12 Cheking for Samba logs] *****************************************************************************************************************************************
+[0;32mok: [dcex1648myswis1] => {[0m
+[0;32m    "smbd_logs.matched": "0"[0m
+[0;32m}[0m
+
+TASK [cis_security : 2.1.12 Cheking for Samba service] **************************************************************************************************************************************
+[0;32mok: [dcex1648myswis1] => {[0m
+[0;32m    "smbd_service.status.ActiveState": "inactive"[0m
+[0;32m}[0m
+
+TASK [cis_security : 2.1.12 Ensure Samba is not installed] **********************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.13 Ensure HTTP Proxy Server is not installed] **********************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.14 Ensure SNMP Server is not installed] ****************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.15 Ensure mail transfer agent is configured for local-only mode] ***************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.15 Ensure mail transfer agent is configured for local-only mode] ***************************************************************************************************
+[0;31m--- before: /etc/postfix/main.cf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/postfix/main.cf (content)[0m
+[0;32m[0m[0;36m@@ -43,5 +43,5 @@[0m
+[0;36m[0m mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
+ mailbox_size_limit = 0
+ recipient_delimiter = +
+[0;31m-inet_interfaces = all[0m
+[0;31m[0m[0;32m+inet_interfaces = 127.0.0.1[0m
+[0;32m[0m inet_protocols = ipv4
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.15 Restart Mail transfer agent] ************************************************************************************************************************************
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.16 Ensure rsync service is not installed] **************************************************************************************************************************
+The following packages were automatically installed and are no longer required:
+  libboost-context1.67.0-icinga libboost-coroutine1.67.0-icinga
+  libboost-filesystem1.67.0-icinga libboost-program-options1.67.0-icinga
+  libboost-regex1.67.0-icinga libboost-system1.67.0-icinga
+  libboost-thread1.67.0-icinga libreadline5 python-certifi python-cffi-backend
+  python-chardet python-cryptography python-dateutil python-dbus python-debian
+  python-decorator python-enum34 python-ethtool python-gi python-gobject
+  python-gobject-2 python-idna python-iniparse python-ipaddress python-openssl
+  python-pkg-resources python-requests python-rpm python-six
+  python-subscription-manager python-urllib3
+Use 'apt autoremove' to remove them.
+The following packages will be REMOVED:
+  rsync* ubuntu-standard*
+0 upgraded, 0 newly installed, 2 to remove and 0 not upgraded.
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.1.17 Ensure NIS Server is not installed] *****************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.2.1 Ensure NIS Client is not installed] ******************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.2.2 Ensure rsh client is not installed] ******************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.2.3 Ensure talk client is not installed] *****************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.2.4 Ensure telnet client is not installed] ***************************************************************************************************************************
+The following packages were automatically installed and are no longer required:
+  libboost-context1.67.0-icinga libboost-coroutine1.67.0-icinga
+  libboost-filesystem1.67.0-icinga libboost-program-options1.67.0-icinga
+  libboost-regex1.67.0-icinga libboost-system1.67.0-icinga
+  libboost-thread1.67.0-icinga libreadline5 python-certifi python-cffi-backend
+  python-chardet python-cryptography python-dateutil python-dbus python-debian
+  python-decorator python-enum34 python-ethtool python-gi python-gobject
+  python-gobject-2 python-idna python-iniparse python-ipaddress python-openssl
+  python-pkg-resources python-requests python-rpm python-six
+  python-subscription-manager python-urllib3
+Use 'apt autoremove' to remove them.
+The following packages will be REMOVED:
+  telnet*
+0 upgraded, 0 newly installed, 1 to remove and 0 not upgraded.
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 2.2.5 Ensure LDAP client is not installed] *****************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : verify no wireless interfaces are active on the system] ****************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.1.2 Ensure wireless interfaces are disabled] *************************************************************************************************************************
+[0;36mskipping: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.2.1 Ensure packet redirect sending is disabled | set] ****************************************************************************************************************
+[0;32mok: [dcex1648myswis1] => (item={'name': 'net.ipv4.conf.all.send_redirects', 'value': 0})[0m
+[0;32mok: [dcex1648myswis1] => (item={'name': 'net.ipv4.conf.default.send_redirects', 'value': 0})[0m
+
+TASK [cis_security : 3.2.1 Ensure packet redirect sending is disabled | load] ***************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.2.2 Ensure IP forwarding is disabled | ipv4"] ************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.2.2 Ensure IP forwarding is disabled | ipv6"] ************************************************************************************************************************
+[0;36mskipping: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.2.2 Ensure IP forwarding is disabled | IPV4 load"] *******************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.2.2 Ensure IP forwarding is disabled | IPV6 load"] *******************************************************************************************************************
+[0;36mskipping: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.3.1 Ensure source routed packets are not accepted | ipv4"] ***********************************************************************************************************
+[0;32mok: [dcex1648myswis1] => (item={'name': 'net.ipv4.conf.all.accept_source_route', 'value': 0})[0m
+[0;32mok: [dcex1648myswis1] => (item={'name': 'net.ipv4.conf.default.accept_source_route', 'value': 0})[0m
+
+TASK [cis_security : 3.3.1 Ensure source routed packets are not accepted | ipv4 load"] ******************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.3.1 Ensure source routed packets are not accepted | ipv6"] ***********************************************************************************************************
+[0;36mskipping: [dcex1648myswis1] => (item={'name': 'net.ipv6.conf.all.accept_source_route', 'value': 0}) [0m
+[0;36mskipping: [dcex1648myswis1] => (item={'name': 'net.ipv6.conf.default.accept_source_route', 'value': 0}) [0m
+[0;36mskipping: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.3.1 Ensure source routed packets are not accepted | ipv6 load"] ******************************************************************************************************
+[0;36mskipping: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.3.2 Ensure ICMP redirects are not accepted | ipv4"] ******************************************************************************************************************
+[0;32mok: [dcex1648myswis1] => (item={'name': 'net.ipv4.conf.all.accept_redirects', 'value': 0})[0m
+[0;32mok: [dcex1648myswis1] => (item={'name': 'net.ipv4.conf.default.accept_redirects', 'value': 0})[0m
+
+TASK [cis_security : shell] *****************************************************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.3.2 Ensure ICMP redirects are not accepted | ipv6"] ******************************************************************************************************************
+[0;36mskipping: [dcex1648myswis1] => (item={'name': 'net.ipv6.conf.all.accept_redirects', 'value': 0}) [0m
+[0;36mskipping: [dcex1648myswis1] => (item={'name': 'net.ipv6.conf.default.accept_redirects', 'value': 0}) [0m
+[0;36mskipping: [dcex1648myswis1][0m
+
+TASK [cis_security : shell] *****************************************************************************************************************************************************************
+[0;36mskipping: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.3.3 Ensure secure ICMP redirects are not accepted | save] ************************************************************************************************************
+[0;32mok: [dcex1648myswis1] => (item={'name': 'net.ipv4.conf.all.secure_redirects', 'value': 0})[0m
+[0;32mok: [dcex1648myswis1] => (item={'name': 'net.ipv4.conf.default.secure_redirects', 'value': 0})[0m
+
+TASK [cis_security : 3.3.3 Ensure secure ICMP redirects are not accepted | load] ************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.3.4 Ensure suspicious packets are logged | save] *********************************************************************************************************************
+[0;32mok: [dcex1648myswis1] => (item={'name': 'net.ipv4.conf.all.log_martians', 'value': 1})[0m
+[0;32mok: [dcex1648myswis1] => (item={'name': 'net.ipv4.conf.default.log_martians', 'value': 1})[0m
+
+TASK [cis_security : 3.3.4 Ensure suspicious packets are logged | load] *********************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.3.5 Ensure broadcast ICMP requests are ignored | save] ***************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.3.5 Ensure broadcast ICMP requests are ignored | load] ***************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.3.6 Ensure bogus ICMP responses are ignored | save] ******************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.3.6 Ensure bogus ICMP responses are ignored | load] ******************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.3.7 Ensure Reverse Path Filtering is enabled | save] *****************************************************************************************************************
+[0;32mok: [dcex1648myswis1] => (item={'name': 'net.ipv4.conf.all.rp_filter', 'value': 1})[0m
+[0;32mok: [dcex1648myswis1] => (item={'name': 'net.ipv4.conf.default.rp_filter', 'value': 1})[0m
+
+TASK [cis_security : 3.3.7 Ensure Reverse Path Filtering is enabled | load] *****************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.3.8 Ensure TCP SYN Cookies is enabled | save] ************************************************************************************************************************
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.3.8 Ensure TCP SYN Cookies is enabled | load] ************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.3.9 Ensure IPv6 router advertisements are not accepted | save] *******************************************************************************************************
+[0;36mskipping: [dcex1648myswis1] => (item={'name': 'net.ipv6.conf.all.accept_ra', 'value': 0}) [0m
+[0;36mskipping: [dcex1648myswis1] => (item={'name': 'net.ipv6.conf.default.accept_ra', 'value': 0}) [0m
+[0;36mskipping: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.3.9 Ensure IPv6 router advertisements are not accepted | load] *******************************************************************************************************
+[0;36mskipping: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.5.1.1 Ensure ufw is installed | ufw] *********************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.5.1.2 Ensure iptables-persistent is not installed] *******************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 3.5.3.1.2 Ensure ufw is uninstalled or disabled with nftables] *********************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 4.2.1.1 Ensure rsyslog is installed] ***********************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 4.2.1.2 Ensure rsyslog Service is enabled] *****************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 4.2.1.4 Ensure rsyslog default file permissions configured] ************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 4.2.1.5 Ensure rsyslog default file permissions configured] ************************************************************************************************************
+[0;31m--- before: /etc/rsyslog.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/rsyslog.conf (content)[0m
+[0;32m[0m[0;36m@@ -57,3 +57,4 @@[0m
+[0;36m[0m # Include all config files in /etc/rsyslog.d/
+ #
+ $IncludeConfig /etc/rsyslog.d/*.conf
+[0;32m+ *.* action(type="omfwd" target="192.168.2.100" port="514" protocol="tcp"action.resumeRetryCount="100"queue.type="LinkedList" queue.size="1000")[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 4.2.2.1 Ensure journald is configured to send logs to rsyslog] *********************************************************************************************************
+[0;31m--- before: /etc/systemd/journald.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/systemd/journald.conf (content)[0m
+[0;32m[0m[0;36m@@ -29,7 +29,7 @@[0m
+[0;36m[0m #RuntimeMaxFiles=100
+ #MaxRetentionSec=
+ #MaxFileSec=1month
+[0;31m-#ForwardToSyslog=yes[0m
+[0;31m[0m[0;32m+ForwardToSyslog=yes[0m
+[0;32m[0m #ForwardToKMsg=no
+ #ForwardToConsole=no
+ #ForwardToWall=yes
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 4.2.2.2 Ensure journald is configured to compress large log files] *****************************************************************************************************
+[0;31m--- before: /etc/systemd/journald.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/systemd/journald.conf (content)[0m
+[0;32m[0m[0;36m@@ -13,7 +13,7 @@[0m
+[0;36m[0m 
+ [Journal]
+ #Storage=auto
+[0;31m-#Compress=yes[0m
+[0;31m[0m[0;32m+Compress=yes[0m
+[0;32m[0m #Seal=yes
+ #SplitMode=uid
+ #SyncIntervalSec=5m
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 4.2.2.3 Ensure journald is configured to write logfiles to persistent disk] ********************************************************************************************
+[0;31m--- before: /etc/systemd/journald.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/systemd/journald.conf (content)[0m
+[0;32m[0m[0;36m@@ -12,7 +12,7 @@[0m
+[0;36m[0m # See journald.conf(5) for details.
+ 
+ [Journal]
+[0;31m-#Storage=auto[0m
+[0;31m[0m[0;32m+Storage=persistent[0m
+[0;32m[0m Compress=yes
+ #Seal=yes
+ #SplitMode=uid
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.1.1 Ensure cron daemon is enabled and running] ***********************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.1.2 Ensure permissions on /etc/crontab are configured] ***************************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0644",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/crontab"
+ }
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.1.3 Ensure permissions on /etc/cron.hourly are configured] ***********************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0755",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/cron.hourly"
+ }
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.1.4 Ensure permissions on /etc/cron.daily are configured] ************************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0755",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/cron.daily"
+ }
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.1.5 Ensure permissions on /etc/cron.weekly are configured] ***********************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0755",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/cron.weekly"
+ }
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.1.6 Ensure permissions on /etc/cron.monthly are configured] **********************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0755",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/cron.monthly"
+ }
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.1.7 Ensure permissions on /etc/cron.d are configured] ****************************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0755",[0m
+[0;31m[0m[0;32m+    "mode": "0600",[0m
+[0;32m[0m     "path": "/etc/cron.d"
+ }
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.1.8 Ensure cron is restricted to authorized users | /etc/cron.deny] **************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : stat] ******************************************************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.1.8 Ensure cron is restricted to authorized users | /etc/cron.allow] *************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,6 +1,6 @@[0m
+[0;36m[0m {
+[0;31m-    "atime": 1685086497.4261913,[0m
+[0;31m[0m[0;31m-    "mtime": 1685086497.4261913,[0m
+[0;31m[0m[0;32m+    "atime": 1685086497.4295666,[0m
+[0;32m[0m[0;32m+    "mtime": 1685086497.4295666,[0m
+[0;32m[0m     "path": "/etc/cron.allow",
+[0;31m-    "state": "absent"[0m
+[0;31m[0m[0;32m+    "state": "touch"[0m
+[0;32m[0m }
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.1.9 Ensure at is restricted to authorized users | /etc/at.deny] ******************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : stat] ******************************************************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.1.9 Ensure at is restricted to authorized users | /etc/at.allow] *****************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,6 +1,6 @@[0m
+[0;36m[0m {
+[0;31m-    "atime": 1685086498.2582037,[0m
+[0;31m[0m[0;31m-    "mtime": 1685086498.2582037,[0m
+[0;31m[0m[0;32m+    "atime": 1685086498.2604158,[0m
+[0;32m[0m[0;32m+    "mtime": 1685086498.2604158,[0m
+[0;32m[0m     "path": "/etc/at.allow",
+[0;31m-    "state": "absent"[0m
+[0;31m[0m[0;32m+    "state": "touch"[0m
+[0;32m[0m }
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.2.1 Ensure sudo is installed] ****************************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.2.2 Ensure sudo commands use pty] ************************************************************************************************************************************
+[0;31m--- before: /etc/sudoers (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/sudoers (content)[0m
+[0;32m[0m[0;36m@@ -28,3 +28,4 @@[0m
+[0;36m[0m # See sudoers(5) for more information on "#include" directives:
+ 
+ #includedir /etc/sudoers.d
+[0;32m+Defaults use_pty[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.2.3 Ensure sudo log file exists] *************************************************************************************************************************************
+[0;31m--- before: /etc/sudoers (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/sudoers (content)[0m
+[0;32m[0m[0;36m@@ -29,3 +29,4 @@[0m
+[0;36m[0m 
+ #includedir /etc/sudoers.d
+ Defaults use_pty
+[0;32m+Defaults    logfile=/var/log/sudo.log[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.3.1 Ensure permissions on /etc/ssh/sshd_config are configured] *******************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.3.2 Ensure permissions on SSH private host key files are configured | find keys] *************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.3.2 Ensure permissions on SSH private host key files are configured | fix permissions] *******************************************************************************
+[1;35m[WARNING]: conditional statements should not include jinja2 templating delimiters such as {{ }} or {% %}. Found: {{ private_keys.stdout_lines|length > 0 }}[0m
+[0;32mok: [dcex1648myswis1] => (item=/etc/ssh/ssh_host_rsa_key)[0m
+[0;32mok: [dcex1648myswis1] => (item=/etc/ssh/ssh_host_ed25519_key)[0m
+[0;32mok: [dcex1648myswis1] => (item=/etc/ssh/ssh_host_ecdsa_key)[0m
+
+TASK [cis_security : 5.3.3 Ensure permissions on SSH public host key files are configured | find keys] **************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.3.3 Ensure permissions on SSH public host key files are configured | fix permissions] ********************************************************************************
+[1;35m[WARNING]: conditional statements should not include jinja2 templating delimiters such as {{ }} or {% %}. Found: {{ public_keys.stdout_lines|length > 0 }}[0m
+[0;32mok: [dcex1648myswis1] => (item=/etc/ssh/ssh_host_ecdsa_key.pub)[0m
+[0;32mok: [dcex1648myswis1] => (item=/etc/ssh/ssh_host_ed25519_key.pub)[0m
+[0;32mok: [dcex1648myswis1] => (item=/etc/ssh/ssh_host_rsa_key.pub)[0m
+
+TASK [cis_security : 5.3.4 Ensure SSH access is limited | allow groups] *********************************************************************************************************************
+[0;36mskipping: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.3.4 Ensure SSH access is limited | denyusers] ************************************************************************************************************************
+[0;36mskipping: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.3.4 Ensure SSH access is limited | denygroups] ***********************************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -171,3 +171,4 @@[0m
+[0;36m[0m # Reject keys that are explicitly blacklisted
+ RevokedKeys /etc/ssh/revoked_keys
+ 
+[0;32m+DenyGroups games[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.3.5 Ensure SSH LogLevel is appropriate] ******************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.3.7 Ensure SSH MaxAuthTries is set to 4 or less] *********************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.3.8 Ensure SSH IgnoreRhosts is enabled] ******************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.3.9 Ensure SSH HostbasedAuthentication is disabled] ******************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.3.11 Ensure SSH PermitEmptyPasswords is disabled] ********************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.3.12 Ensure SSH PermitUserEnvironment is disabled] *******************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.3.13 Ensure only strong Ciphers are used] ****************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.3.14 Ensure only strong MAC algorithms are used] *********************************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -60,7 +60,7 @@[0m
+[0;36m[0m # eg Ruby's Net::SSH at around 2.2.* doesn't support sha2 for hmac, so this will have to be set true in this case.
+ #
+ 
+[0;31m-MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256[0m
+[0;31m[0m[0;32m+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256[0m
+[0;32m[0m 
+ # Alternative setting, if OpenSSH version is below v5.9
+ #MACs hmac-ripemd160
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.3.15 Ensure only strong Key Exchange algorithms are used] ************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.3.16 Ensure SSH Idle Timeout Interval is configured | clientalive] ***************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.3.16 Ensure SSH Idle Timeout Interval is configured | MaxAlive] ******************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.3.17 Ensure SSH LoginGraceTime is set to one minute or less] *********************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -77,7 +77,7 @@[0m
+[0;36m[0m 
+ # Secure Login directives.
+ 
+[0;31m-LoginGraceTime 30s[0m
+[0;31m[0m[0;32m+LoginGraceTime 30[0m
+[0;32m[0m MaxAuthTries 2
+ MaxSessions 10
+ MaxStartups 10:30:100
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.3.18 Ensure SSH warning banner is configured] ************************************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -164,7 +164,7 @@[0m
+[0;36m[0m 
+ PrintLastLog no
+ 
+[0;31m-Banner /etc/ssh/banner.txt[0m
+[0;31m[0m[0;32m+Banner /etc/ssh/banner[0m
+[0;32m[0m 
+ DebianBanner no
+ 
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.3.19 Ensure SSH PAM is enabled] **************************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.3.21 Ensure SSH MaxStartups is configured to 10:30:60] ***************************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -80,7 +80,7 @@[0m
+[0;36m[0m LoginGraceTime 30
+ MaxAuthTries 2
+ MaxSessions 10
+[0;31m-MaxStartups 10:30:100[0m
+[0;31m[0m[0;32m+MaxStartups 10:30:60[0m
+[0;32m[0m 
+ # Enable public key authentication
+ PubkeyAuthentication yes
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.3.22 Ensure SSH MaxSessions is limited to 4] *************************************************************************************************************************
+[0;31m--- before: /etc/ssh/sshd_config (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/ssh/sshd_config (content)[0m
+[0;32m[0m[0;36m@@ -79,7 +79,7 @@[0m
+[0;36m[0m 
+ LoginGraceTime 30
+ MaxAuthTries 2
+[0;31m-MaxSessions 10[0m
+[0;31m[0m[0;32m+MaxSessions 4[0m
+[0;32m[0m MaxStartups 10:30:60
+ 
+ # Enable public key authentication
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : restart_sshd] **********************************************************************************************************************************************************
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.4.3.2 Ensure password reuse is limited | update file according to CIS] ***********************************************************************************************
+[0;31m--- before: /etc/pam.d/common-password (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/pam.d/common-password (content)[0m
+[0;32m[0m[0;36m@@ -23,6 +23,7 @@[0m
+[0;36m[0m 
+ # here are the per-package modules (the "Primary" block)
+ password	requisite     pam_passwdqc.so min=disabled,disabled,16,12,8
+[0;32m+password       required                        pam_pwhistory.so remember=5[0m
+[0;32m[0m password	[success=1 default=ignore]	pam_unix.so obscure use_authtok try_first_pass sha512
+ # here's the fallback if no module succeeds
+ password	requisite			pam_deny.so
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.4.4 Ensure password hashing algorithm is SHA-512] ********************************************************************************************************************
+[0;31m--- before: /etc/pam.d/common-password (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/pam.d/common-password (content)[0m
+[0;32m[0m[0;36m@@ -24,7 +24,7 @@[0m
+[0;36m[0m # here are the per-package modules (the "Primary" block)
+ password	requisite     pam_passwdqc.so min=disabled,disabled,16,12,8
+ password       required                        pam_pwhistory.so remember=5
+[0;31m-password	[success=1 default=ignore]	pam_unix.so obscure use_authtok try_first_pass sha512[0m
+[0;31m[0m[0;32m+password       [success=1 default=ignore]      pam_unix.so obscure use_authtok try_first_pass sha512[0m
+[0;32m[0m # here's the fallback if no module succeeds
+ password	requisite			pam_deny.so
+ # prime the stack with a positive return value if there isn't one already;
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.5.1.1 Ensure minimum days between password changes is configured | PASS_MIN_DAYS] ************************************************************************************
+[0;31m--- before: /etc/login.defs (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/login.defs (content)[0m
+[0;32m[0m[0;36m@@ -101,7 +101,7 @@[0m
+[0;36m[0m PASS_MAX_DAYS 99999
+ 
+ # Minimum number of days allowed between password changes.
+[0;31m-PASS_MIN_DAYS 0[0m
+[0;31m[0m[0;32m+PASS_MIN_DAYS   7[0m
+[0;32m[0m 
+ # Number of days warning given before a password expires.
+ PASS_WARN_AGE	7
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.5.1.1 Ensure minimum days between password changes is configured  | chage --mindays] *********************************************************************************
+[0;32mok: [dcex1648myswis1] => (item=root)[0m
+
+TASK [cis_security : 5.5.1.3 Ensure password expiration warning days is 7 or more | PASS_WARN_AGE] ******************************************************************************************
+[0;31m--- before: /etc/login.defs (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/login.defs (content)[0m
+[0;32m[0m[0;36m@@ -104,7 +104,7 @@[0m
+[0;36m[0m PASS_MIN_DAYS   7
+ 
+ # Number of days warning given before a password expires.
+[0;31m-PASS_WARN_AGE	7[0m
+[0;31m[0m[0;32m+PASS_WARN_AGE  7[0m
+[0;32m[0m 
+ # Min/max values for automatic uid selection in useradd
+ UID_MIN			 1000
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.5.1.3 Ensure password expiration warning days is 7 or more  | chage --warndays] **************************************************************************************
+[0;32mok: [dcex1648myswis1] => (item=root)[0m
+
+TASK [cis_security : 5.5.1.5 Ensure all users last password change date is in the past | get list] ******************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.5.1.5 Ensure all users last password change date is in the past | save list] *****************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-33000199y43llhr/tmpms8bsz0z[0m
+[0;32m[0m[0;36m@@ -0,0 +1 @@[0m
+[0;36m[0m[0;32m+[][0m
+[0;32m\ No newline at end of file[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.5.2 Ensure system accounts are secured | set all system accounts to a non login shell] *******************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.5.3 Ensure default group for the root account is GID 0] **************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.5.4 Ensure default user umask is 027 or more restrictive - /etc/profile] *********************************************************************************************
+[0;31m--- before: /etc/profile (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/profile (content)[0m
+[0;32m[0m[0;36m@@ -25,3 +25,4 @@[0m
+[0;36m[0m   done
+   unset i
+ fi
+[0;32m+umask 027[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.5.4 Ensure default user umask is 027 or more restrictive - Fix for /etc/apt/apt.conf.d/50command-not-found] **********************************************************
+[0;36mskipping: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.5.5 Ensure default user shell timeout is 900 seconds or less | /etc/profile] *****************************************************************************************
+[0;31m--- before: /etc/profile (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/profile (content)[0m
+[0;32m[0m[0;36m@@ -26,3 +26,4 @@[0m
+[0;36m[0m   unset i
+ fi
+ umask 027
+[0;32m+readonly TMOUT=900 ; export TMOUT[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.7 Ensure access to the su command is restricted  | create su-group-access] *******************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-33000199y43llhr/tmpqdyu3qmq/su-group-access.j2[0m
+[0;32m[0m[0;36m@@ -0,0 +1,2 @@[0m
+[0;36m[0m[0;32m+# Managed by ansible alivx/CIS-Ubuntu-20.04-Ansible[0m
+[0;32m[0m[0;32m+root[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 5.7 Ensure access to the su command is restricted  | create pam-d-su] **************************************************************************************************
+[0;31m--- before: /etc/pam.d/su[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-33000199y43llhr/tmpmlzv80ex/pam-d-su.j2[0m
+[0;32m[0m[0;36m@@ -12,7 +12,7 @@[0m
+[0;36m[0m # denying "root" user, unless she's a member of "foo" or explicitly
+ # permitted earlier by e.g. "sufficient pam_rootok.so").
+ # (Replaces the `SU_WHEEL_ONLY' option from login.defs)
+[0;31m-# auth       required   pam_wheel.so[0m
+[0;31m[0m[0;32m+auth           required        pam_wheel.so use_uid[0m
+[0;32m[0m 
+ # Uncomment this if you want wheel members to be able to
+ # su without a password.
+[0;36m@@ -20,7 +20,7 @@[0m
+[0;36m[0m 
+ # Uncomment this if you want members of a specific group to not
+ # be allowed to use su at all.
+[0;31m-# auth       required   pam_wheel.so deny group=nosu[0m
+[0;31m[0m[0;32m+auth           required        pam_wheel.so use_uid deny group=nosu[0m
+[0;32m[0m 
+ # Uncomment and edit /etc/security/time.conf if you need to set
+ # time restrainst on su usage.
+[0;36m@@ -31,7 +31,7 @@[0m
+[0;36m[0m # This module parses environment configuration file(s)
+ # and also allows you to use an extended config
+ # file /etc/security/pam_env.conf.
+[0;31m-# [0m
+[0;31m[0m[0;32m+#[0m
+[0;32m[0m # parsing /etc/environment needs "readenv=1"
+ session       required   pam_env.so readenv=1
+ # locale variables are also kept into /etc/default/locale in etch
+[0;36m@@ -40,7 +40,7 @@[0m
+[0;36m[0m 
+ # Defines the MAIL environment variable
+ # However, userdel also needs MAIL_DIR and MAIL_FILE variables
+[0;31m-# in /etc/login.defs to make sure that removing a user [0m
+[0;31m[0m[0;32m+# in /etc/login.defs to make sure that removing a user[0m
+[0;32m[0m # also removes the user's mail spool file.
+ # See comments in /etc/login.defs
+ #
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.1.2 Ensure permissions on /etc/passwd are configured] ****************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.1.3 Ensure permissions on /etc/passwd- are configured] ***************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.1.4 Ensure permissions on /etc/group are configured] *****************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.1.5 Ensure permissions on /etc/group- are configured] ****************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.1.6 Ensure permissions on /etc/shadow are configured, with group 'shadow'] *******************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.1.7 Ensure permissions on /etc/shadow- are configured] ***************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.1.8 Ensure permissions on /etc/gshadow are configured] ***************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.1.9 Ensure permissions on /etc/gshadow- are configured] **************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.1.10 Ensure no world writable files exist | find files] **************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.1.10 Ensure no world writable files exist | save output] *************************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-33000199y43llhr/tmpkgktc1n0[0m
+[0;32m[0m[0;36m@@ -0,0 +1 @@[0m
+[0;36m[0m[0;32m+["/opt/ens/McAfeeTP-10.7.10-62-Release-standalone.tar.gz", "/opt/ens/install-mfetp.sh", "/opt/ens/install_McAfee_agent5dot7.sh"][0m
+[0;32m\ No newline at end of file[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.1.10 Ensure no world writable files exist | fix permission] **********************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0777",[0m
+[0;31m[0m[0;32m+    "mode": "0775",[0m
+[0;32m[0m     "path": "/opt/ens/McAfeeTP-10.7.10-62-Release-standalone.tar.gz"
+ }
+
+[0;33mchanged: [dcex1648myswis1] => (item=/opt/ens/McAfeeTP-10.7.10-62-Release-standalone.tar.gz)[0m
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0777",[0m
+[0;31m[0m[0;32m+    "mode": "0775",[0m
+[0;32m[0m     "path": "/opt/ens/install-mfetp.sh"
+ }
+
+[0;33mchanged: [dcex1648myswis1] => (item=/opt/ens/install-mfetp.sh)[0m
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0777",[0m
+[0;31m[0m[0;32m+    "mode": "0775",[0m
+[0;32m[0m     "path": "/opt/ens/install_McAfee_agent5dot7.sh"
+ }
+
+[0;33mchanged: [dcex1648myswis1] => (item=/opt/ens/install_McAfee_agent5dot7.sh)[0m
+
+TASK [cis_security : 6.2.1 Ensure accounts in /etc/passwd use shadowed passwords] ***********************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.2  Ensure password fields are not empty | list] ********************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.2 Ensure password fields are not empty | Save output] **************************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-33000199y43llhr/tmpkxfbbqu5[0m
+[0;32m[0m[0;36m@@ -0,0 +1 @@[0m
+[0;36m[0m[0;32m+[][0m
+[0;32m\ No newline at end of file[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.2 Ensure password fields are not empty | Lock account] *************************************************************************************************************
+[0;36mskipping: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.3 Ensure all groups in /etc/passwd exist in /etc/group | list] *****************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.3 Ensure all groups in /etc/passwd exist in /etc/group | save output] **********************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.4 Ensure all users' home directories exist | list] *****************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.4 Ensure all users' home directories exist | save] *****************************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-33000199y43llhr/tmpx27z0nt1[0m
+[0;32m[0m[0;36m@@ -0,0 +1 @@[0m
+[0;36m[0m[0;32m+["mysql1"][0m
+[0;32m\ No newline at end of file[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.4 Ensure all users' home directories exist | fix] ******************************************************************************************************************
+[1;35m[WARNING]: conditional statements should not include jinja2 templating delimiters such as {{ }} or {% %}. Found: {{ output_6_2_4.stdout_lines|length > 0 }}[0m
+[0;33mchanged: [dcex1648myswis1] => (item=mysql1)[0m
+
+TASK [cis_security : 6.2.5 Ensure users own their home directories | list] ******************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.5 Ensure users own their home directories | Var] *******************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.5 Ensure users own their home directories | save output] ***********************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-33000199y43llhr/tmpfn50whtv[0m
+[0;32m[0m[0;36m@@ -0,0 +1 @@[0m
+[0;36m[0m[0;32m+[][0m
+[0;32m\ No newline at end of file[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.5 Ensure users own their home directories | fix] *******************************************************************************************************************
+[0;36mskipping: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.6 Ensure users home directories permissions are 750 or more restrictive - list] ************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.6 Ensure users' home directories permissions are 750 or more restrictive - print output] ***************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-33000199y43llhr/tmp25vvmi_4[0m
+[0;32m[0m[0;36m@@ -0,0 +1 @@[0m
+[0;36m[0m[0;32m+[][0m
+[0;32m\ No newline at end of file[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.6 Ensure users home directories permissions are 750 or more restrictive - fix] *************************************************************************************
+[0;36mskipping: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.7 Ensure users' dot files are not group or world writable | list] **************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.7 Ensure users' dot files and folders are not group or world writable | list] **************************************************************************************
+[0;36mskipping: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.7 Ensure users' dot files are not group or world writable | save output] *******************************************************************************************
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.7 Ensure users' dot files and folders are not group or world writable | save output] *******************************************************************************
+[0;36mskipping: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.7 Ensure users' dot files are not group or world writable | correct file permissions] ******************************************************************************
+[0;36mskipping: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.7 Ensure users' dot files and folders are not group or world writable | correct file permissions] ******************************************************************
+[0;36mskipping: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.8 Ensure no users have .netrc files | list] ************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.8 Ensure no users have .netrc files | save output] *****************************************************************************************************************
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.9 Ensure no users have .forward files | list] **********************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.9 Ensure no users have .forward files  | save output] **************************************************************************************************************
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.10 Ensure no users have .rhosts files | list] **********************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.10 Ensure no users have .rhosts files | save output] ***************************************************************************************************************
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.11 Ensure root is the only UID 0 account| list] ********************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.11 Ensure root is the only UID 0 account | Save output] ************************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-33000199y43llhr/tmpwgw8umyr[0m
+[0;32m[0m[0;36m@@ -0,0 +1 @@[0m
+[0;36m[0m[0;32m+[][0m
+[0;32m\ No newline at end of file[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.12 Ensure root PATH Integrity | run | Delete non-existing folders from PATH] ***************************************************************************************
+[0;36mskipping: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.12 Ensure root PATH Integrity | run] *******************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.12 Ensure root PATH Integrity | run] *******************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.12 Ensure root PATH Integrity | save output] ***********************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.13 Ensure no duplicate UIDs exist | list] **************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.13 Ensure no duplicate UIDs exist | save output] *******************************************************************************************************************
+[0;31mfatal: [dcex1648myswis1]: FAILED! => {"changed": false, "checksum": "5a7e063388e2fefdcf45632b5e8279f0bdf73bf5", "msg": "Unsupported parameters for (ansible.legacy.copy) module: changed_when. Supported parameters include: _original_basename, attributes, backup, checksum, content, dest, directory_mode, follow, force, group, local_follow, mode, owner, remote_src, selevel, serole, setype, seuser, src, unsafe_writes, validate (attr)."}[0m
+[0;36m...ignoring[0m
+
+TASK [cis_security : 6.2.14 Ensure no duplicate GIDs exist | list] **************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.14 Ensure no duplicate GIDs exist | save output] *******************************************************************************************************************
+[0;31mfatal: [dcex1648myswis1]: FAILED! => {"changed": false, "checksum": "22363f3188e400e835dcf8fe6d21ddf2c4e56aa6", "msg": "Unsupported parameters for (ansible.legacy.copy) module: changed_when. Supported parameters include: _original_basename, attributes, backup, checksum, content, dest, directory_mode, follow, force, group, local_follow, mode, owner, remote_src, selevel, serole, setype, seuser, src, unsafe_writes, validate (attr)."}[0m
+[0;36m...ignoring[0m
+
+TASK [cis_security : 6.2.15 Ensure no duplicate user names exist | list] ********************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.15 Ensure no duplicate user names exist | save output] *************************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-33000199y43llhr/tmpzkmmgq5d[0m
+[0;32m[0m[0;36m@@ -0,0 +1 @@[0m
+[0;36m[0m[0;32m+[][0m
+[0;32m\ No newline at end of file[0m
+[0;32m[0m
+[0;33mchanged: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.16 Ensure no duplicate group names exist | list] *******************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.16 Ensure no duplicate group names exist | save output] ************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.17 Ensure shadow group is empty | list] ****************************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : 6.2.17 Ensure shadow group is empty | save output] *********************************************************************************************************************
+[0;32mok: [dcex1648myswis1][0m
+
+TASK [cis_security : Add hardening file.] ***************************************************************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,7 +1,7 @@[0m
+[0;36m[0m {
+[0;31m-    "atime": 1685086535.3587587,[0m
+[0;31m[0m[0;31m-    "mode": "0640",[0m
+[0;31m[0m[0;31m-    "mtime": 1685086535.3587587,[0m
+[0;31m[0m[0;32m+    "atime": 1685086535.3606997,[0m
+[0;32m[0m[0;32m+    "mode": "0400",[0m
+[0;32m[0m[0;32m+    "mtime": 1685086535.3606997,[0m
+[0;32m[0m     "path": "/etc/.hardening",
+[0;31m-    "state": "absent"[0m
+[0;31m[0m[0;32m+    "state": "touch"[0m
+[0;32m[0m }
+
+[0;33mchanged: [dcex1648myswis1][0m
+
+RUNNING HANDLER [cis_security : reloadTimesyncd] ********************************************************************************************************************************************
+[0;31mfatal: [dcex1648myswis1]: FAILED! => {"changed": false, "msg": "Unable to start service systemd-timesyncd: Failed to start systemd-timesyncd.service: Unit systemd-timesyncd.service is masked.\n"}[0m
+[0;36m...ignoring[0m
+
+PLAY RECAP **********************************************************************************************************************************************************************************
+[0;33mdcex1648myswis1[0m            : [0;32mok=222 [0m [0;33mchanged=68  [0m unreachable=0    failed=0    [0;36mskipped=24  [0m rescued=0    [1;35mignored=7   [0m
+
+
+Script done on 2023-05-26 09:35:35+02:00

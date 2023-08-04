@@ -1,0 +1,401 @@
+Script started on 2023-05-25 13:50:53+02:00
+[1;35m[WARNING]: While constructing a mapping from /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/defaults/main.yml, line 6, column 1, found a duplicate dict key (enable_firewall). Using last defined value only.[0m
+[1;35m[WARNING]: While constructing a mapping from /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/defaults/main.yml, line 6, column 1, found a duplicate dict key (ssh_max_sessions). Using last defined value only.[0m
+[0;35m[DEPRECATION WARNING]: "include" is deprecated, use include_tasks/import_tasks instead. See https://docs.ansible.com/ansible-core/2.14/user_guide/playbooks_reuse_includes.html for details. This feature will be removed in version 2.16. [0m
+[0;35mDeprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.[0m
+
+PLAY [all] **********************************************************************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] **********************************************************************************************************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17][0m
+
+TASK [cis_security : include] ***************************************************************************************************************************************************************************************************************
+[0;35m[DEPRECATION WARNING]: "include" is deprecated, use include_tasks/import_tasks/import_playbook instead. This feature will be removed in version 2.16. Deprecation warnings can be disabled by setting deprecation_warnings=False in [0m
+[0;35mansible.cfg.[0m
+[0;36mincluded: /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/tasks/CIS-Ubuntu-20.yml for dcex1039pkzoq17[0m
+
+TASK [cis_security : include] ***************************************************************************************************************************************************************************************************************
+[0;36mincluded: /home/gfk.com/ivan.stamov.adm/cis-hardening/roles/cis_security/tasks/type-files/ubuntu-20-type.yml for dcex1039pkzoq17[0m
+
+TASK [cis_security : 1.1.1.1 Ensure mounting of cramfs filesystems is disabled] *************************************************************************************************************************************************************
+[0;31m--- before: /etc/modprobe.d/CIS.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/modprobe.d/CIS.conf (content)[0m
+[0;32m[0m[0;36m@@ -1 +1,2 @@[0m
+[0;36m[0m install jffs2 /bin/true
+[0;32m+install cramfs /bin/true[0m
+[0;32m[0m
+[0;31m--- before: /etc/modprobe.d/CIS.conf (file attributes)[0m
+[0;31m[0m[0;32m+++ after: /etc/modprobe.d/CIS.conf (file attributes)[0m
+[0;32m[0m[0;36m@@ -1,3 +1,3 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0640"[0m
+[0;31m[0m[0;32m+    "mode": "0644"[0m
+[0;32m[0m }
+
+[0;33mchanged: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.1.1.1 Ensure mounting of cramfs filesystems is disabled | modprobe] **************************************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.1.1.2 Ensure mounting of freevxfs filesystems is disabled] ***********************************************************************************************************************************************************
+[0;31m--- before: /etc/modprobe.d/CIS.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/modprobe.d/CIS.conf (content)[0m
+[0;32m[0m[0;36m@@ -1 +1,2 @@[0m
+[0;36m[0m install jffs2 /bin/true
+[0;32m+install freevxfs /bin/true[0m
+[0;32m[0m
+[0;33mchanged: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.1.1.2 Ensure mounting of freevxfs filesystems is disabled | modprobe] ************************************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.1.1.3 Ensure mounting of jffs2 filesystems is disabled] **************************************************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.1.1.3 Ensure mounting of jffs2 filesystems is disabled] **************************************************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.1.1.4 Ensure mounting of hfs filesystems is disabled] ****************************************************************************************************************************************************************
+[0;31m--- before: /etc/modprobe.d/CIS.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/modprobe.d/CIS.conf (content)[0m
+[0;32m[0m[0;36m@@ -1 +1,2 @@[0m
+[0;36m[0m install jffs2 /bin/true
+[0;32m+install hfs /bin/true[0m
+[0;32m[0m
+[0;33mchanged: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.1.1.4 Ensure mounting of hfs filesystems is disabled | modprobe] *****************************************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.1.1.5 Ensure mounting of hfsplus filesystems is disabled] ************************************************************************************************************************************************************
+[0;31m--- before: /etc/modprobe.d/CIS.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/modprobe.d/CIS.conf (content)[0m
+[0;32m[0m[0;36m@@ -1 +1,2 @@[0m
+[0;36m[0m install jffs2 /bin/true
+[0;32m+install hfsplus /bin/true[0m
+[0;32m[0m
+[0;33mchanged: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.1.1.5 Ensure mounting of hfsplus filesystems is disabled | modprobe] *************************************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.1.1.7 Ensure mounting of udf filesystems is disabled] ****************************************************************************************************************************************************************
+[0;31m--- before: /etc/modprobe.d/CIS.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/modprobe.d/CIS.conf (content)[0m
+[0;32m[0m[0;36m@@ -1 +1,2 @@[0m
+[0;36m[0m install jffs2 /bin/true
+[0;32m+install udf /bin/true[0m
+[0;32m[0m
+[0;33mchanged: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.1.1.7 Ensure mounting of udf filesystems is disabled | modprobe] *****************************************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.1.2 Ensure /tmp is configured] ***************************************************************************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.1.2 Ensure /tmp is configured | edit file] ***************************************************************************************************************************************************************************
+[0;31mfatal: [dcex1039pkzoq17]: FAILED! => {"changed": false, "msg": "Destination /etc/systemd/system/tmp.mount does not exist !", "rc": 257}[0m
+[0;36m...ignoring[0m
+
+TASK [cis_security : 1.1.2 Ensure /tmp is configured | reload demon] ************************************************************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.1.2 Ensure /tmp is configured | enable and start tmp.mount] **********************************************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17][0m
+
+TASK [cis_security : Get file system] *******************************************************************************************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17][0m
+
+TASK [cis_security : debug] *****************************************************************************************************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17] => {[0m
+[0;32m    "filesystem.stdout": "ext4"[0m
+[0;32m}[0m
+
+TASK [cis_security : Check /tmp config] *****************************************************************************************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17][0m
+
+TASK [cis_security : Remount /tmp] **********************************************************************************************************************************************************************************************************
+[0;36mskipping: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.1.6 Ensure /dev/shm is configured
+ 1.1.7 Ensure nodev option set on /dev/shm partition
+ 1.1.8 Ensure nosuid option set on /dev/shm partition
+ 1.1.9 Ensure noexec option set on /dev/shm partition] *********************
+[0;33mchanged: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.1.12 Ensure nodev option set on /var/tmp partitions] *****************************************************************************************************************************************************************
+[0;36mskipping: [dcex1039pkzoq17][0m
+
+TASK [cis_security : /var/tmp partitions] ***************************************************************************************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17] => {[0m
+[0;32m    "msg": {[0m
+[0;32m        "changed": false,[0m
+[0;32m        "cmd": "mount | grep \"on /var\" && true || true\n",[0m
+[0;32m        "delta": null,[0m
+[0;32m        "end": null,[0m
+[0;32m        "failed": false,[0m
+[0;32m        "msg": "Command would have run if not in check mode",[0m
+[0;32m        "rc": 0,[0m
+[0;32m        "skipped": true,[0m
+[0;32m        "start": null,[0m
+[0;32m        "stderr": "",[0m
+[0;32m        "stderr_lines": [],[0m
+[0;32m        "stdout": "",[0m
+[0;32m        "stdout_lines": [][0m
+[0;32m    }[0m
+[0;32m}[0m
+
+TASK [cis_security : 1.1.18 Ensure nodev option set on /home partition] *********************************************************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17] => {[0m
+[0;32m    "msg": "For new installations, during installation create a custom partition setup and specify a separate partition"[0m
+[0;32m}[0m
+
+TASK [cis_security : 1.1.22 Ensure sticky bit is set on all world-writable directories | get info] ******************************************************************************************************************************************
+[0;36mskipping: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.1.22 Ensure sticky bit is set on all world-writable directories | fix] ***********************************************************************************************************************************************
+[0;36mskipping: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.1.23 Disable Automounting | service disable] *************************************************************************************************************************************************************************
+[0;36mskipping: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.1.23 Disable Automounting | package remove] **************************************************************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.1.24 Disable USB Storage | modprobe] *********************************************************************************************************************************************************************************
+[0;31m--- before: /etc/modprobe.d/CIS.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/modprobe.d/CIS.conf (content)[0m
+[0;32m[0m[0;36m@@ -1 +1,2 @@[0m
+[0;36m[0m install jffs2 /bin/true
+[0;32m+install usb-storage /bin/true[0m
+[0;32m[0m
+[0;33mchanged: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.1.24 Disable USB Storage] ********************************************************************************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.3.1 Ensure AIDE is installed] ****************************************************************************************************************************************************************************************
+The following additional packages will be installed:
+  bsd-mailx liblockfile-bin liblockfile1 postfix
+Suggested packages:
+  figlet procmail postfix-mysql postfix-pgsql postfix-ldap postfix-pcre
+  postfix-lmdb postfix-sqlite sasl2-bin | dovecot-common resolvconf
+  postfix-cdb postfix-doc
+The following NEW packages will be installed:
+  aide aide-common bsd-mailx liblockfile-bin liblockfile1 postfix
+0 upgraded, 6 newly installed, 0 to remove and 40 not upgraded.
+[0;33mchanged: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.4.1 Ensure permissions on bootloader config are not overridden - step 1 - update chmod 444 to chmod 400 in /usr/sbin/grubmkconfig] ***********************************************************************************
+[0;36mskipping: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.4.1 Ensure permissions on bootloader config are not overridden - step 2 -  check on password not being set before running chmod command] *****************************************************************************
+[0;36mskipping: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.4.3 Ensure permissions on bootloader config are configured] **********************************************************************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after[0m
+[0;32m[0m[0;36m@@ -1,4 +1,4 @@[0m
+[0;36m[0m {
+[0;31m-    "mode": "0444",[0m
+[0;31m[0m[0;32m+    "mode": "0400",[0m
+[0;32m[0m     "path": "/boot/grub/grub.cfg"
+ }
+
+[0;33mchanged: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.5.2 Ensure address space layout randomization (ASLR) is enabled] *****************************************************************************************************************************************************
+[0;33mchanged: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.5.3 Ensure prelink is not installed] *********************************************************************************************************************************************************************************
+[0;36mskipping: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.5.3 Ensure prelink is not installed] *********************************************************************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.5.4 Ensure core dumps are restricted | sysctl] ***********************************************************************************************************************************************************************
+[0;33mchanged: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.5.4 Ensure core dumps are restricted | limits.conf] ******************************************************************************************************************************************************************
+[0;31m--- before: /etc/security/limits.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/security/limits.conf (content)[0m
+[0;32m[0m[0;36m@@ -53,4 +53,5 @@[0m
+[0;36m[0m #ftp             -       chroot          /ftp
+ #@student        -       maxlogins       4
+ 
+[0;32m+*                hard    core            0[0m
+[0;32m[0m # End of file
+
+[0;33mchanged: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.5.4 Ensure core dumps are restricted | apt] **************************************************************************************************************************************************************************
+The following packages were automatically installed and are no longer required:
+  apport-symptoms python3-apport python3-problem-report python3-systemd
+Use 'apt autoremove' to remove them.
+The following packages will be REMOVED:
+  apport
+The following NEW packages will be installed:
+  systemd-coredump
+0 upgraded, 1 newly installed, 1 to remove and 40 not upgraded.
+[0;33mchanged: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.5.4 Ensure core dumps are restricted | coredump.conf] ****************************************************************************************************************************************************************
+[0;31m--- before: /etc/systemd/coredump.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/systemd/coredump.conf (content)[0m
+[0;32m[0m[0;36m@@ -0,0 +1 @@[0m
+[0;36m[0m[0;32m+Storage=none[0m
+[0;32m[0m
+[0;33mchanged: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.5.4 Ensure core dumps are restricted | coredump.conf] ****************************************************************************************************************************************************************
+[0;31m--- before: /etc/systemd/coredump.conf (content)[0m
+[0;31m[0m[0;32m+++ after: /etc/systemd/coredump.conf (content)[0m
+[0;32m[0m[0;36m@@ -0,0 +1 @@[0m
+[0;36m[0m[0;32m+ProcessSizeMax=0[0m
+[0;32m[0m
+[0;33mchanged: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.5.4 Ensure core dumps are restricted | reload] ***********************************************************************************************************************************************************************
+[0;36mskipping: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.6.1.1 Ensure AppArmor is installed] **********************************************************************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.6.1.3 Ensure all AppArmor Profiles are in enforce or complain mode
+ 1.6.1.4 Ensure all AppArmor Profiles are enforcing] ***********************************************************************************************
+[0;36mskipping: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.7.1 Ensure message of the day is configured properly
+ 1.7.4 Ensure permissions on /etc/motd are configured] ***********************************************************************************************************
+[0;31m--- before[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-3222384pm_6i_fp/tmp63taqv6a/motd.j2[0m
+[0;32m[0m[0;36m@@ -0,0 +1,6 @@[0m
+[0;36m[0m[0;32m+-----------------------------------------------------------------------------[0m
+[0;32m[0m[0;32m+WARNING: This is a private system.  Do not attempt to login unless you are an[0m
+[0;32m[0m[0;32m+authorized user.  Any authorized or unauthorized access and use may be moni-[0m
+[0;32m[0m[0;32m+tored and can result in criminal or civil prosecution under applicable law.[0m
+[0;32m[0m[0;32m+-----------------------------------------------------------------------------[0m
+[0;32m[0m[0;32m+[0m
+[0;32m[0m
+[0;33mchanged: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.7.1 Ensure message of the day is configured properly
+ 1.7.4 Ensure permissions on /etc/motd are configured  | Show templates used] ************************************************************************************
+[0;32mok: [dcex1039pkzoq17] => {[0m
+[0;32m    "msg": "custom file not found, using default"[0m
+[0;32m}[0m
+
+TASK [cis_security : 1.7.2 Ensure local login warning banner is configured properly
+ 1.7.5 Ensure permissions on /etc/issue are configured] **************************************************************************************************
+[0;31m--- before: /etc/issue[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-3222384pm_6i_fp/tmpqng6ij58/issue.j2[0m
+[0;32m[0m[0;36m@@ -1,2 +1,5 @@[0m
+[0;36m[0m[0;31m-Ubuntu 20.04.3 LTS \n \l[0m
+[0;31m[0m[0;31m-[0m
+[0;31m[0m[0;32m+-----------------------------------------------------------------------------[0m
+[0;32m[0m[0;32m+WARNING: This is a private system.  Do not attempt to login unless you are an[0m
+[0;32m[0m[0;32m+authorized user.  Any authorized or unauthorized access and use may be moni-[0m
+[0;32m[0m[0;32m+tored and can result in criminal or civil prosecution under applicable law.[0m
+[0;32m[0m[0;32m+-----------------------------------------------------------------------------[0m
+[0;32m[0m
+[0;33mchanged: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.7.2 Ensure local login warning banner is configured properly
+ 1.7.5 Ensure permissions on /etc/issue are configured  | Show templates used] ***************************************************************************
+[0;32mok: [dcex1039pkzoq17] => {[0m
+[0;32m    "msg": "custom file not found, using default"[0m
+[0;32m}[0m
+
+TASK [cis_security : 1.7.3 Ensure local remote warning banner is configured properly
+ 1.7.6 Ensure permissions on /etc/issue.net are configured] *********************************************************************************************
+[0;31m--- before: /etc/issue.net[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-3222384pm_6i_fp/tmpuvv320yk/issue.net.j2[0m
+[0;32m[0m[0;36m@@ -1 +1,5 @@[0m
+[0;36m[0m[0;31m-Ubuntu 20.04.3 LTS[0m
+[0;31m[0m[0;32m+-----------------------------------------------------------------------------[0m
+[0;32m[0m[0;32m+WARNING: This is a private system.  Do not attempt to login unless you are an[0m
+[0;32m[0m[0;32m+authorized user.  Any authorized or unauthorized access and use may be moni-[0m
+[0;32m[0m[0;32m+tored and can result in criminal or civil prosecution under applicable law.[0m
+[0;32m[0m[0;32m+-----------------------------------------------------------------------------[0m
+[0;32m[0m
+[0;33mchanged: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 1.7.3 Ensure remote login warning banner is configured properly
+ 1.7.6 Ensure permissions on /etc/issue.net are configured  | Show templates used] **********************************************************************
+[0;32mok: [dcex1039pkzoq17] => {[0m
+[0;32m    "msg": "custom file not found, using default"[0m
+[0;32m}[0m
+
+TASK [cis_security : 2.1.1.1 Ensure time synchronization is in use - service install] *******************************************************************************************************************************************************
+The following packages will be REMOVED:
+  systemd-timesyncd
+The following NEW packages will be installed:
+  chrony
+0 upgraded, 1 newly installed, 1 to remove and 40 not upgraded.
+[0;33mchanged: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 2.1.1.1 Ensure time synchronization is in use - service start] *********************************************************************************************************************************************************
+[0;31mfatal: [dcex1039pkzoq17]: FAILED! => {"changed": false, "msg": "Could not find the requested service chrony: host"}[0m
+[0;36m...ignoring[0m
+
+TASK [cis_security : 2.1.1.2 Remove NTP] ****************************************************************************************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 2.1.1.2 Ensure systemd-timesyncd is configured | install systemd-timesyncd] ********************************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 2.1.1.2 Ensure systemd-timesyncd is configured | set timezone] *********************************************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 2.1.1.2 Ensure systemd-timesyncd is configured | Configure systemd-timesyncd] ******************************************************************************************************************************************
+[0;31m--- before: /etc/systemd/timesyncd.conf[0m
+[0;31m[0m[0;32m+++ after: /root/.ansible/tmp/ansible-local-3222384pm_6i_fp/tmp5j16grgc/timesyncd.conf.j2[0m
+[0;32m[0m[0;36m@@ -1,19 +1,4 @@[0m
+[0;36m[0m[0;31m-#  This file is part of systemd.[0m
+[0;31m[0m[0;31m-#[0m
+[0;31m[0m[0;31m-#  systemd is free software; you can redistribute it and/or modify it[0m
+[0;31m[0m[0;31m-#  under the terms of the GNU Lesser General Public License as published by[0m
+[0;31m[0m[0;31m-#  the Free Software Foundation; either version 2.1 of the License, or[0m
+[0;31m[0m[0;31m-#  (at your option) any later version.[0m
+[0;31m[0m[0;31m-#[0m
+[0;31m[0m[0;31m-# Entries in this file show the compile time defaults.[0m
+[0;31m[0m[0;31m-# You can change settings by editing this file.[0m
+[0;31m[0m[0;31m-# Defaults can be restored by simply deleting this file.[0m
+[0;31m[0m[0;31m-#[0m
+[0;31m[0m[0;31m-# See timesyncd.conf(5) for details.[0m
+[0;31m[0m[0;31m-[0m
+[0;31m[0m[0;32m+# Ansible managed[0m
+[0;32m[0m [Time]
+[0;31m-NTP=uxtime1.gfk.de uxtime2.gfk.de[0m
+[0;31m[0m[0;31m-#FallbackNTP=ntp.ubuntu.com[0m
+[0;31m[0m[0;31m-#RootDistanceMaxSec=5[0m
+[0;31m[0m[0;31m-#PollIntervalMinSec=32[0m
+[0;31m[0m[0;31m-#PollIntervalMaxSec=2048[0m
+[0;31m[0m[0;32m+NTP=[0m
+[0;32m[0m[0;32m+FallbackNTP=uxtime1.gfk.de uxtime2.gfk.de[0m
+[0;32m[0m
+[0;33mchanged: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 2.1.1.2 Ensure systemd-timesyncd is configured | Start and enable systemd-timesyncd] ***********************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 2.1.1.3 Remove NTP] ****************************************************************************************************************************************************************************************************
+[0;32mok: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 2.1.1.3 Ensure chrony is configured | Install Chrony] ******************************************************************************************************************************************************************
+The following packages will be REMOVED:
+  systemd-timesyncd
+The following NEW packages will be installed:
+  chrony
+0 upgraded, 1 newly installed, 1 to remove and 40 not upgraded.
+[0;33mchanged: [dcex1039pkzoq17][0m
+
+TASK [cis_security : 2.1.1.3 Ensure chrony is configured | Start Chrony service] ************************************************************************************************************************************************************
+[0;31mfatal: [dcex1039pkzoq17]: FAILED! => {"changed": false, "msg": "Could not find the requested service chrony: host"}[0m
+
+PLAY RECAP **********************************************************************************************************************************************************************************************************************************
+[0;31mdcex1039pkzoq17[0m            : [0;32mok=53  [0m [0;33mchanged=21  [0m unreachable=0    [0;31mfailed=1   [0m [0;36mskipped=10  [0m rescued=0    [1;35mignored=2   [0m
+
+
+Script done on 2023-05-25 13:51:22+02:00
