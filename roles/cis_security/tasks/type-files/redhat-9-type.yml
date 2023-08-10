@@ -321,6 +321,22 @@
         when: gpgcheck is defined and gpgcheck
     tags:
       - 1.2.2
+  - name: "1.2.3 | AUDIT | Ensure package manager repositories are configured"
+    block:
+      - name: "1.2.3 | AUDIT | Ensure package manager repositories are configured | Get repo list"
+        ansible.builtin.shell: dnf repolist
+        changed_when: false
+        failed_when: false
+        register: dnf_configured
+        check_mode: false
+
+      - name: "1.2.3 | AUDIT | Ensure package manager repositories are configured | Display repo list"
+        ansible.builtin.debug:
+          msg:
+            - "Warning!! Below are the configured repos. Please review and make sure all align with site policy"
+            - "{{ dnf_configured.stdout_lines }}"
+    tags:
+      - 1.2.3 
 
 # AIDE is a file system integrity checker which will document all
   # filesystem changes. It's very noisy on busy systems and should be
@@ -741,11 +757,6 @@
     when: tftp_server is defined and not tftp_server
     tags:
       - 2.2.1
-  - name: 2.2.2 - Ensure xorg-x11-server-common is not installed
-    ansible.builtin.set_fact:
-      "{{ unneeded_packages + [ 'xorg-x11-server-common' ] }}"
-    tags:
-      - 2.2.2 
   - name: 2.2.2 - Remove avahi; add to removal list
     ansible.builtin.set_fact:
       unneeded_packages: "{{ unneeded_packages + [ 'avahi' ] + [ 'avahi-autoipd' ] }}"
@@ -925,7 +936,32 @@
         notify: restart postfix
     tags:
       - 2.2.15
+  - name: "2.4 | AUDIT | Ensure nonessential services listening on the system are removed or masked"
+    block:
+      - name: "2.4 | AUDIT | Ensure nonessential services listening on the system are removed or masked | Get list of services"
+        ansible.builtin.shell: systemctl list-units --type=service
+        changed_when: false
+        failed_when: false
+        check_mode: false
+        register: rhel9cis_2_4_services
 
+      - name: "2.4 | AUDIT | Ensure nonessential services listening on the system are removed or masked | Get list of sockets"
+        ansible.builtin.shell: systemctl list-units --type=sockets
+        changed_when: false
+        failed_when: false
+        check_mode: false
+        register: rhel9cis_2_4_sockets
+
+      - name: "2.4 | AUDIT | Ensure nonessential services listening on the system are removed or masked | Display list of services"
+        ansible.builtin.debug:
+          msg:
+            - "Warning!! Below are the list of services and sockets, both active and inactive"
+            - "Please review to make sure all are essential"
+            - "{{ rhel9cis_2_4_services.stdout_lines }}"
+            - "{{ rhel9cis_2_4_sockets.stdout_lines }}"
+
+    tags:
+      - 2.4
   # Section 3, Network parameters
 
   # The sysctl module will configure certain sysctl parameters. They are
@@ -1153,7 +1189,14 @@
       enabled: true
     tags:
       - 4.2.1.2
-
+  - name: "4.2.1.3 | PATCH | Ensure journald is configured to send logs to rsyslog"
+    ansible.builtin.lineinfile:
+      path: /etc/systemd/journald.conf
+      regexp: "^#ForwardToSyslog=|^ForwardToSyslog="
+      line: ForwardToSyslog=yes
+    notify: Restart rsyslog
+    tags:
+      - 4.2.1.3
   - name: 4.2.1.4 - Ensure rsyslog default file permissions are configured
     ansible.builtin.lineinfile:
       path: /etc/rsyslog.conf
@@ -1166,11 +1209,34 @@
       state: present
     tags:
       - 4.2.1.4
-
+#  - name: "4.2.1.7 | PATCH | Ensure rsyslog is not configured to recieve logs from a remote client"
+#    block:
+#      - name: "4.2.1.7 | PATCH | Ensure rsyslog is not configured to recieve logs from a remote client. | When not log host"
+#        ansible.builtin.replace:
+#          path: /etc/rsyslog.conf
+#          regexp: '{{ item }}'
+#          replace: '#\1'
+#        notify: Restart rsyslog
+#        loop:
+#          - '^(\$ModLoad imtcp)'
+#          - '^(\$InputTCPServerRun)'
+#          - '^(module\(load="imtcp"\))'
+#          - '^(input\(type="imtcp")'
+#      - name: "4.2.1.7 | PATCH | Ensure rsyslog is not configured to recieve logs from a remote clients. | When log host"
+#        ansible.builtin.replace:
+#          path: /etc/rsyslog.conf
+#          regexp: '^#(.*{{ item }}.*)'
+#          replace: '\1'
+#        notify: Restart rsyslog
+#        loop:
+#          - 'ModLoad imtcp'
+#          - 'InputTCPServerRun'
+#    tags:
+#      - 4.2.1.7
   # Control 4.2.1.5 - Ensure rsyslog is configured to send logs to a remote log host is machine dependent
   # skipping
 
-  - name: 4.2.2 - Configure journald
+  - name: 4.2.2.2 - Configure journald
     block:
       - name: Ensure Journald is installed
         ansible.builtin.dnf:
@@ -1188,7 +1254,7 @@
         failed_when: rsyslog_forward_out.rc == "2"
         check_mode: false
 
-      - name: 4.2.2.1 - Forward journald logs to rsyslog IF rsyslog is sending logs to a log host
+      - name: 4.2.2.5 - Forward journald logs to rsyslog IF rsyslog is sending logs to a log host
         ansible.builtin.lineinfile:
           dest: /etc/systemd/journald.conf
           regexp: "^ForwardToSyslog=((?!yes).)*$"
@@ -1196,26 +1262,44 @@
           insertafter: "#ForwardToSyslog=no"
         when: rsyslog_forward_out.stdout
     tags:
-      - 4.2.2.1
+      - 4.2.2.5
 
-  - name: 4.2.2.2 - Ensure journald compresses large files
+  - name: 4.2.2.3 - Ensure journald compresses large files
     ansible.builtin.lineinfile:
       dest: /etc/systemd/journald.conf
       regexp: "^Compress=((?!yes).)*$"
       line: "Compress=yes"
       insertafter: "^#Compress="
     tags:
-      - 4.2.2.2
+      - 4.2.2.3
 
-  - name: 4.2.2.3 - Ensure journald writes to peristent disk
+  - name: 4.2.2.4 - Ensure journald writes to peristent disk
     ansible.builtin.lineinfile:
       dest: /etc/systemd/journald.conf
       regexp: "^Storage=((?!persistent).)*$"
       line: "Storage=persistent"
       insertafter: "^#Storage="
     tags:
-      - 4.2.2.3
+      - 4.2.2.4
+  - name: "4.2.2.7 | AUDIT | Ensure journald default file permissions configured"
+    block:
+      - name: "4.2.2.7 | AUDIT | Ensure journald default file permissions configured | Check for override file"
+        ansible.builtin.stat:
+          path: /etc/tmpfiles.d/systemd.conf
+        register: rhel9cis_4_2_2_7_override
 
+      - name: "4.2.2.7 | AUDIT | Ensure journald default file permissions configured | Set live file"
+        ansible.builtin.set_fact:
+          systemd_conf_file: /etc/tmpfiles.d/systemd.conf
+        when: rhel9cis_4_2_2_7_override.stat.exists
+
+      - name: "4.2.2.7 | PATCH | Ensure journald default file permissions configured | Set permission"
+        ansible.builtin.lineinfile:
+          path: "{{ systemd_conf_file | default('/usr/lib/tmpfiles.d/systemd.conf') }}"
+          regexp: '^z \/var\/log\/journal\/%m\/system.journal (!?06(0|4)0) root'
+          line: 'z /var/log/journal/%m/system.journal 0640 root systemd-journal - -'
+    tags:
+      - 4.2.2.7
   # Control 4.2.3, Ensure permissions on log files are configured, is machine dependant
   # skipping
   - name: "4.2.3 Ensure permissions on all logfiles are configured"
@@ -1238,6 +1322,7 @@
       - /etc/at.deny
     tags:
       - 5.1.8
+      - 5.1.9
   - name: Create the cron/at allow files (5.1.8)
     ansible.builtin.copy:
       dest: "{{ item }}"
@@ -1251,7 +1336,7 @@
       - /etc/at.allow
     tags:
       - 5.1.8
-
+      - 5.1.9
   - name: 5.1.1 - Ensure cron is enabled
     ansible.builtin.service:
       name: crond
@@ -1727,41 +1812,7 @@
   # skipping
   # Control 6.1.2,  Ensure sticky bit is set on all world-writable directories
   # providing a list to the user here.
-  - name: 6.1.2 - Ensure sticky bit is set on all world-writable directories
-    block:
-      - name: 6.1.2 - Find any world writiable files directories
-        shell: df --local -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev -type d \( -perm -0002 -a ! -perm -1000 \) 2>/dev/null
-        register: ww_dirs
-        changed_when: false
-        check_mode: false
-
-      - name: 6.1.2 - Print any world writable directories found
-        ansible.builtin.debug:
-          msg: "World writiable files found: {{ ww_dirs.stdout }}"
-        changed_when: true
-        when: ww_dirs.stdout
-      - name: 6.1.2 Remove any world writiable files directories
-        shell: df --local -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev -type d \( -perm -0002 -a ! -perm -1000 \) 2>/dev/null | xargs -I '{}' chmod a+t '{}' 
-    ignore_errors: yes
-    tags:
-      - 6.1.2
-  - name: 6.1.[3,9] - Ensure permissions on /etc/passwd /etc/group
-    ansible.builtin.file:
-      path: /etc/{{ item }}
-      owner: root
-      group: root
-      mode: 0000
-    loop:
-      - gshadow-
-      - shadow-
-      - shadow
-      - gshadow
-    tags:
-      - 6.1.3
-      - 6.1.4
-
-
-  - name: 6.1.[6-10] - Ensure permissions on /etc/passwd- /etc/[g]shadow- /etc/group-
+  - name: 6.1.[1-4] - Ensure permissions on /etc/passwd- /etc/[g]shadow- /etc/group-
     ansible.builtin.file:
       path: /etc/{{ item }}
       owner: root
@@ -1773,172 +1824,207 @@
       - group
       - group-
     tags:
-      - 6.1.6
-      - 6.1.7
-      - 6.1.8
-      - 6.1.9
-
-  # Control 6.1.11, Ensure no world writable files exist, is system dependent so we are only
-  # providing a list to the user here.
-  - name: 6.1.11 - Ensure no world writable files exist
+      - 6.1.1
+      - 6.1.2
+      - 6.1.3
+      - 6.1.4
+#  - name: 6.1.[5-8] - Ensure permissions on /etc/shadow /etc/shadow~ /etc/gshadow /etc/gshadow~
+#      path: /etc/{{ item }}
+#      owner: root
+#      group: root
+#      mode: 0000
+#    loop:
+#      - gshadow-
+#      - shadow-
+#      - shadow
+#      - gshadow
+#    tags:
+ #     - 6.1.5
+#      - 6.1.6
+#      - 6.1.7
+#      - 6.1.8
+  - name: 6.1.9 - Ensure no world writable files exist
     block:
-      - name: 6.1.11 - Find any world writiable files
+      - name: 6.1.9 - Find any world writiable files
         shell: "/usr/bin/df --local -P | /usr/bin/awk {' if (NR!=1) print $6'} | /usr/bin/xargs -I '{}' find '{}' -xdev -type f -perm -0002"
         register: ww_files
         changed_when: false
         check_mode: false
 
-      - name: 6.1.11 - Print any world writable files found
+      - name: 6.1.9 - Print any world writable files found
         ansible.builtin.debug:
           msg: "World writiable files found: {{ ww_files.stdout }}"
         changed_when: true
         when: ww_files.stdout
     tags:
-      - 6.1.11
-
-  # Control 6.1.12, Ensure no unowned files exist, is system dependent so we are only
-  # providing a list to the user here.
-  - name: 6.1.12 - Ensure no unowned files exist
+      - 6.1.9
+  - name: 6.1.10 - Ensure no unowned files exist
     block:
-      - name: 6.1.12 - Find any unowned files
+      - name: 6.1.10 - Find any unowned files
         shell: "/usr/bin/df --local -P | /usr/bin/awk {' if (NR!=1) print $6'} | /usr/bin/xargs -I '{}' find '{}' -xdev -nouser"
         register: uo_files
         changed_when: false
         check_mode: false
 
-      - name: 6.1.12 - Print any unowned files found
+      - name: 6.1.10 - Print any unowned files found
         ansible.builtin.debug:
           msg: "unowned files found: {{ uo_files.stdout }}"
         changed_when: true
         when: uo_files.stdout
     tags:
-      - 6.1.12
-
-  # Control 6.1.13, Enscure no ungrouped files exist, is system dependent so we are only
-  # providing a list to the user here.
-  - name: 6.1.13 - Ensure no ungrouped files exist
+      - 6.1.10
+  - name: 6.1.11 - Ensure no ungrouped files exist
     block:
-      - name: 6.1.13 - Find any ungrouped files
+      - name: 6.1.11 - Find any ungrouped files
         shell: "/usr/bin/df --local -P | /usr/bin/awk {' if (NR!=1) print $6'} | /usr/bin/xargs -I '{}' find '{}' -xdev -nogroup"
         register: ug_files
         changed_when: false
         check_mode: false
 
-      - name: 6.1.13 - Print any ungrouped files found
+      - name: 6.1.11 - Print any ungrouped files found
         ansible.builtin.debug:
           msg: "ungrouped files found: {{ uo_files.stdout }}"
         changed_when: true
         when: ug_files.stdout
     tags:
-      - 6.1.13
+      - 6.1.11
+  - name: 6.1.12 - Ensure sticky bit is set on all world-writable directories
+    block:
+      - name: 6.1.12 - Find any world writiable files directories
+        shell: df --local -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev -type d \( -perm -0002 -a ! -perm -1000 \) 2>/dev/null
+        register: ww_dirs
+        changed_when: false
+        check_mode: false
 
+      - name: 6.1.12 - Print any world writable directories found
+        ansible.builtin.debug:
+          msg: "World writiable files found: {{ ww_dirs.stdout }}"
+        changed_when: true
+        when: ww_dirs.stdout
+      - name: 6.1.12 Remove any world writiable files directories
+        shell: df --local -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev -type d \( -perm -0002 -a ! -perm -1000 \) 2>/dev/null | xargs -I '{}' chmod a+t '{}'
+    ignore_errors: yes
+    tags:
+      - 6.1.12
   - name: 6.2.1 - Ensure password fields are not empty
     block:
       - name: 6.2.1 - Check to see if there are any accounts with empty passwords
+        shell: awk -F':' '($2 != "x" ) { print $1 " is not set to shadowed passwords "}' /etc/passwd
+        changed_when: false
+        register: passwd_passwords
+        check_mode: false
+      - name: 6.2.1 - Report the named users to the report
+        ansible.builtin.debug:
+          msg: "The user {{ item }} has an empty password"
+        when: passwd_passwords.stdout
+        changed_when: true
+        loop: "{{ passwd_passwords.stdout_lines }}"
+    tags:
+      - 6.2.1
+
+  - name: 6.2.2 - Ensure password fields are not empty
+    block:
+      - name: 6.2.2 - Check to see if there are any accounts with empty passwords
         shell: "/usr/bin/cat /etc/shadow | awk -F: '($2 == \"\" ) { print $1 }'"
         changed_when: false
         register: empty_passwords
         check_mode: false
-
-
-      - name: 6.2.1 - Report the named users to the report
+      - name: 6.2.2 - Report the named users to the report
         ansible.builtin.debug:
           msg: "The user {{ item }} has an empty password"
         when: empty_passwords.stdout
         changed_when: true
         loop: "{{ empty_passwords.stdout_lines }}"
     tags:
-      - 6.2.1
-  - name: 6.2.2 - Report on groups in /etc/passwd  with a GID not in /etc/group
+      - 6.2.2
+  - name: 6.2.3 - Report on groups in /etc/passwd  with a GID not in /etc/group
     block:
-      - name: 6.2.2 - Use script to pull the list of groups
+      - name: 6.2.3 - Use script to pull the list of groups
         script:
           cmd: files/undefined_groups.sh
         register: undefined_groups
         changed_when: false
         check_mode: false
-
-      - name: 6.2.2 - Report to user any unreferenced groups
+      - name: 6.2.3 - Report to user any unreferenced groups
         ansible.builtin.debug:
           msg: "{{ undefined_groups.stdout_lines }}"
         changed_when: true
         when: undefined_groups.stdout
     tags:
-      - 6.2.2  
-  - name: 6.2.3 - Report on duplicate UIDs in /etc/passwd
+      - 6.2.3  
+  - name: 6.2.4 - Report on duplicate UIDs in /etc/passwd
     block:
-      - name: 6.2.3 - Use script to pull the list of duplicate UIDs
+      - name: 6.2.4 - Use script to pull the list of duplicate UIDs
         script:
           cmd: files/duplicate_uids.sh
         register: duplicate_uids
         changed_when: false
         check_mode: false
 
-      - name: 6.2.3 - Print report of duplicated UIDs to user
+      - name: 6.2.4 - Print report of duplicated UIDs to user
         ansible.builtin.debug:
           msg: "{{ duplicate_uids.stdout_lines }}"
         changed_when: true
         when: duplicate_uids.stdout
     tags:
-      - 6.2.3
+      - 6.2.4
 
-  - name: 6.2.4 - Report on duplicate GIDs in /etc/group
+  - name: 6.2.5 - Report on duplicate GIDs in /etc/group
     block:
-      - name: 6.2.4 - Use script to pull the list of duplicate GIDs
+      - name: 6.2.5 - Use script to pull the list of duplicate GIDs
         script:
           cmd: files/duplicate_guids.sh
         register: duplicate_guids
         changed_when: false
         check_mode: false
 
-      - name: 6.2.4 - Print report of duplcate GIDs to user
+      - name: 6.2.5 - Print report of duplcate GIDs to user
         ansible.builtin.debug:
           msg: "{{ duplicate_guids.stdout_lines }}"
         changed_when: true
         when: duplicate_guids.stdout
     tags:
-      - 6.2.4
-  - name: 6.2.5 - Report on duplicate users in /etc/passwd
+      - 6.2.5
+  - name: 6.2.6 - Report on duplicate users in /etc/passwd
     block:
-      - name: 6.2.5 - Use script to pull the list of users
+      - name: 6.2.6 - Use script to pull the list of users
         script:
           cmd: files/duplicate_users.sh
         register: duplicate_users
         changed_when: false
         check_mode: false
-      - name: 6.2.5 - Print report of duplicate users to user
+      - name: 6.2.6 - Print report of duplicate users to user
         ansible.builtin.debug:
            msg: "{{ duplicate_users.stdout_lines }}"
         changed_when: true
         when: duplicate_users.stdout
     tags:
-      - 6.2.5
-
-  - name: 6.2.6 - Report on duplicate groups in /etc/group
+      - 6.2.6
+  - name: 6.2.7 - Report on duplicate groups in /etc/group
     block:
-      - name: 6.2.6 - Use script to pull the list of groups
+      - name: 6.2.7 - Use script to pull the list of groups
         script:
           cmd: files/duplicate_groups.sh
         register: duplicate_groups
         changed_when: false
         check_mode: false
 
-      - name: 6.2.6 - Print report of duplicate groups to user
+      - name: 6.2.7 - Print report of duplicate groups to user
         ansible.builtin.debug:
           msg: "{{ duplicate_groups.stdout_lines }}"
         changed_when: true
         when: duplicate_groups.stdout
     tags:
-      - 6.2.6
-  - name: 6.2.7 - Ensure root PATH integrity
+      - 6.2.7
+  - name: 6.2.8 - Ensure root PATH integrity
     block:
-      - name: 6.2.7 - Run script on path variable
+      - name: 6.2.8 - Run script on path variable
         script: files/path_check.sh
         changed_when: false
         register: path_check
         check_mode: false
 
-      - name: 6.2.7 - Print report to user
+      - name: 6.2.8 - Print report to user
         ansible.builtin.debug:
           msg:
             - "Note, Ansible runs this as SUDO with the ansible user's PATH variable. The script may not print issues"
@@ -1946,17 +2032,17 @@
             - " {{ path_check.stdout }}"
         when: path_check.stdout and not ansible_check_mode
     tags:
-      - 6.2.7
+      - 6.2.8
 
-  - name: 6.2.8 - Report on multiple accounts with UID of 0
+  - name: 6.2.9 - Report on multiple accounts with UID of 0
     block:
-      - name: 6.2.8 - find accounts with UID of 0
+      - name: 6.2.9 - find accounts with UID of 0
         shell: "/usr/bin/cat /etc/passwd | awk -F: '($3 == 0) { print $1 }'"
         register: rootuid
         changed_when: rootuid.rc == 2
         check_mode: false
 
-      - name: 6.2.8 - Report on mulitple accounts with UID of 0
+      - name: 6.2.9 - Report on mulitple accounts with UID of 0
         ansible.builtin.debug:
           msg:
             - "Accounts with UID zero in addition to root"
@@ -1964,33 +2050,10 @@
         changed_when: true
         when: rootuid.stdout != 'root'
     tags:
-      - 6.2.8
-
-  - name: 6.2.9 - Report on users that do not have a home directory
-    block:
-      - name: 6.2.9 - Use script to find the users
-        script:
-          cmd: files/non_existant_homedirs.sh
-        register: nohomedir
-        changed_when: false
-
-      - name: 6.2.9 - Print report of users that do not have a home directory
-        ansible.builtin.debug:
-          msg: "{{ nohomedir.stdout_lines }}"
-        changed_when: true
-        when: nohomedir.stdout
-    ignore_errors: yes
-    tags:
       - 6.2.9
-
-
-  # Control 6.2.7 is environment dependent, skipping
-  # Control 6.2.8 is environment dependent, skipping
-  # Controls 6.2.[9-13,20] are recommended to be handled by monitoring software
-# 6.2.9 Ensure all users' home directories exist
-  - name: 6.2.9 Ensure all users' home directories exist
+  - name: 6.2.10 Ensure all users' home directories exist
     block:
-      - name: 6.2.9 Ensure all users' home directories exist | list
+      - name: 6.2.10 Ensure all users' home directories exist | list
         shell: |
           grep -E -v '^(halt|sync|shutdown)' /etc/passwd | awk -F: '($7 != "'"$(which nologin)"'" && $7 != "/bin/false") { print $1 " " $6 }' | while
           read -r user dir
@@ -1999,36 +2062,106 @@
                   echo "${user}"
               fi
           done
-        register: output_6_2_9
+        register: output_6_2_10
         changed_when: false
-      - name: 6.2.9 Ensure all users' home directories exist | save
+      - name: 6.2.10 Ensure all users' home directories exist | save
         copy:
-          dest: "{{ outputfiles }}/6.2.9"
-          content: "{{ output_6_2_9.stdout_lines }}"
-      - name: 6.2.9 Ensure all users' home directories exist | fix
+          dest: "{{ outputfiles }}/6.2.10"
+          content: "{{ output_6_2_10.stdout_lines }}"
+      - name: 6.2.10 Ensure all users' home directories exist | fix
         user:
           name: "{{ item }}"
           create_home: yes
-        with_items: "{{ output_6_2_9.stdout_lines }}"
-        when: "{{ output_6_2_9.stdout_lines|length > 0 }}"
+        with_items: "{{ output_6_2_10.stdout_lines }}"
+        when: output_6_2_10.stdout_lines|length > 0 
     ignore_errors: yes
     tags:
-      - 6.2.9
-
-  - name: 6.2.10 - Report on shadow group in /etc/group
+      - 6.2.10
+  - name: "6.2.12 | PATCH | Ensure local interactive user home directories are mode 750 or more restrictive"
     block:
-      - name: 6.2.10 - Determine if the shadow group exists in /etc/group
-        command: /usr/bin/grep "^shadow:" /etc/group
-        register: shadow_out
-        changed_when: false
-        failed_when: shadow_out.rc == "2"
-        check_mode: false
+      - name: "6.2.12 | AUDIT | Ensure local interactive user home directories are mode 750 or more restrictive | get stat"
+        ansible.builtin.stat:
+          path: "/home/{{ item }}"
+        register: rhel_09_6_2_12_home_dir_perms
+        loop: "{{ output_6_2_10.stdout_lines }}"
+        when: output_6_2_10.stdout_lines|length > 0 
+      - name: "6.2.12 | PATCH | Ensure local interactive user home directories are mode 750 or more restrictive | amend if needed"
+        ansible.builtin.file:
+          path: "{{ item.stat.path }}"
+          state: directory
+          mode: "0750"
+        loop: "{{ rhel_09_6_2_12_home_dir_perms.results }}"
+        loop_control:
+          label: "{{ item }}"
+        when:
+          - item.stat.mode > '0750'
+        ignore_errors: yes
+      - name: "6.2.12 | PATCH | Ensure local interactive user home directories are mode 750 or more restrictive | Set group ACL"
+        ansible.posix.acl:
+          path: "/home/{{ item }}"
+          default: true
+          etype: group
+          permissions: rx
+          state: present
+        loop: "{{ output_6_2_10.stdout_lines }}"
+        ignore_errors: yes
+      - name: "6.2.12 | PATCH | Ensure local interactive user home directories are mode 750 or more restrictive | Set other ACL"
+        ansible.posix.acl:
+          path: "/home/{{ item }}"
+          default: true
+          etype: other
+          permissions: 0
+          state: present
+        loop: "{{ output_6_2_10.stdout_lines }}"
+        ignore_errors: yes
+    tags:
+       - 6.2.12
 
-      - name: 6.2.10 - Print report of shadow group to user
-        ansible.builtin.debug:
-          msg: "Shadow group exists in /etc/group. Remove"
-        changed_when: true
-        when: shadow_out.stdout
+  - name: "6.2.13 | PATCH | Ensure no local interactive user has .netrc files"
+    ansible.builtin.file:
+        path: "/home/{{ item }}/.netrc"
+        state: absent
+    loop: "{{ output_6_2_10.stdout_lines }}"
+    tags:
+      - 6.2.13
+  - name: "6.2.14 | PATCH | Ensure no local interactive user has .forward files"
+    ansible.builtin.file:
+        path: "/home/{{ item }}/.forward"
+        state: absent
+    loop: "{{ output_6_2_10.stdout_lines }}"
+    tags:
+      - 6.2.14
+
+  - name: "6.2.15 | PATCH | Ensure no local interactive user has .rhosts files"
+    ansible.builtin.file:
+        path: "~{{ item }}/.rhosts"
+        state: absent
+    loop: "{{ output_6_2_10.stdout_lines }}"
+    tags:
+      - 6.2.15
+
+  - name: "6.2.16 | PATCH | Ensure local interactive user dot files are not group or world writable"
+    block:
+        - name: "6.2.16 | AUDIT | Ensure local interactive user dot files are not group or world writable | Check for files"
+          ansible.builtin.find:
+              path: /home
+              depth: 3
+              patterns: ".*"
+              hidden: true
+              recurse: true
+              file_type: file
+          register: user_dot_files
+
+        - name: "6.2.16 | AUDIT | Ensure local interactive user dot files are not group or world writable | update permissions"
+          ansible.builtin.file:
+              path: "{{ item.path }}"
+              mode: go-w
+#              follow: "{{ rhel_09_6_2_16_home_follow_symlinks }}"
+          loop: "{{ user_dot_files.files }}"
+          loop_control:
+              label: "{{ item.path }}"
+    tags:
+      - 6.2.16 
 
 
   - name: Add hardening file.
