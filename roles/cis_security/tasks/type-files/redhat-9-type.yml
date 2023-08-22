@@ -959,7 +959,7 @@
             - "Please review to make sure all are essential"
             - "{{ rhel9cis_2_4_services.stdout_lines }}"
             - "{{ rhel9cis_2_4_sockets.stdout_lines }}"
-
+    ignore_errors: yes
     tags:
       - 2.4
   # Section 3, Network parameters
