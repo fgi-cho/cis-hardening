@@ -66,8 +66,8 @@
     enabled: True
     masked: False
     daemon_reload: True
-
-# Call the grub config file rebuilding program
+  ignore_errors: yes
+#Call the grub config file rebuilding program
 # There is no grub module, so we have to do it with shell
 - name: rebuild grub
   command: /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg

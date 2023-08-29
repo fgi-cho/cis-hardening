@@ -962,6 +962,7 @@
     loop:
       - net.ipv4.conf.all.send_redirects # (3.1.2)
       - net.ipv4.conf.default.send_redirects # (3.1.2)
+    ignore_errors: yes
     notify: flush network routes
     tags:
       - 3.1.2
@@ -1016,6 +1017,7 @@
           - net.ipv6.conf.default.accept_ra # (3.2.9)
         notify: flush network routes
         when: not ipv6_disable
+    ignore_errors: yes
     tags:
       - 3.2.0
 
