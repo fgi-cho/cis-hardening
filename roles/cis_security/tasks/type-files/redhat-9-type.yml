@@ -1308,6 +1308,14 @@
     ignore_errors: yes
     tags:
       - 4.2.3
+  - name: 4.2.3 set Sysstats logs permissions
+    ansible.builtin.replace:
+      path: /etc/sysconfig/sysstat
+      replace: "UMASK=0027"
+      regexp: '^\s*UMASK=0022'
+    tags:
+      - 4.2.3
+
   # 4.3 - Ensure logrotate is configured skipped as machine and environment dependent
 
 
@@ -1601,7 +1609,51 @@
       validate: /usr/sbin/visudo -cf %s
     tags:
       - 5.3.3
+  - name: "5.3.7 | PATCH | Ensure access to the su command is restricted"
+    block:
+      - name: "5.3.7 | PATCH | Ensure access to the su command is restricted | Ensure sugroup exists"
+        ansible.builtin.group:
+          name: sugroup
+          state: present
 
+      - name: "5.3.7 | PATCH | Ensure access to the su command is restricted | remove users from group"
+        ansible.builtin.lineinfile:
+          path: /etc/group
+          regexp: '^sugroup(:.:.*:).*$'
+          line: 'sugroup\g<1>'
+          backrefs: true
+
+      - name: "5.3.7 | PATCH | Ensure access to the su command is restricted | Setting pam_wheel to use_uid"
+        ansible.builtin.lineinfile:
+          path: /etc/pam.d/su
+          regexp: '^(#)?auth\s+required\s+pam_wheel\.so'
+          line: 'auth           required        pam_wheel.so use_uid group=sugroup'
+    tags:
+      - 5.3.7
+  - name: "5.4.2 | PATCH | Ensure authselect includes with-faillock | with auth select profile"
+    block:
+#      - name: Create custom profile
+#        ansible.builtin.shell: "authselect create-profile rhel9 -b sssd --symlink-meta --symlink-pam"
+#        ignore_errors: yes
+      - name: "5.4.2 | AUDIT | Ensure authselect includes with-faillock | Gather profiles and enabled features"
+        ansible.builtin.shell: "authselect current | grep with-faillock"
+        failed_when: false
+        changed_when: false
+        check_mode: false
+        register: rhel9cis_5_4_2_profiles_faillock
+
+      - name: "5.4.2 | AUDIT | Ensure authselect includes with-faillock | Show profiles"
+        ansible.builtin.debug:
+          msg:
+            - "Below are the current custom profiles"
+            - "{{ rhel9cis_5_4_2_profiles_faillock.stdout_lines }}"
+      - name: "5.4.2 Authselect enable feature with-faillock on current profile"
+        ansible.builtin.shell: "authselect enable-feature with-faillock"
+      - name: "5.4.2  Authselect apply changes"
+        ansible.builtin.shell: "authselect apply-changes"
+    ignore_errors: yes
+    tags:
+      - 5.4.2
 
   - name: 5.5.1 - Configure PAM files and password requirements
     block:

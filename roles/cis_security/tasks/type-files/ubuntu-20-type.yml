@@ -248,6 +248,7 @@
         name: autofs
         state: absent
         purge: yes
+  ignore_errors: yes
   when: disable_autofs
   tags:
     - section1
@@ -1367,6 +1368,7 @@
         sysctl_set: true
         state: present
         reload: true
+      ignore_errors: yes
       with_items:
         - { name: net.ipv4.conf.all.accept_redirects, value: 0 }
         - { name: net.ipv4.conf.default.accept_redirects, value: 0 }
@@ -1376,6 +1378,7 @@
         sysctl -w net.ipv4.conf.default.accept_redirects=0
         sysctl -w net.ipv4.route.flush=1
       changed_when: false
+      ignore_errors: yes
     - name: 3.3.2 Ensure ICMP redirects are not accepted | ipv6"
       sysctl:
         name: "{{ item.name }}"
