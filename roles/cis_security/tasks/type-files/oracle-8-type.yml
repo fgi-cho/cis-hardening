@@ -1637,21 +1637,21 @@
   # Manually verify that only physically secure TTYs are listed  in
   # /etc/securetty
 
-  - name: 5.7 - Restrict su to wheel group
-    block:
-      - name: 5.7 - Configure PAM to only allow su from wheel group
-        ansible.builtin.replace:
-          path: /etc/pam.d/su
-          regexp: '^#auth\s+required\s+pam_wheel.so\s+use_uid'
-          replace: "auth         required        pam_wheel.so use_uid"
+  #- name: 5.7 - Restrict su to wheel group
+  #  block:
+  #    - name: 5.7 - Configure PAM to only allow su from wheel group
+  #      ansible.builtin.replace:
+  #        path: /etc/pam.d/su
+  #        regexp: '^#auth\s+required\s+pam_wheel.so\s+use_uid'
+  #        replace: "auth         required        pam_wheel.so use_uid"
 
-      - name: 5.7 - Add root to the wheel group
-        ansible.builtin.user:
-          name: root
-          groups: wheel
-          append: true
-    tags:
-      - 5.7.0
+  #    - name: 5.7 - Add root to the wheel group
+  #      ansible.builtin.user:
+  #        name: root
+  #        groups: wheel
+  #        append: true
+  #  tags:
+  #    - 5.7.0
 
   # Section 6 - System Maintenance
 
