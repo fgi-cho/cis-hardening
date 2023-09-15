@@ -1761,6 +1761,7 @@
           msg: "ungrouped files found: {{ uo_files.stdout }}"
         changed_when: true
         when: ug_files.stdout
+    ignore_errors: yes
     tags:
       - 6.1.13
 
