@@ -202,7 +202,99 @@
       - 1.1.3
       - 1.1.4
       - 1.1.5
-
+# 1.1.3 Ensure /var configured
+# Ensure nosuid option set on /var partition
+# Ensure nodev option set on /var partition
+  - name: "1.1.3.2 Ensure nodev option set on /var partition\n
+           1.1.3.4 Ensure nosuid option set on /var partition"
+    block:
+      - name: Get file system
+        shell: findmnt -n /var | awk '{print $3}'
+        check_mode: no
+        register: varsystem
+        changed_when: false
+      - debug:
+          var:  varsystem.stdout
+      - name: Check /var config
+        mount:
+          path: /var
+          src: /dev/mapper/system-var
+          fstype: "{{ varsystem.stdout }}"
+          state: present
+          opts:  rw,nosuid,nodev,relatime,attr2,inode64,logbufs=8,logbsize=32k,noquota
+        register: var_conf
+      - name: Remount /var
+        mount:
+          path: /var
+          state: remounted
+        when: var_conf.changed
+    ignore_errors: yes
+    tags:
+      - 1.1.3.2
+      - 1.1.3.4
+      - var
+# 1.1.5 Ensure /var/log configured
+# Ensure nosuid option set on /var/log partition
+# Ensure nodev option set on /var/log partition
+# Ensure noexec option set on /var/log partition
+  - name: "1.1.5.2 Ensure nodev option set on /var/log partition\n
+           1.1.5.3 Ensure nosuid option set on /var/log partition\n
+           1.1.5.4 Ensure noexec option set on /var/log partition"
+    block:
+      - name: Get file system
+        shell: findmnt -n /var/log | awk '{print $3}'
+        check_mode: no
+        register: varlogsystem
+        changed_when: false
+      - debug:
+          var:  varlogsystem.stdout
+      - name: Check /var/log config
+        mount:
+          path: /var/log
+          src: /dev/mapper/system-log
+          fstype: "{{ varlogsystem.stdout }}"
+          state: present
+          opts:  rw,nosuid,nodev,noexec,relatime,attr2,inode64,logbufs=8,logbsize=32k,noquota
+        register: varlog_conf
+      - name: Remount /var/log
+        mount:
+          path: /var/log
+          state: remounted
+        when: varlog_conf.changed
+    ignore_errors: yes
+    tags:
+      - 1.1.5
+# 1.1.6 Ensure /var/log/audit configured
+# Ensure nosuid option set on /var/log/audit partition
+# Ensure nodev option set on /var/log/audit partition
+# Ensure noexec option set on /var/log/audit partition
+  - name: "1.1.6.2 Ensure nodev option set on /var/log/audit partition\n
+           1.1.6.3 Ensure nosuid option set on /var/log/audit partition\n
+           1.1.6.4 Ensure noexec option set on /var/log/audit partition"
+    block:
+      - name: Get file system
+        shell: findmnt -n /var/log/audit | awk '{print $3}'
+        check_mode: no
+        register: varauditsystem
+        changed_when: false
+      - debug:
+          var:  varauditsystem.stdout
+      - name: Check /var/log/audit config
+        mount:
+          path: /var/log/audit
+          src: /dev/mapper/system-audit
+          fstype: "{{ varauditsystem.stdout }}"
+          state: present
+          opts:  rw,nosuid,nodev,noexec,relatime,attr2,inode64,logbufs=8,logbsize=32k,noquota
+        register: varaudit_conf
+      - name: Remount /var/log/audit
+        mount:
+          path: /var/log/audit
+          state: remounted
+        when: varaudit_conf.changed
+    ignore_errors: yes
+    tags:
+      - 1.1.6
 # The /var/tmp directory is a world-writable directory used for temporary storage by all
 # users and some applications.
 #  - name: "1.1.8 Ensure nodev option set on /var/tmp partition\n
@@ -1163,6 +1255,11 @@
         name: "firewalld"
         state: present
       notify: start firewalld # 3.4.2.1
+#    - name: Enable and start firewalld
+#      ansible.builtin.service:
+#        name: firewalld
+#        enabled: true
+#        state: started
 
     - name: 3.4.2.3 - Disable netfilters service
       ansible.builtin.systemd:
