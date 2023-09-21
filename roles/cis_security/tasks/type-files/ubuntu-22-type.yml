@@ -2541,7 +2541,7 @@
         dest: /etc/pam.d/common-account
         regexp: '^account\srequisite'
         line: "account        requisite                       pam_deny.so"
-    - name: 5.4.2 Ensure lockout for failed password attempts is configured | pam_tally2.so
+    - name: 5.4.2 Ensure lockout for failed password attempts is configured | pam_faillock.so
       lineinfile:
         dest: /etc/pam.d/common-account
         regexp: '^account\srequired'
