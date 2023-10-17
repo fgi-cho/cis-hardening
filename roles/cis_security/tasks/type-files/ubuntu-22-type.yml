@@ -372,6 +372,7 @@
         name: usb-storage
         state: absent
   when: disable_usb
+  ignore_errors: yes
   tags:
     - section1
     - level_1_server
@@ -872,6 +873,7 @@
         enabled: yes
       when: chrony_conf.changed
   when: chronyEnable
+  ignore_errors: yes
   tags:
     - section2
     - level_1_server
@@ -1876,6 +1878,7 @@
     name: auditd
     state: started
     enabled: true
+  ignore_errors: yes
   tags:
     - section4
     - level_2_server
@@ -1945,6 +1948,7 @@
   service:
     name: rsyslog
     enabled: yes
+  ignore_errors: yes
   tags:
     - section4
     - level_1_server
