@@ -501,6 +501,7 @@
         - python3-libselinux
       state: present
     when: selinux is defined and selinux != "Disabled"
+    ignore_errors: yes
     tags:
       - 1.6.1.1
 
@@ -1120,6 +1121,7 @@
     ansible.builtin.dnf:
       name: rsyslog
       state: present
+    ignore_errors: yes
     tags:
       - 4.2.1.1
 

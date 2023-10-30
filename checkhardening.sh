@@ -29,9 +29,9 @@ if  [ -s ../inv.ini ]; then
     if [[ ! -z "$1" ]]; then
       name=$line
       echo "$name"
-      echo "Executing : ansible-playbook -i $name, hardening.yml --diff --skip-tags $1" && echo
+      echo "Executing : ansible-playbook -i $name, hardening.yml --diff $1" && echo
       sleep 5 &
-      script --flush --quiet --return ../check-logs/$name'.log' --command "ansible-playbook -i $name, --extra-vars 'ansible_ssh_user=root' ../hardening.yml --diff --check --skip-tags $1"
+      script --flush --quiet --return ../check-logs/$name'.log' --command "ansible-playbook -i $name, --extra-vars 'ansible_ssh_user=root' ../hardening.yml --diff --check $1"
     else
       name=$line
       echo "$name"
