@@ -97,6 +97,12 @@
     - net.ipv4.route.flush
     - net.ipv6.route.flush
 
+- name: restart rsyslog
+  ansible.builtin.systemd:
+    name: rsyslog
+    enabled: True
+    state: restarted
+
 - name: restart timesyncd
   ansible.builtin.systemd:
     name: systemd.timesyncd

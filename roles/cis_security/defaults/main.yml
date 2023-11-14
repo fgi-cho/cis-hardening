@@ -64,7 +64,17 @@ motd_file: "banner"             # Linux: File location by default in 'files' dir
 issue_file: "issue"             # Linux: File location by default in 'files' directory
 issue.net_file: "issue"         # Linux: File location by default in 'files' diretory
 ipv6_disable: true              # Common: Set to true to disable ipv6 support on host
-
+agent_ports:
+  - 443
+  - 5665
+  - 5666
+  - 8081
+  - 8082
+  - 9091
+  - 9092
+  - 52311
+udp_ports: 
+  - 52311
 # SSH Server settings
 ssh_log_level: INFO             # Linux: Control is INFO or VERBOSE. Stricter is not approved and more verbose exposes user info
 ssh_max_auth_tries: 4           # Linux: Control is 4 retries
