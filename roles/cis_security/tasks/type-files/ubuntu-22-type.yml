@@ -1017,6 +1017,16 @@
     - name: 2.[2-3].6 Nfs shares found
       debug:
         var: nfs_shares.stdout
+    - name: 2.[2-3].6 Check is pcsd is operational
+      systemd:
+        name: pcsd.service
+      register: pcsd_service
+      ignore_errors: yes
+    - name: 2.[2-3].6 Check is pacemaker is operational
+      systemd:
+        name: pacemaker.service
+      register: pacemaker_service
+      ignore_errors: yes
     - name: 2.[2-3].6 Ensure NFS is not installed
       apt:
         name: "{{ item }}"
@@ -1025,7 +1035,7 @@
       with_items:
         - nfs-kernel-server
         - rpcbind
-      when: nfs_mp.stdout | length == 0 and nfs_shares.stdout | length == 0
+      when: nfs_mp.stdout | length == 0 and nfs_shares.stdout | length == 0 and pcsd_service.status.ActiveState == "inactive" and pacemaker_service.status.ActiveState == "inactive"
   tags:
     - section2
     - level_1_server
@@ -1215,18 +1225,28 @@
     - 2.2.15
 # 2.1.16 Ensure rsync service is not installed
 # The rsync service can be used to synchronize files between systems over network links.
-- name: 2.2.16 Ensure rsync service is not installed
-  apt:
-    name: rsync
-    state: absent
-    purge: yes
-  ignore_errors: yes
-  when: remove_rsyncservice
+- name: 2.1.16 - Remove rsync; add to removal list
+  block:
+    - name: 2.1.16 Check is pacemaker is operational
+      systemd:
+        name: mariadb.service
+      register: mariadb_service
+      ignore_errors: yes
+    - name: 2.1.16 Cheking for services service
+      debug:
+        var: mariadb_service.status.ActiveState
+    - name: 2.2.16 Ensure rsync service is not installed
+      apt:
+        name: rsync
+        state: absent
+        purge: yes
+      ignore_errors: yes
+      when: mariadb_service.status.ActiveState == "inactive" and remove_rsyncservice
   tags:
+    - 2.1.16
     - section2
     - level_1_server
     - level_1_workstation
-    - 2.2.16
 # 2.3 Service Clients
 # 2.3.1 Ensure NIS Client is not installed
 # The NIS service is inherently an insecure system that has been vulnerable to DOS attacks,

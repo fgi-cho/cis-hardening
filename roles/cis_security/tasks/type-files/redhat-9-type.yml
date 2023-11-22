@@ -751,7 +751,7 @@
     ansible.builtin.set_fact:
       unneeded_packages: []
     tags:
-      - section2
+      - 2.2.X 
   - name: 2.2.1 - Remove xinetd service
     ansible.builtin.set_fact:
       unneeded_packages: "{{ unneeded_packages + [ 'xinetd' ] }}"
@@ -884,17 +884,38 @@
       - name: 2.2.[16-17] Nfs shares found
         debug:
           var: nfs_shares.stdout
+      - name: 2.2.[16-17] Check is pcsd is operational
+        systemd:
+          name: pcsd.service
+        register: pcsd_service
+        ignore_errors: yes
+      - name: 2.2.[16-17] Check is pacemaker is operational
+        systemd:
+          name: pacemaker.service
+        register: pacemaker_service
+        ignore_errors: yes
       - name: 2.2.[16-17] Remove nfs server; add to removal list
         ansible.builtin.set_fact:
           unneeded_packages: "{{ unneeded_packages + [ 'nfs-utils' ] + [ 'rpcbind' ] }}"
-        when: nfs_mp.stdout | length == 0 and nfs_shares.stdout | length == 0
+        when: nfs_mp.stdout | length == 0 and nfs_shares.stdout | length == 0 and pcsd_service.status.ActiveState == "inactive" and pacemaker_service.status.ActiveState == "inactive"
     tags:
       - 2.2.16
       - 2.2.17
       - section2
   - name: 2.2.18 - Remove rsync; add to removal list
-    ansible.builtin.set_fact:
-      unneeded_packages: "{{ unneeded_packages + [ 'rsync' ] }}"
+    block:
+      - name: 2.2.18 Check is pacemaker is operational
+        systemd:
+          name: mariadb.service
+        register: mariadb_service
+        ignore_errors: yes
+      - name: 2.2.18 Cheking for services service
+        debug:
+          var: mariadb_service.status.ActiveState
+      - name: 2.2.18 - Remove rsync; add to removal list
+        ansible.builtin.set_fact:
+          unneeded_packages: "{{ unneeded_packages + [ 'rsync' ] }}"
+        when: mariadb_service.status.ActiveState == "inactive"
     tags:
       - 2.2.18
   - name: 2.3.2 - Ensure LDAP client is not installed
@@ -914,7 +935,7 @@
     ansible.builtin.dnf:
       name: "{{ unneeded_packages }}"
       state: absent
-
+    tags: remove
   # Cups should be remove per control 2.2.16, but it may not be able to due to
   #  dependencies, so disable the service instead
 

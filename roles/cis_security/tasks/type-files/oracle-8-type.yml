@@ -844,20 +844,40 @@
       - name: 2.2.[18-19] Nfs shares found
         debug:
           var: nfs_shares.stdout
+      - name: 2.2.[18-19] Check is pcsd is operational
+        systemd:
+          name: pcsd.service
+        register: pcsd_service
+        ignore_errors: yes
+      - name: 2.2.[18-19] Check is pacemaker is operational
+        systemd:
+          name: pacemaker.service
+        register: pacemaker_service
+        ignore_errors: yes
       - name: 2.2.[18-19] - Remove nfs server; add to removal list
         ansible.builtin.set_fact:
           unneeded_packages: "{{ unneeded_packages + [ 'nfs-utils' ] + [ 'rpcbind' ] }}"
-        when: nfs_mp.stdout | length == 0 and nfs_shares.stdout | length == 0
+        when: nfs_mp.stdout | length == 0 and nfs_shares.stdout | length == 0 and pcsd_service.status.ActiveState == "inactive" and pacemaker_service.status.ActiveState == "inactive"
     tags:
       - 2.2.18
       - 2.2.19
       - section2
   - name: 2.2.20 - Remove rsync; add to removal list
-    ansible.builtin.set_fact:
-      unneeded_packages: "{{ unneeded_packages + [ 'rsync' ] }}"
+    block:
+      - name: 2.2.20 Check is pacemaker is operational
+        systemd:
+          name: mariadb.service
+        register: mariadb_service
+        ignore_errors: yes
+      - name: 2.2.20 Cheking for services service
+        debug:
+          var: mariadb_service.status.ActiveState
+      - name: 2.2.20 - Remove rsync; add to removal list
+        ansible.builtin.set_fact:
+          unneeded_packages: "{{ unneeded_packages + [ 'rsync' ] }}"
+        when: mariadb_service.status.ActiveState == "inactive"
     tags:
       - 2.2.20
-
   - name: 2.3.1 - Remove ypbind; add to removal list
     ansible.builtin.set_fact:
       unneeded_packages: "{{ unneeded_packages + [ 'ypbind' ] }}"

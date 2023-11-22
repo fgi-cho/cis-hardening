@@ -895,18 +895,18 @@
 # servers through the network.
 - name: 2.1.7 Ensure NFS is not installed
   block:
-  - name: 2.2.7 Check for nfs in /etc/fstab
+  - name: 2.1.7 Check for nfs in /etc/fstab
     shell: grep nfs /etc/fstab
     register: nfs_mp
     ignore_errors: yes
-  - name: 2.2.7 Check for nfs shares
+  - name: 2.1.7 Check for nfs shares
     shell: nfsstat -m
     register: nfs_shares
     ignore_errors: yes
-  - name: 2.2.7 Fstab result
+  - name: 2.1.7 Fstab result
     debug:
       var: nfs_mp.stdout
-  - name: 2.2.7 Nfs shares found
+  - name: 2.1.7 Nfs shares found
     debug:
       var: nfs_shares.stdout
 #  - name: Check is NFS is operational
@@ -916,13 +916,23 @@
 #    ignore_errors: yes
 #  - name: NFS service status
 #    debug:
-#      var: nfs_service.status.ActiveState
+#      var: nfs_service.status.ActiveState 
+  - name: 2.1.7 Check is pcsd is operational
+    systemd:
+      name: pcsd.service
+    register: pcsd_service
+    ignore_errors: yes
+  - name: 2.1.7 Check is pacemaker is operational
+    systemd:
+      name: pacemaker.service
+    register: pacemaker_service
+    ignore_errors: yes      
   - name: 2.1.7 Ensure NFS is not installed
     apt:
       name: nfs-kernel-server
       state: absent
       purge: yes
-    when: nfs_mp.stdout | length == 0 and nfs_shares.stdout | length == 0
+    when: nfs_mp.stdout | length == 0 and nfs_shares.stdout | length == 0 and pcsd_service.status.ActiveState == "inactive" and pacemaker_service.status.ActiveState == "inactive"
   tags:
     - section2
     - level_1_server
@@ -1103,18 +1113,40 @@
     - 2.1.15
 # 2.1.16 Ensure rsync service is not installed
 # The rsync service can be used to synchronize files between systems over network links.
-- name: 2.1.16 Ensure rsync service is not installed
-  apt:
-    name: rsync
-    state: absent
-    purge: yes
-  ignore_errors: yes
-  when: remove_rsyncservice
+#- name: 2.1.16 Ensure rsync service is not installed
+#  apt:
+#    name: rsync
+#    state: absent
+#    purge: yes
+#  ignore_errors: yes
+#  when: remove_rsyncservice
+#  tags:
+#    - section2
+#    - level_1_server
+#    - level_1_workstation
+#:    - 2.1.16
+- name: 2.1.16 - Remove rsync; add to removal list
+  block:
+    - name: 2.1.16 Check is pacemaker is operational
+      systemd:
+        name: mariadb.service
+      register: mariadb_service
+      ignore_errors: yes
+    - name: 2.1.16 Cheking for services service
+      debug:
+        var: mariadb_service.status.ActiveState
+    - name: 2.1.16 Ensure rsync service is not installed
+      apt:
+        name: rsync
+        state: absent
+        purge: yes
+      ignore_errors: yes
+      when: mariadb_service.status.ActiveState == "inactive" and remove_rsyncservice
   tags:
+    - 2.1.16
     - section2
     - level_1_server
     - level_1_workstation
-    - 2.1.16
 # 2.1.17 Ensure NIS Server is not installed
 # The Network Information Service (NIS) (formally known as Yellow Pages) is a client-server
 # directory service protocol for distributing system configuration files. The NIS server is a
