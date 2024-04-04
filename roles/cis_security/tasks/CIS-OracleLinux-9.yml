@@ -1,0 +1,4 @@
+---
+# indclude the type file for RHEL 9 type machines
+
+- include: type-files/oracle-9-type.yml

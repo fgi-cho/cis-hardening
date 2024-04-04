@@ -221,7 +221,7 @@
           src: /dev/mapper/system-var
           fstype: "{{ varsystem.stdout }}"
           state: present
-          opts:  rw,nosuid,nodev,relatime,attr2,inode64,logbufs=8,logbsize=32k,noquota
+          opts:  rw,nosuid,nodev,relatime,attr2,inode64,logbufs=8,noquota
         register: var_conf
       - name: Remount /var
         mount:
@@ -254,7 +254,7 @@
           src: /dev/mapper/system-log
           fstype: "{{ varlogsystem.stdout }}"
           state: present
-          opts:  rw,nosuid,nodev,noexec,relatime,attr2,inode64,logbufs=8,logbsize=32k,noquota
+          opts:  rw,nosuid,nodev,noexec,relatime,attr2,inode64,logbufs=8,noquota
         register: varlog_conf
       - name: Remount /var/log
         mount:
@@ -285,7 +285,7 @@
           src: /dev/mapper/system-audit
           fstype: "{{ varauditsystem.stdout }}"
           state: present
-          opts:  rw,nosuid,nodev,noexec,relatime,attr2,inode64,logbufs=8,logbsize=32k,noquota
+          opts:  rw,nosuid,nodev,noexec,relatime,attr2,inode64,logbufs=8,noquota
         register: varaudit_conf
       - name: Remount /var/log/audit
         mount:
