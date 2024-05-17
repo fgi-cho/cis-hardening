@@ -1,6 +1,6 @@
 # cis_security
 
-A collection to implement Center for Internet Security (CIS) controls for RHEL (7-8) and RHEL clones (Oracle, CentOS), SLES 15, Ubuntu 18.04 LTS and Ubuntu 20.04 LTS and certain Windows servers.
+A collection to implement Center for Internet Security (CIS) controls for RHEL (7-8) and RHEL clones (Rhel, Oracle),Ubuntu 20.04 LTS and Ubuntu 22.04 LTS.
 
 ### Introduction
 
@@ -19,14 +19,10 @@ files that are modified in this role.
 Benchmark Versions:
 | Operating System | 
 | -----------------|-------------- |
-| RHEL 7           |
 | RHEL 8           |
-| CentOS 7         |
-| CentOS 8         |
-| Fedora 31        |
-| Oracle Linux 7   |
+| RHEL 9           |
 | Oracle Linux 8   |
-| Ubuntu 18.04 LTS |
+| Oracle Linux 9   |
 | Ubuntu 20.04 LTS |
 | Ubuntu 22.04 LTS |
 
